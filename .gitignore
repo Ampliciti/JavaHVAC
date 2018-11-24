@@ -25,3 +25,7 @@ hs_err_pid*
 
 # Properties files, so we don't accidently commit our own configs
 *.properties
+/target/
+
+nb-configuration.xml
+*.yaml
