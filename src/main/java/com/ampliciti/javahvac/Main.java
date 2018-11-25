@@ -15,6 +15,8 @@
 package com.ampliciti.javahvac;
 
 import com.ampliciti.javahvac.config.Config;
+import com.ampliciti.javahvac.dao.HVACDao;
+import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import java.io.File;
 import org.apache.log4j.Logger;
 
@@ -55,15 +57,15 @@ public class Main {
     if (!props) {
       System.exit(-1);
     }
-    File propertiesFile = new File(args[0]);
-    if (!propertiesFile.exists() || !propertiesFile.isFile()) {
+    File yamlFile = new File(args[0]);
+    if (!yamlFile.exists() || !yamlFile.isFile()) {
       String message =
           "YAML file at the path: " + args[0] + " does not exist. Application cannot start.";
       System.err.println(message);
       logger.error(message);
       System.exit(-1);
     }
-    Main main = new Main(propertiesFile);
+    Main main = new Main(yamlFile);
     main.run();
   }
 
@@ -77,8 +79,14 @@ public class Main {
     this.yamlFile = yamlFile;
   }
 
+
+  /**
+   * Does the actual work of starting up and running our application.
+   */
   public void run() {
     Config.buildConfig(yamlFile);
+    HVACDao dao = new SqliteHVACDao();
+    dao.initDb(Config.getDbPath());
     // TODO: Something more here
   }
 }

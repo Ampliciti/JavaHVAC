@@ -15,6 +15,7 @@
 package com.ampliciti.javahvac.config;
 
 import com.ampliciti.javahvac.domain.Region;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
@@ -46,6 +47,12 @@ public class Config {
    */
   private static ArrayList<Region> regions;
 
+  /**
+   * Path where the database will be stored.
+   */
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private static String dbPath = "./hvac-sqlite.db";
+
 
   /**
    * The name of your building complex and/or setup. This is used for logging and UI purposes.
@@ -73,6 +80,24 @@ public class Config {
    */
   public static ArrayList<Region> getRegions() {
     return regions;
+  }
+
+  /**
+   * Path where the database will be stored.
+   * 
+   * @return the dbPath
+   */
+  public static String getDbPath() {
+    return dbPath;
+  }
+
+  /**
+   * Path where the database will be stored.
+   * 
+   * @param aDbPath the dbPath to set
+   */
+  public static void setDbPath(String aDbPath) {
+    dbPath = aDbPath;
   }
 
   /**
