@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac;
 
+import com.ampliciti.javahvac.config.Config;
 import java.io.File;
 import org.apache.log4j.Logger;
 
@@ -43,7 +44,7 @@ public class Main {
   public static void main(String[] args) {
     String startupMessage = "Starting PiHomeSecurity Server! With path to YAML file of: ";
     boolean props = true;
-    if (args.length != 1) {
+    if (args == null || args.length != 1) {
       startupMessage += "None. Will not start! Please pass in a path as a command argument.";
       props = false;
     } else {
@@ -77,7 +78,7 @@ public class Main {
   }
 
   public void run() {
-
+    Config.buildConfig(yamlFile);
     // TODO: Something more here
   }
 }

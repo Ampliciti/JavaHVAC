@@ -28,7 +28,7 @@ public class Zone {
    * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room South"
    */
   private String name;
-  
+
   /**
    * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room South"
    * 

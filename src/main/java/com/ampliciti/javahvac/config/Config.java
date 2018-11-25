@@ -46,7 +46,7 @@ public class Config {
    */
   private static ArrayList<Region> regions;
 
-  
+
   /**
    * The name of your building complex and/or setup. This is used for logging and UI purposes.
    * Example: "Smith Household" or "ABC Company".

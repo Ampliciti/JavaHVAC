@@ -33,9 +33,8 @@ public class Region {
    */
   private ArrayList<Zone> zones;
 
-  public Region() {
-  }
-  
+  public Region() {}
+
 
   /**
    * Name of this region. Examples: "Region 1", "First Floor", "House".
@@ -84,6 +83,7 @@ public class Region {
 
   /**
    * Name of this region. Examples: "Region 1", "First Floor", "House".
+   * 
    * @param name the name to set
    */
   public void setName(String name) {
