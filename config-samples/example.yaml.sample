@@ -1,0 +1,20 @@
+#sample server configuration
+
+#The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith Household" or "ABC Company"
+name: "Name of Building Complex"
+
+#Locally resolveable DNS or IP address
+dns: "127.0.0.1"
+
+#A region is an area serviced by a single pump/blower/etc
+regions:
+    - name: house
+      #A zone is associated with regions in a 1:many fashion and is controlled by a valve or switch. Each region needs at least one zone.
+      zones:
+        - name: hall
+
+    - name: shop
+      zones:
+       - name: mill
+       - name: chicken_coop
+    
