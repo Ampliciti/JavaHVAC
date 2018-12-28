@@ -52,6 +52,11 @@ public class ServerConfig {
      * Nodes that the server should be expecting to communicate with.
      */
     private static ArrayList<Node> nodes;
+    
+    /**
+     * Email address that critical notifications will be sent.
+     */
+    private static ArrayList<String> notificationEmail;
 
     /**
      * Path where the database will be stored.
@@ -149,6 +154,23 @@ public class ServerConfig {
      */
     public void setNodes(ArrayList<Node> aNodes) {
         nodes = aNodes;
+    }
+    
+    
+    /**
+     * Email address that critical notifications will be sent.
+     * @return the notificationEmail
+     */
+    public static ArrayList<String> getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    /**
+     * Email address that critical notifications will be sent.
+     * @param aNotificationEmail the notificationEmail to set
+     */
+    public static void setNotificationEmail(ArrayList<String> aNotificationEmail) {
+        notificationEmail = aNotificationEmail;
     }
 
     // builder stuff

@@ -6,6 +6,9 @@ name: "Name of Building Complex"
 #Local-network resolveable DNS or IP address
 dns: "127.0.0.1"
 
+#Email address that critical notifications will be sent
+notificationEmail: [sample1@example.com, sample2@example.com]
+
 #A region is an area serviced by a single pump/blower/etc
 regions:
     - name: house
