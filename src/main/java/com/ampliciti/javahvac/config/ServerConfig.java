@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author jeffrey
  */
-public class Config {
+public class ServerConfig {
 
   /**
    * The name of your building complex and/or setup. This is used for logging and UI purposes.
@@ -146,12 +146,12 @@ public class Config {
    * @param yamlFile
    * @return A map representing the Yaml file.
    */
-  private static Config loadYaml(File yamlFile) {
+  private static ServerConfig loadYaml(File yamlFile) {
     ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(yamlFile);
-      return mapper.readValue(fis, Config.class);
+      return mapper.readValue(fis, ServerConfig.class);
     } catch (Exception e) {
       throw new IllegalArgumentException(e);
     } finally {

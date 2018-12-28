@@ -52,15 +52,15 @@ public class ConfigTest {
     if (!yamlFile.exists()) {
       fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
     }
-    Config.buildConfig(yamlFile);
-    assertEquals("Name of Building Complex", Config.getName());
-    assertEquals("127.0.0.1", Config.getDns());
-    assertEquals(2, Config.getRegions().size());
-    assertEquals("house", Config.getRegions().get(0).getName());
-    assertEquals("hall", Config.getRegions().get(0).getZones().get(0).getName());
-    assertEquals("shop", Config.getRegions().get(1).getName());
-    assertEquals("mill", Config.getRegions().get(1).getZones().get(0).getName());
-    assertEquals("chicken_coop", Config.getRegions().get(1).getZones().get(1).getName());
+    ServerConfig.buildConfig(yamlFile);
+    assertEquals("Name of Building Complex", ServerConfig.getName());
+    assertEquals("127.0.0.1", ServerConfig.getDns());
+    assertEquals(2, ServerConfig.getRegions().size());
+    assertEquals("house", ServerConfig.getRegions().get(0).getName());
+    assertEquals("hall", ServerConfig.getRegions().get(0).getZones().get(0).getName());
+    assertEquals("shop", ServerConfig.getRegions().get(1).getName());
+    assertEquals("mill", ServerConfig.getRegions().get(1).getZones().get(0).getName());
+    assertEquals("chicken_coop", ServerConfig.getRegions().get(1).getZones().get(1).getName());
   }
 
 }

@@ -14,7 +14,7 @@
  */
 package com.ampliciti.javahvac;
 
-import com.ampliciti.javahvac.config.Config;
+import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.HVACDao;
 import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import java.io.File;
@@ -84,9 +84,9 @@ public class Main {
    * Does the actual work of starting up and running our application.
    */
   public void run() {
-    Config.buildConfig(yamlFile);
+    ServerConfig.buildConfig(yamlFile);
     HVACDao dao = new SqliteHVACDao();
-    dao.initDb(Config.getDbPath());
+    dao.initDb(ServerConfig.getDbPath());
     // TODO: Something more here
   }
 }

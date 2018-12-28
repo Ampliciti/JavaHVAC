@@ -14,7 +14,7 @@
  */
 package com.ampliciti.javahvac;
 
-import com.ampliciti.javahvac.config.Config;
+import com.ampliciti.javahvac.config.ServerConfig;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -104,7 +104,7 @@ public class MainTest {
     Main instance = new Main(yamlFile);
     instance.run();
     // at least check that something got loaded into config
-    assertEquals("Name of Building Complex", Config.getName());
+    assertEquals("Name of Building Complex", ServerConfig.getName());
   }
 
 }
