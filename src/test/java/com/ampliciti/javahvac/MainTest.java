@@ -76,7 +76,7 @@ public class MainTest {
   @Test
   public void testMain1() {
     System.out.println("main");
-    String[] args = {"./config-samples/example.yaml.sample"};
+    String[] args = {"./config-samples/server.yaml.sample"};
     Main.main(args);
   }
 
@@ -87,7 +87,7 @@ public class MainTest {
   public void testMain2() {
     System.out.println("main");
     exit.expectSystemExit();
-    String[] args = {"./config-samples/example.yaml.sample.missing"};
+    String[] args = {"./config-samples/server.yaml.sample.missing"};
     Main.main(args);
   }
 
@@ -97,7 +97,7 @@ public class MainTest {
   @Test
   public void testRun() {
     System.out.println("run");
-    File yamlFile = new File("./config-samples/example.yaml.sample");
+    File yamlFile = new File("./config-samples/server.yaml.sample");
     if (!yamlFile.exists()) {
       fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
     }

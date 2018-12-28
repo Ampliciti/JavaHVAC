@@ -48,7 +48,7 @@ public class ConfigTest {
   @Test
   public void testBuildConfig() throws Exception {
     System.out.println("buildConfig");
-    File yamlFile = new File("./config-samples/example.yaml.sample");
+    File yamlFile = new File("./config-samples/server.yaml.sample");
     if (!yamlFile.exists()) {
       fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
     }
