@@ -169,7 +169,7 @@ public class ServerConfig {
      * Email address that critical notifications will be sent.
      * @param aNotificationEmail the notificationEmail to set
      */
-    public static void setNotificationEmail(ArrayList<String> aNotificationEmail) {
+    public void setNotificationEmail(ArrayList<String> aNotificationEmail) {
         notificationEmail = aNotificationEmail;
     }
 
