@@ -66,7 +66,7 @@ public class Main {
       System.exit(-1);
     }
     Main main = new Main(yamlFile);
-    main.run();
+    main.runApp();
   }
 
 
@@ -83,7 +83,7 @@ public class Main {
   /**
    * Does the actual work of starting up and running our application.
    */
-  public void run() {
+  public void runApp() {
     ServerConfig.buildConfig(yamlFile);
     HVACDao dao = new SqliteHVACDao();
     dao.initDb(ServerConfig.getDbPath());

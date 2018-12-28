@@ -26,5 +26,6 @@ nodes:
     - address: barn.lan
     - address: central.lan
     - address: attic.lan
+    - address: idonotexist.lan
 
     
