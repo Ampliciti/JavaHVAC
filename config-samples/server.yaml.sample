@@ -3,7 +3,7 @@
 #The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith Household" or "ABC Company"
 name: "Name of Building Complex"
 
-#Locally resolveable DNS or IP address
+#Local-network resolveable DNS or IP address
 dns: "127.0.0.1"
 
 #A region is an area serviced by a single pump/blower/etc

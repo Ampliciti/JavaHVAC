@@ -44,7 +44,7 @@ public class Main {
    * @param args A single path to the properties file used for this app.
    */
   public static void main(String[] args) {
-    String startupMessage = "Starting PiHomeSecurity Server! With path to YAML file of: ";
+    String startupMessage = "Starting JavaHVAC Server! With path to YAML file of: ";
     boolean props = true;
     if (args == null || args.length != 1) {
       startupMessage += "None. Will not start! Please pass in a path as a command argument.";
