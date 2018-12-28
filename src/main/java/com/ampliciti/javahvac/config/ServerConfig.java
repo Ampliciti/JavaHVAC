@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.config;
 
+import com.ampliciti.javahvac.domain.Node;
 import com.ampliciti.javahvac.domain.Region;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,144 +25,166 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Config object for our application. All accessors are static, so once built, this object does not
- * need to be passed around.
+ * Config object for our application. All accessors are static, so once built,
+ * this object does not need to be passed around.
  *
  * @author jeffrey
  */
 public class ServerConfig {
 
-  /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
-   */
-  private static String name;
+    /**
+     * The name of your building complex and/or setup. This is used for logging
+     * and UI purposes. Example: "Smith Household" or "ABC Company".
+     */
+    private static String name;
 
-  /**
-   * Locally resolveable DNS or IP address.
-   */
-  private static String dns;
+    /**
+     * Locally resolveable DNS or IP address.
+     */
+    private static String dns;
 
-  /**
-   * A region is an area serviced by a single pump/blower/etc.
-   */
-  private static ArrayList<Region> regions;
+    /**
+     * A region is an area serviced by a single pump/blower/etc.
+     */
+    private static ArrayList<Region> regions;
 
-  /**
-   * Path where the database will be stored.
-   */
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private static String dbPath = "./hvac-sqlite.db";
+    /**
+     * Nodes that the server should be expecting to communicate with.
+     */
+    private static ArrayList<Node> nodes;
 
+    /**
+     * Path where the database will be stored.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private static String dbPath = "./hvac-sqlite.db";
 
-  /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
-   * 
-   * @return the name
-   */
-  public static String getName() {
-    return name;
-  }
-
-  /**
-   * Locally resolveable DNS or IP address.
-   * 
-   * @return the dns
-   */
-  public static String getDns() {
-    return dns;
-  }
-
-  /**
-   * A region is an area serviced by a single pump/blower/etc.
-   * 
-   * @return the regions
-   */
-  public static ArrayList<Region> getRegions() {
-    return regions;
-  }
-
-  /**
-   * Path where the database will be stored.
-   * 
-   * @return the dbPath
-   */
-  public static String getDbPath() {
-    return dbPath;
-  }
-
-  /**
-   * Path where the database will be stored.
-   * 
-   * @param aDbPath the dbPath to set
-   */
-  public static void setDbPath(String aDbPath) {
-    dbPath = aDbPath;
-  }
-
-  /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
-   * 
-   * @param aName the name to set
-   */
-  public void setName(String aName) {
-    name = aName;
-  }
-
-  /**
-   * Locally resolveable DNS or IP address.
-   * 
-   * @param dns the dns to set
-   */
-  public void setDns(String dns) {
-    this.dns = dns;
-  }
-
-  /**
-   * A region is an area serviced by a single pump/blower/etc.
-   * 
-   * @param regions the regions to set
-   */
-  public void setRegions(ArrayList<Region> regions) {
-    this.regions = regions;
-  }
-
-
-  // builder stuff
-  /**
-   * Builds this object out, statically.
-   *
-   * @param yamlFile Yaml config to use to build.
-   * @throws IllegalArgumentException if the YAML is missing, unreadable, or malformed.
-   */
-  public static void buildConfig(File yamlFile) throws IllegalArgumentException {
-    loadYaml(yamlFile);
-  }
-
-  /**
-   * Loads a yaml file object into a Yaml object.
-   *
-   * @param yamlFile
-   * @return A map representing the Yaml file.
-   */
-  private static ServerConfig loadYaml(File yamlFile) {
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-    FileInputStream fis = null;
-    try {
-      fis = new FileInputStream(yamlFile);
-      return mapper.readValue(fis, ServerConfig.class);
-    } catch (Exception e) {
-      throw new IllegalArgumentException(e);
-    } finally {
-      if (fis != null) {
-        try {
-          fis.close();
-        } catch (IOException e) {
-          ;// nothing we can do
-        }
-      }
+    /**
+     * The name of your building complex and/or setup. This is used for logging
+     * and UI purposes. Example: "Smith Household" or "ABC Company".
+     *
+     * @return the name
+     */
+    public static String getName() {
+        return name;
     }
-  }
+
+    /**
+     * Locally resolveable DNS or IP address.
+     *
+     * @return the dns
+     */
+    public static String getDns() {
+        return dns;
+    }
+
+    /**
+     * A region is an area serviced by a single pump/blower/etc.
+     *
+     * @return the regions
+     */
+    public static ArrayList<Region> getRegions() {
+        return regions;
+    }
+
+    /**
+     * Path where the database will be stored.
+     *
+     * @return the dbPath
+     */
+    public static String getDbPath() {
+        return dbPath;
+    }
+
+    /**
+     * Path where the database will be stored.
+     *
+     * @param aDbPath the dbPath to set
+     */
+    public static void setDbPath(String aDbPath) {
+        dbPath = aDbPath;
+    }
+
+    /**
+     * The name of your building complex and/or setup. This is used for logging
+     * and UI purposes. Example: "Smith Household" or "ABC Company".
+     *
+     * @param aName the name to set
+     */
+    public void setName(String aName) {
+        name = aName;
+    }
+
+    /**
+     * Locally resolveable DNS or IP address.
+     *
+     * @param dns the dns to set
+     */
+    public void setDns(String dns) {
+        this.dns = dns;
+    }
+
+    /**
+     * A region is an area serviced by a single pump/blower/etc.
+     *
+     * @param regions the regions to set
+     */
+    public void setRegions(ArrayList<Region> regions) {
+        this.regions = regions;
+    }
+
+    /**
+     * Nodes that the server should be expecting to communicate with.
+     *
+     * @return the nodes
+     */
+    public static ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * Nodes that the server should be expecting to communicate with.
+     *
+     * @param aNodes the nodes to set
+     */
+    public void setNodes(ArrayList<Node> aNodes) {
+        nodes = aNodes;
+    }
+
+    // builder stuff
+    /**
+     * Builds this object out, statically.
+     *
+     * @param yamlFile Yaml config to use to build.
+     * @throws IllegalArgumentException if the YAML is missing, unreadable, or
+     * malformed.
+     */
+    public static void buildConfig(File yamlFile) throws IllegalArgumentException {
+        loadYaml(yamlFile);
+    }
+
+    /**
+     * Loads a yaml file object into a Yaml object.
+     *
+     * @param yamlFile
+     * @return A map representing the Yaml file.
+     */
+    private static ServerConfig loadYaml(File yamlFile) {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(yamlFile);
+            return mapper.readValue(fis, ServerConfig.class);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    ;// nothing we can do
+                }
+            }
+        }
+    }
 }

@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
  *
  * @author jeffrey
  */
-public class ConfigTest {
+public class ServerConfigTest {
 
-  public ConfigTest() {}
+  public ServerConfigTest() {}
 
   @BeforeClass
   public static void setUpClass() {}
@@ -61,6 +61,8 @@ public class ConfigTest {
     assertEquals("shop", ServerConfig.getRegions().get(1).getName());
     assertEquals("mill", ServerConfig.getRegions().get(1).getZones().get(0).getName());
     assertEquals("chicken_coop", ServerConfig.getRegions().get(1).getZones().get(1).getName());
+    assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
+    assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());
   }
 
 }

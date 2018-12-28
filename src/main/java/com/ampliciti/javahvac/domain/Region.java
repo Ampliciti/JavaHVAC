@@ -14,7 +14,6 @@
  */
 package com.ampliciti.javahvac.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +32,9 @@ public class Region {
    */
   private ArrayList<Zone> zones;
 
+  /**
+   * Default constructor.
+   */
   public Region() {}
 
 

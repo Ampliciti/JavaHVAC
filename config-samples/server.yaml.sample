@@ -1,4 +1,4 @@
-#sample server configuration
+#sample server configuration -- check out the yaml spec for information about formatting; however, please note that you should use spaces instead of tabs.
 
 #The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith Household" or "ABC Company"
 name: "Name of Building Complex"
@@ -18,6 +18,10 @@ regions:
        - name: mill
        - name: chicken_coop
 
-
+#Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes themselves are not associated with zones, however, node functions are. The purpose of having the node list here is so that the server knows what nodes to expect to connect to, and can send out warnings if they don't exist. Nodes must have DNS names or IP addresses that resolve on the local network, for that reason, if using IPs, static DHCP is recommended.
+nodes:
+    - address: barn.lan
+    - address: central.lan
+    - address: attic.lan
 
     
