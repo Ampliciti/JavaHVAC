@@ -21,6 +21,8 @@ package com.ampliciti.javahvac.service;
  * @author jeffrey
  */
 public class NodeService {
+    
+    //TODO: Consider making methods statically accessable.
 
     /**
      * Default constructor.
@@ -33,7 +35,7 @@ public class NodeService {
      * @return True if we can talk to ALL nodes, false if one or more node is down.
      */
     public boolean checkNodeConnections(){
-        
+        //TODO: Finish
         return false;
     
     
