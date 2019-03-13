@@ -93,5 +93,7 @@ public class Main {
             logger.info("We are able to connect to all nodes.");
         }
         // TODO: Something more here
+        // TODO: Start worker thread to see if any conditions need to be changed
+        // TODO: Start REST API
     }
 }
