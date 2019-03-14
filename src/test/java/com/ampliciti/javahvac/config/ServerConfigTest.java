@@ -55,16 +55,24 @@ public class ServerConfigTest {
     ServerConfig.buildConfig(yamlFile);
     assertEquals("Name of Building Complex", ServerConfig.getName());
     assertEquals("127.0.0.1", ServerConfig.getDns());
-    assertEquals(2, ServerConfig.getRegions().size());
+    assertEquals(3, ServerConfig.getRegions().size());
     assertEquals("house", ServerConfig.getRegions().get(0).getName());
     assertEquals("hall", ServerConfig.getRegions().get(0).getZones().get(0).getName());
     assertEquals("shop", ServerConfig.getRegions().get(1).getName());
+    assertEquals("lights", ServerConfig.getRegions().get(2).getName());
+    
     assertEquals(0, ServerConfig.getRegions().get(1).getZones().get(0).getRuntime());
     assertEquals(false, ServerConfig.getRegions().get(1).getZones().get(0).isManualAllowed());    
     assertEquals("mill", ServerConfig.getRegions().get(1).getZones().get(0).getName());
+    
     assertEquals("chicken_coop", ServerConfig.getRegions().get(1).getZones().get(1).getName());
     assertEquals(5, ServerConfig.getRegions().get(1).getZones().get(1).getRuntime());
     assertEquals(true, ServerConfig.getRegions().get(1).getZones().get(1).isManualAllowed());
+    
+    assertEquals("house_floods", ServerConfig.getRegions().get(2).getZones().get(0).getName());
+    assertEquals(0, ServerConfig.getRegions().get(2).getZones().get(0).getRuntime());
+    assertEquals(true, ServerConfig.getRegions().get(2).getZones().get(0).isManualAllowed());
+    
     assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
     assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());
   }

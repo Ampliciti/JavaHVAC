@@ -23,6 +23,12 @@ regions:
          manualAllowed: true #Flag indicating if manual control/override of this zone by the end user is permitted. Defaults to false.
          runtime: 5 #Runtime for this zone in seconds. This is used to allow regions to round robin heat sources between zones. (See javadoc.)
 
+    - name: lights #regions don't even have to be HVAC related; they can be used to group arbitrary relays for other tasks
+      managed: false #if a region isn't HVAC related, set it to not be automatically managed.
+      zones:
+          - name: house_floods
+            manualAllowed: true #all zones under a non-managed region should be manualAllowed: true
+
 #Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes themselves are not associated with zones, however, node functions are. The purpose of having the node list here is so that the server knows what nodes to expect to connect to, and can send out warnings if they don't exist. Nodes must have DNS names or IP addresses that resolve on the local network, for that reason, if using IPs, static IPs or static DHCP is recommended.
 nodes:
     - address: barn.lan
