@@ -21,5 +21,11 @@ package com.ampliciti.javahvac.dao;
  * @author jeffrey
  */
 public interface HVACDao {
+    
+    //TODO: Left off here
+//    void setRegionStatus();
+//    void getRegionStatus();
+//    void setZoneStatus();
+//    void getZoneStatus();
 
 }

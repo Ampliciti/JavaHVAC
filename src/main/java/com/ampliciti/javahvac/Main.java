@@ -95,7 +95,7 @@ public class Main {
             logger.error(message);
             System.exit(-1);
         }
-        // TODO: write config to DB
+        // TODO: write config to DB (or maybe not?)
         
         NodeService ns = new NodeService();
         if (!ns.checkNodeConnections()) {
