@@ -12,14 +12,16 @@ notificationEmail: ["sample1@example.com", "sample2@example.com"]
 #A region is an area serviced by a single pump/blower/etc
 regions:
     - name: house
-      #A zone is associated with regions in a 1:many fashion and is controlled by a valve or switch. Each region needs at least one zone.
+      #A zone is associated with regions in a many:1 fashion and is controlled by a valve or switch. Each region needs at least one zone.
       zones:
         - name: hall
 
     - name: shop
       zones:
        - name: mill
-       - name: chicken_coop
+       - name: chicken_coop 
+         manualAllowed: true #Flag indicating if manual control/override of this zone by the end user is permitted. Defaults to false.
+         runtime: 5 #Runtime for this zone in seconds. This is used to allow regions to round robin heat sources between zones. (See javadoc.)
 
 #Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes themselves are not associated with zones, however, node functions are. The purpose of having the node list here is so that the server knows what nodes to expect to connect to, and can send out warnings if they don't exist. Nodes must have DNS names or IP addresses that resolve on the local network, for that reason, if using IPs, static IPs or static DHCP is recommended.
 nodes:

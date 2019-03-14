@@ -15,32 +15,80 @@
 package com.ampliciti.javahvac.domain;
 
 /**
- * A zone is associated with region in a many:1 fashion and is controlled by a valve or switch.
- * Each region needs at least one zone.
- * 
+ * A zone is associated with region in a many:1 fashion and is controlled by a
+ * valve or switch. Each region needs at least one zone.
+ *
  * @author jeffrey
  */
 public class Zone {
 
-  /**
-   * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room South"
-   */
-  private String name;
+    /**
+     * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room
+     * South"
+     */
+    private String name;
 
-  /**
-   * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room South"
-   * 
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
+    /**
+     * Flag indicating if manual control/override of this zone by the end user
+     * is permitted. Defaults to false.
+     */
+    private boolean manualAllowed = false;
 
+    /**
+     * Runtime for this zone in seconds. This is used to allow regions to round
+     * robin heat sources between zones. A time of zero indicates that the zone
+     * should never be automatically started. If the region desires a climate
+     * change, the zone will run for this amount of time, then turn off,
+     * allowing another zone to run. If there is only one zone in region, this
+     * value is ignored.
+     *
+     * Defaults to 0;
+     */
+    private int runtime = 0;
 
-  @Override
-  public String toString() {
-    return "Zone{" + "name=" + name + '}';
-  }
+    /**
+     * Default constructor.
+     */
+    public Zone() {
+    }
 
+    /**
+     * Name of zone. Examples of zone names: "Entrance", "Hall", "Living Room
+     * South"
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Flag indicating if manual control/override of this zone by the end user
+     * is permitted.
+     *
+     * @return the manualAllowed
+     */
+    public boolean isManualAllowed() {
+        return manualAllowed;
+    }
+
+    /**
+     * Runtime for this zone in seconds. This is used to allow regions to round
+     * robin heat sources between zones. A time of zero indicates that the zone
+     * should never be automatically started. If the region desires a climate
+     * change, the zone will run for this amount of time, then turn off,
+     * allowing another zone to run. If there is only one zone in region, this
+     * value is ignored.
+     *
+     * @return the runtime in minutes.
+     */
+    public int getRuntime() {
+        return runtime;
+    }
+
+    @Override
+    public String toString() {
+        return "Zone{" + "name=" + name + ", manualAllowed=" + manualAllowed + ", runtime=" + runtime + '}';
+    }
 
 }
