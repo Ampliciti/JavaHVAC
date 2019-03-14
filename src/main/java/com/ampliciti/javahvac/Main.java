@@ -19,6 +19,7 @@ import com.ampliciti.javahvac.dao.HVACDao;
 import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import com.ampliciti.javahvac.service.NodeService;
 import java.io.File;
+import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 /**
@@ -66,7 +67,7 @@ public class Main {
             System.exit(-1);
         }
         Main main = new Main(yamlFile);
-        main.runApp();
+        main.initApp();
     }
 
     /**
@@ -79,13 +80,23 @@ public class Main {
     }
 
     /**
-     * Does the actual work of starting up and running our application.
+     * Does the actual work of starting up application.
      */
-    public void runApp() {
+    public void initApp() {
         ServerConfig.buildConfig(yamlFile);
         logger.info("Configuration built for " + ServerConfig.getName());//let the user know they picked the right config
-        HVACDao dao = new SqliteHVACDao();
-        dao.initDb(ServerConfig.getDbPath());
+        //setup our DB/DAO
+        HVACDao dao;
+        try {
+            dao = new SqliteHVACDao(ServerConfig.getDbPath());
+        } catch (SQLException e) {
+            String message = "Could not connect to the database at path: " + ServerConfig.getDbPath() + "; application cannot start.";
+            logger.fatal(message, e);
+            logger.error(message);
+            System.exit(-1);
+        }
+        // TODO: write config to DB
+        
         NodeService ns = new NodeService();
         if (!ns.checkNodeConnections()) {
             logger.warn("Warning, not all nodes are acccessable. Proceeding without all running nodes.");
@@ -93,7 +104,9 @@ public class Main {
             logger.info("We are able to connect to all nodes.");
         }
         // TODO: Something more here
-        // TODO: Start worker thread to see if any conditions need to be changed
+        
         // TODO: Start REST API
+        // TODO: Start worker thread to see if any conditions need to be changed
+
     }
 }

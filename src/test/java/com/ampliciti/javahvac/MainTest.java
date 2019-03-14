@@ -102,7 +102,7 @@ public class MainTest {
       fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
     }
     Main instance = new Main(yamlFile);
-    instance.runApp();
+    instance.initApp();
     // at least check that something got loaded into config
     assertEquals("Name of Building Complex", ServerConfig.getName());
   }

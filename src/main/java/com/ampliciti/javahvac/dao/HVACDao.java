@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.dao;
 
+
 /**
  * Dao for interacting with the database.
  * 
@@ -21,11 +22,4 @@ package com.ampliciti.javahvac.dao;
  */
 public interface HVACDao {
 
-
-  /**
-   * Method that inits the DB.
-   * 
-   * @param path Path or connection string to use.
-   */
-  void initDb(String path);
 }

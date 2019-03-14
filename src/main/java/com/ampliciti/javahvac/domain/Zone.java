@@ -14,10 +14,8 @@
  */
 package com.ampliciti.javahvac.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
- * A zone is associated with regions in a 1:many fashion and is controlled by a valve or switch.
+ * A zone is associated with region in a many:1 fashion and is controlled by a valve or switch.
  * Each region needs at least one zone.
  * 
  * @author jeffrey
