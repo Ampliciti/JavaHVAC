@@ -16,7 +16,7 @@
  */
 package com.ampliciti.javahvac.dao.impl;
 
-import com.ampliciti.javahvac.RESTException;
+import com.ampliciti.javahvac.exceptions.RESTException;
 import com.ampliciti.javahvac.dao.RESTDao;
 import java.io.IOException;
 import java.net.URISyntaxException;

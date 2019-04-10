@@ -1,6 +1,6 @@
 package com.ampliciti.javahvac.dao;
 
-import com.ampliciti.javahvac.RESTException;
+import com.ampliciti.javahvac.exceptions.RESTException;
 import java.util.HashMap;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
