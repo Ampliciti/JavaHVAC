@@ -14,8 +14,10 @@
  */
 package com.ampliciti.javahvac.config;
 
+import com.ampliciti.javahvac.Main;
 import com.ampliciti.javahvac.domain.Node;
 import com.ampliciti.javahvac.domain.Region;
+import com.ampliciti.javahvac.domain.Source;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 /**
  * Config object for our application. All accessors are static, so once built,
@@ -32,6 +35,12 @@ import java.util.ArrayList;
  */
 public class ServerConfig {
 
+    
+    /**
+     * Logger for this class.
+     */
+    public static Logger logger = Logger.getLogger(Main.class);
+    
     /**
      * The name of your building complex and/or setup. This is used for logging
      * and UI purposes. Example: "Smith Household" or "ABC Company".
@@ -49,10 +58,16 @@ public class ServerConfig {
     private static ArrayList<Region> regions;
 
     /**
+     * Sources of heat and cool; can be for more than one region; region names
+     * must match regions.
+     */
+    private static ArrayList<Source> sources;
+
+    /**
      * Nodes that the server should be expecting to communicate with.
      */
     private static ArrayList<Node> nodes;
-    
+
     /**
      * Email address that critical notifications will be sent.
      */
@@ -90,6 +105,16 @@ public class ServerConfig {
      */
     public static ArrayList<Region> getRegions() {
         return regions;
+    }
+
+    /**
+     * Sources of heat and cool; can be for more than one region; region names
+     * must match regions.
+     *
+     * @return the sources
+     */
+    public static ArrayList<Source> getSources() {
+        return sources;
     }
 
     /**
@@ -139,6 +164,16 @@ public class ServerConfig {
     }
 
     /**
+     * Sources of heat and cool; can be for more than one region; region names
+     * must match regions.
+     *
+     * @param aSources the sources to set
+     */
+    public void setSources(ArrayList<Source> aSources) {
+        sources = aSources;
+    }
+
+    /**
      * Nodes that the server should be expecting to communicate with.
      *
      * @return the nodes
@@ -155,10 +190,10 @@ public class ServerConfig {
     public void setNodes(ArrayList<Node> aNodes) {
         nodes = aNodes;
     }
-    
-    
+
     /**
      * Email address that critical notifications will be sent.
+     *
      * @return the notificationEmail
      */
     public static ArrayList<String> getNotificationEmail() {
@@ -167,6 +202,7 @@ public class ServerConfig {
 
     /**
      * Email address that critical notifications will be sent.
+     *
      * @param aNotificationEmail the notificationEmail to set
      */
     public void setNotificationEmail(ArrayList<String> aNotificationEmail) {
@@ -183,6 +219,20 @@ public class ServerConfig {
      */
     public static void buildConfig(File yamlFile) throws IllegalArgumentException {
         loadYaml(yamlFile);
+        //check to make sure we have a source for each region
+        for (Region r : regions) {
+            boolean nameMatch = false;
+            for (Source s : sources) {
+                for (String regionServedName : s.getRegions_served()) {
+                    if (regionServedName.equals(r.getName())) {
+                        nameMatch = true;
+                    }
+                }
+            }
+            if (!nameMatch) {
+                logger.warn("Region: '" + r.getName() + "' does not have a heat/cool source.");
+            }
+        }
     }
 
     /**

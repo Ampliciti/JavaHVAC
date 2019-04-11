@@ -36,4 +36,21 @@ nodes:
     - address: attic.lan
     - address: idonotexist.lan
 
-    
+#sources of heat and cool; can be for more than one region; region names must match regions above
+sources:
+    - name: furnace
+      regions_served:
+        - house
+      type: HEAT
+    - name: ac
+      type: AC
+      regions_served:
+        - house
+    - name: cistern
+      type: HEAT
+      regions_served:
+        - house
+        - shop
+      detail: SOLAR
+      max_temp: 120
+

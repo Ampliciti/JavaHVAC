@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.config;
 
+import com.ampliciti.javahvac.domain.Source.Type;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -75,6 +76,13 @@ public class ServerConfigTest {
     
     assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
     assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());
+    
+    assertEquals("furnace", ServerConfig.getSources().get(0).getName());
+    assertEquals("house", ServerConfig.getSources().get(0).getRegions_served().get(0));
+    assertEquals(Type.HEAT, ServerConfig.getSources().get(0).getType());
+    assertEquals("ac", ServerConfig.getSources().get(1).getName());
+    assertEquals("cistern", ServerConfig.getSources().get(2).getName());
+    
   }
 
 }
