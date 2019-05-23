@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 jeffrey
+ * Copyright (C) 2018-2019 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -17,9 +17,12 @@ package com.ampliciti.javahvac;
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.HVACDao;
 import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
+import com.ampliciti.javahvac.rules.Rule;
+import com.ampliciti.javahvac.rules.RuleGenerator;
 import com.ampliciti.javahvac.service.NodeService;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 /**
@@ -96,17 +99,63 @@ public class Main {
             System.exit(-1);
         }
         // TODO: write config to DB (or maybe not?)
-        
+
         NodeService ns = new NodeService();
         if (!ns.checkNodeConnections()) {
             logger.warn("Warning, not all nodes are acccessable. Proceeding without all running nodes.");
         } else {
             logger.info("We are able to connect to all nodes.");
         }
-        // TODO: Something more here
-        
+        // Define Rules
+        ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
+        ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
+
+        // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
         // TODO: Start REST API
-        // TODO: Start worker thread to see if any conditions need to be changed
+        // Start worker thread to see if any conditions need to be changed
+        Runnable managedWorker = new Runnable() {
+            @Override
+            public void run() {
+                for (Rule r : managedRules) {//enforce all rules
+                    r.enforceRule();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+
+                    }
+                }
+            }
+        };
+
+        Thread managedWorkerThread = new Thread(managedWorker);
+        logger.info("Starting managed worker thread...");
+        managedWorkerThread.start();
+        logger.info("Managed worker thread started.");
+
+        // Start worker thread to see if any conditions need to be changed
+        Runnable unmanagedWorker = new Runnable() {
+            @Override
+            public void run() {
+                for (Rule r : unmanagedRules) {//enforce all rules
+                    r.enforceRule();
+
+                }
+            }
+        };
+
+        Thread unmanagedWorkerThread = new Thread(unmanagedWorker);
+        logger.info("Starting unmanaged worker thread...");
+        unmanagedWorkerThread.start();
+        logger.info("Umanaged worker thread started.");
+        logger.info("Program successfully started up!");
+        while (true) {//wait till it dies
+            try {
+                Thread.sleep(500000);
+            } catch (Exception e) {
+
+            }
+        }
 
     }
+
 }
