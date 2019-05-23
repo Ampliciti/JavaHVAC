@@ -17,6 +17,7 @@
 package com.ampliciti.javahvac.dao.domain;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,8 +38,12 @@ public class ZoneState implements Serializable {
     @Column(name = "id")
     private int id;
     /**
-     * Date that this region was last updated.
+     * Name of this zone.
      */
-    private String name;
+    private String name;    
+    /**
+     * Date that this zone was last updated.
+     */
+    private Date lastUpdated;
 
 }
