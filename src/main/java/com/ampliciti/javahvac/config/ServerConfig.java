@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 jeffrey
+ * Copyright (C) 2018-2019 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,7 +14,6 @@
  */
 package com.ampliciti.javahvac.config;
 
-import com.ampliciti.javahvac.Main;
 import com.ampliciti.javahvac.domain.Node;
 import com.ampliciti.javahvac.domain.Region;
 import com.ampliciti.javahvac.domain.Source;
@@ -39,7 +38,7 @@ public class ServerConfig {
     /**
      * Logger for this class.
      */
-    public static Logger logger = Logger.getLogger(Main.class);
+    private static Logger logger = Logger.getLogger(ServerConfig.class);
     
     /**
      * The name of your building complex and/or setup. This is used for logging
