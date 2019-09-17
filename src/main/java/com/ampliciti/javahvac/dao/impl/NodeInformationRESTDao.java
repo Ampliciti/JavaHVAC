@@ -14,8 +14,11 @@
  */
 package com.ampliciti.javahvac.dao.impl;
 
+import com.ampliciti.javahvac.Utils;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
+import com.ampliciti.javahvac.dao.RESTDao;
 import com.ampliciti.javahvac.domain.NodeInformation;
+import java.net.URL;
 
 /**
  * REST Dao for getting self-reported information from nodes.
@@ -33,10 +36,10 @@ public class NodeInformationRESTDao implements NodeInformationDao {
    * @return
    */
   @Override
-  public NodeInformation getInfo(String nodeName) {
-    throw new UnsupportedOperationException("Not supported yet."); // To change body of generated
-                                                                   // methods, choose Tools |
-                                                                   // Templates.
+  public NodeInformation getInfo(String nodeAddress) {
+    RESTDao restDao = new RESTDaoImpl(Utils.buildUrlFromAddressString(nodeAddress));
+    // restDao.doGetCall(nodeAddress);
+    throw new UnsupportedOperationException("Not done yet");
   }
 
 }
