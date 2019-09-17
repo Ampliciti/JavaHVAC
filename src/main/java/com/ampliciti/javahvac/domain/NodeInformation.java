@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.domain;
 
+import com.ampliciti.javahvac.domain.config.Node;
 import java.util.ArrayList;
 
 /**

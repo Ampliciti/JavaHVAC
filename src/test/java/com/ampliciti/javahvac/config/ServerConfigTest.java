@@ -14,7 +14,7 @@
  */
 package com.ampliciti.javahvac.config;
 
-import com.ampliciti.javahvac.domain.Source.Type;
+import com.ampliciti.javahvac.domain.config.Source.Type;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;

@@ -1,0 +1,14 @@
+{
+   "name":"house-central",
+   "address":"central.lan",
+   "zones":[
+      {
+         "name":"hall",
+         "temp":75.6
+      },
+      {
+         "name":"air",
+         "temp":80
+      }
+   ]
+}

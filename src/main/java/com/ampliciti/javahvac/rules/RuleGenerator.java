@@ -15,9 +15,9 @@
 package com.ampliciti.javahvac.rules;
 
 import com.ampliciti.javahvac.config.ServerConfig;
-import com.ampliciti.javahvac.domain.Region;
-import com.ampliciti.javahvac.domain.Source;
-import com.ampliciti.javahvac.domain.Zone;
+import com.ampliciti.javahvac.domain.config.Region;
+import com.ampliciti.javahvac.domain.config.Source;
+import com.ampliciti.javahvac.domain.config.Zone;
 import com.ampliciti.javahvac.rules.impl.HeatSourceRule;
 import com.ampliciti.javahvac.rules.impl.RegionRule;
 import com.ampliciti.javahvac.rules.impl.SolarCisternRule;

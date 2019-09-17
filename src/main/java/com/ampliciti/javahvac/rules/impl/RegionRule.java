@@ -14,7 +14,7 @@
  */
 package com.ampliciti.javahvac.rules.impl;
 
-import com.ampliciti.javahvac.domain.Region;
+import com.ampliciti.javahvac.domain.config.Region;
 import com.ampliciti.javahvac.rules.Rule;
 
 /**

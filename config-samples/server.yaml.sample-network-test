@@ -35,10 +35,10 @@ nodes:
       address: localhost:8082
 
     - name: house-central
-      address: localhost:8082
+      address: localhost:8083
     
     - name: house-attic
-      address: localhost:8082
+      address: localhost:8084
     
 
 

@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.domain;
+package com.ampliciti.javahvac.domain.config;
 
 /**
  * Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes
@@ -35,6 +35,18 @@ public class Node {
    * Address for this node.
    */
   private String address;
+
+  /**
+   * Constructor.
+   * 
+   * @param name Name for this node.
+   * @param address Address for this node.
+   */
+  public Node(String name, String address) {
+    this.name = name;
+    this.address = address;
+  }
+
 
 
   /**

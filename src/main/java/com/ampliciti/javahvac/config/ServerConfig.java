@@ -14,9 +14,9 @@
  */
 package com.ampliciti.javahvac.config;
 
-import com.ampliciti.javahvac.domain.Node;
-import com.ampliciti.javahvac.domain.Region;
-import com.ampliciti.javahvac.domain.Source;
+import com.ampliciti.javahvac.domain.config.Node;
+import com.ampliciti.javahvac.domain.config.Region;
+import com.ampliciti.javahvac.domain.config.Source;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;

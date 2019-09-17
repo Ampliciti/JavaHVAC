@@ -18,9 +18,11 @@ import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
 import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
 import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
-import com.ampliciti.javahvac.domain.Node;
+import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
@@ -43,7 +45,8 @@ public class NodeService {
   public NodeService() {}
 
   /**
-   * Checks that we can connect to our nodes and that they are up and running.
+   * Checks that we can connect to our nodes and that they are up and running. Used as a basic
+   * application startup check.
    * 
    * @return True if we can talk to ALL nodes, false if one or more node is down.
    */
@@ -59,7 +62,8 @@ public class NodeService {
         logger.info(
             "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
       } catch (NodeConnectionException e) {
-        logger.error("Could not connect to node to confirm connection.", e);
+        logger.error("Could not connect to node " + node.getName() + " on address: "
+            + node.getAddress() + " to confirm connection.", e);
         connectedToAll = false;
         // even though we've failed here, we'll keep checking the rest of the nodes for logging
         // purposes.
@@ -68,5 +72,39 @@ public class NodeService {
     return connectedToAll;
   }
 
+  /**
+   * Pulls the state from all nodes that it's presently able to talk to.
+   */
+  public Map<String, NodeInformation> pullNodeState() {
+    ArrayList<Node> allNodes = ServerConfig.getNodes();
+    Map<String, NodeInformation> toReturn = new HashMap<>();
+    for (Node node : allNodes) {
+      toReturn.put(node.getName(), pullNodeState(node));
+    }
+    return toReturn;
+  }
+
+  /**
+   * Pulls the state from a single node.
+   * 
+   * @param node Node to pull state from/for.
+   * @return NodeInformation if it can get it. Null if it's unreachable or not available.
+   */
+  public NodeInformation pullNodeState(Node node) {
+    NodeInformationDao nodeDao = new NodeInformationRESTDao();
+    logger.info(
+        "Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
+    try {
+      NodeInformation ni = nodeDao.getInfo(node.getAddress());
+      logger.info(
+          "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
+      return ni;
+    } catch (NodeConnectionException e) {
+      logger.error(
+          "Could not connect to node " + node.getName() + " on address: " + node.getAddress(), e);
+      return null;
+    }
+
+  }
 
 }

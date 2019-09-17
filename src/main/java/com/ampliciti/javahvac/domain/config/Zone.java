@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.domain;
+package com.ampliciti.javahvac.domain.config;
 
 /**
  * A zone is associated with region in a many:1 fashion and is controlled by a valve or switch. Each

@@ -1,0 +1,10 @@
+{
+   "name":"house-attic",
+   "address":"attic.lan",
+   "zones":[
+      {
+         "name":"lights",
+         "state":"false"
+      }
+   ]
+}
