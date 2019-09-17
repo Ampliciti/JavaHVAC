@@ -1,0 +1,62 @@
+#sample server configuration -- check out the yaml spec for information about formatting; however, please note that you should use spaces instead of tabs.
+
+#The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith Household" or "ABC Company"
+name: "Name of Building Complex"
+
+#Local-network resolveable DNS or IP address
+dns: "127.0.0.1"
+
+#Email address that critical notifications will be sent
+notificationEmail: ["sample1@example.com", "sample2@example.com"]
+
+#A region is an area serviced by a single pump/blower/etc
+regions:
+    - name: house
+      #A zone is associated with regions in a many:1 fashion and is controlled by a valve or switch. Each region needs at least one zone.
+      zones:
+        - name: hall
+
+    - name: shop
+      zones:
+       - name: mill
+       - name: chicken_coop 
+         manualAllowed: true #Flag indicating if manual control/override of this zone by the end user is permitted. Defaults to false.
+         runtime: 5 #Runtime for this zone in seconds. This is used to allow regions to round robin heat sources between zones. (See javadoc.)
+
+    - name: lights #regions don't even have to be HVAC related; they can be used to group arbitrary relays for other tasks
+      managed: false #if a region isn't HVAC related, set it to not be automatically managed.
+      zones:
+          - name: house_floods
+            manualAllowed: true #all zones under a non-managed region should be manualAllowed: true
+
+#Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes themselves are not associated with zones, however, node functions are. The purpose of having the node list here is so that the server knows what nodes to expect to connect to, and can send out warnings if they don't exist. Nodes must have DNS names or IP addresses that resolve on the local network, for that reason, if using IPs, static IPs or static DHCP is recommended.
+nodes:
+    - name: barn
+      address: localhost:8082
+
+    - name: house-central
+      address: localhost:8082
+    
+    - name: house-attic
+      address: localhost:8082
+    
+
+
+#sources of heat and cool; can be for more than one region; region names must match regions above
+sources:
+    - name: furnace
+      regions_served:
+        - house
+      type: HEAT
+    - name: ac
+      type: AC
+      regions_served:
+        - house
+    - name: cistern
+      type: HEAT
+      regions_served:
+        - house
+        - shop
+      detail: SOLAR
+      max_temp: 120
+

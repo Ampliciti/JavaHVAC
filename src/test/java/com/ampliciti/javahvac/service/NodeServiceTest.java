@@ -14,12 +14,18 @@
  */
 package com.ampliciti.javahvac.service;
 
+import com.ampliciti.javahvac.config.ServerConfig;
+import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockserver.integration.ClientAndServer;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 /**
  *
@@ -45,14 +51,47 @@ public class NodeServiceTest {
    * Test of checkNodeConnections method, of class NodeService.
    */
   @Test
-  public void testCheckNodeConnections() {
-    System.out.println("checkNodeConnections");
+  public void testCheckNodeConnectionsNoConnections() {
+    System.out.println("checkNodeConnectionsNoConnections");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // test
     NodeService instance = new NodeService();
     boolean expResult = false;
     boolean result = instance.checkNodeConnections();
     assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    // fail("The test case is a prototype.");
+  }
+
+  /**
+   * Test of checkNodeConnections method, of class NodeService.
+   */
+  @Test
+  public void testCheckNodeConnectionsWithConnections() throws Exception {
+    System.out.println("checkNodeConnectionsWithConnections");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    int testPort = 8082;
+    ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
+    mockServer.when(request().withPath("/info"))
+        .respond(response()
+            .withBody(FileUtils.readFileToString(
+                new File("./config-samples/node-json/barn-node-info.json"), "UTF-8"))
+            .withStatusCode(200));
+
+    // test
+    NodeService instance = new NodeService();
+    boolean expResult = true;
+    boolean result = instance.checkNodeConnections();
+    assertEquals(expResult, result);
   }
 
 }

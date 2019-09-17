@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 jeffrey
+ * Copyright (C) 2018-2019 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,12 +14,26 @@
  */
 package com.ampliciti.javahvac.service;
 
+import com.ampliciti.javahvac.config.ServerConfig;
+import com.ampliciti.javahvac.dao.NodeInformationDao;
+import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
+import com.ampliciti.javahvac.domain.Node;
+import com.ampliciti.javahvac.domain.NodeInformation;
+import java.util.ArrayList;
+import org.apache.log4j.Logger;
+
 /**
  * Service class for interacting with nodes.
  * 
  * @author jeffrey
  */
 public class NodeService {
+
+  /**
+   * Logger for this class.
+   */
+  public static Logger logger = Logger.getLogger(NodeService.class);
 
   // TODO: Consider making methods statically accessable.
 
@@ -34,10 +48,24 @@ public class NodeService {
    * @return True if we can talk to ALL nodes, false if one or more node is down.
    */
   public boolean checkNodeConnections() {
-    // TODO: Finish
-    return false;
-
-
+    boolean connectedToAll = true;
+    ArrayList<Node> allNodes = ServerConfig.getNodes();
+    NodeInformationDao nodeDao = new NodeInformationRESTDao();
+    for (Node node : allNodes) {
+      logger.info(
+          "Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
+      try {
+        NodeInformation ni = nodeDao.getInfo(node.getAddress());
+        logger.info(
+            "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
+      } catch (NodeConnectionException e) {
+        logger.error("Could not connect to node to confirm connection.", e);
+        connectedToAll = false;
+        // even though we've failed here, we'll keep checking the rest of the nodes for logging
+        // purposes.
+      }
+    }
+    return connectedToAll;
   }
 
 
