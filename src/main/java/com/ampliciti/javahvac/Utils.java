@@ -26,6 +26,14 @@ public class Utils {
   private static final String HTTP_PROTOCOL = "http";
   private static final int DEFAULT_PORT = 80;
 
+  /**
+   * Converts a string address from our config file into a Java usable URL object. There are better
+   * ways to do this, esp with exception handling, but winter is literally coming and I need this
+   * code working soon to heat my house. Don't judge me.
+   * 
+   * @param address String of the address of a node -- expects no protocol with port being optional
+   * @return Java URL object
+   */
   public static URL buildUrlFromAddressString(String address) {
     try {
       String[] splits = address.split("\\Q:\\E");
@@ -39,8 +47,6 @@ public class Utils {
     } catch (Exception e) {
       throw new RuntimeException("The address passed in was not in a correct format: " + address
           + ". Expected format is: [IP|DNS]:port", e);
-      // there's better ways to do this, but winter is literally coming and I need this code working
-      // soon to heat my house. Don't judge me.
     }
   }
 
