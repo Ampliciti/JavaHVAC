@@ -31,130 +31,132 @@ import org.apache.log4j.Logger;
  */
 public class Main {
 
-    /**
-     * Logger for this class.
-     */
-    public static Logger logger = Logger.getLogger(Main.class);
+  /**
+   * Logger for this class.
+   */
+  public static Logger logger = Logger.getLogger(Main.class);
 
-    /**
-     * File reference to the YAML file for this class.
-     */
-    private final File yamlFile;
+  /**
+   * File reference to the YAML file for this class.
+   */
+  private final File yamlFile;
 
-    /**
-     * Main method. Only one argument expected; a path to a properties file.
-     * Checks the arguments, then calls the constructor for this class.
-     *
-     * @param args A single path to the properties file used for this app.
-     */
-    public static void main(String[] args) {
-        String startupMessage = "Starting JavaHVAC Server! With path to YAML file of: ";
-        boolean props = true;
-        if (args == null || args.length != 1) {
-            startupMessage += "None. Will not start! Please pass in a path as a command argument.";
-            props = false;
-        } else {
-            startupMessage += args[0];
+  /**
+   * Main method. Only one argument expected; a path to a properties file. Checks the arguments,
+   * then calls the constructor for this class.
+   *
+   * @param args A single path to the properties file used for this app.
+   */
+  public static void main(String[] args) {
+    String startupMessage = "Starting JavaHVAC Server! With path to YAML file of: ";
+    boolean props = true;
+    if (args == null || args.length != 1) {
+      startupMessage += "None. Will not start! Please pass in a path as a command argument.";
+      props = false;
+    } else {
+      startupMessage += args[0];
+    }
+    System.out.println(startupMessage);
+    logger.info(startupMessage);
+    if (!props) {
+      System.exit(-1);
+    }
+    File yamlFile = new File(args[0]);
+    if (!yamlFile.exists() || !yamlFile.isFile()) {
+      String message =
+          "YAML file at the path: " + args[0] + " does not exist. Application cannot start.";
+      System.err.println(message);
+      logger.error(message);
+      System.exit(-1);
+    }
+    Main main = new Main(yamlFile);
+    main.initApp();
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param yamlFile YAML file object for this app.
+   */
+  public Main(File yamlFile) {
+    this.yamlFile = yamlFile;
+  }
+
+  /**
+   * Does the actual work of starting up application.
+   */
+  public void initApp() {
+    ServerConfig.buildConfig(yamlFile);
+    logger.info("Configuration built for " + ServerConfig.getName());// let the user know they
+                                                                     // picked the right config
+    // setup our DB/DAO
+    HVACDao dao;
+    try {
+      dao = new SqliteHVACDao(ServerConfig.getDbPath());
+    } catch (SQLException e) {
+      String message = "Could not connect to the database at path: " + ServerConfig.getDbPath()
+          + "; application cannot start.";
+      logger.fatal(message, e);
+      logger.error(message);
+      System.exit(-1);
+    }
+    // TODO: write config to DB (or maybe not?)
+
+    NodeService ns = new NodeService();
+    if (!ns.checkNodeConnections()) {
+      logger.warn("Warning, not all nodes are acccessable. Proceeding without all running nodes.");
+    } else {
+      logger.info("We are able to connect to all nodes.");
+    }
+    // Define Rules
+    ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
+    ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
+
+    // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
+    // TODO: Start REST API
+    // Start worker thread to see if any conditions need to be changed
+    Runnable managedWorker = new Runnable() {
+      @Override
+      public void run() {
+        for (Rule r : managedRules) {// enforce all rules
+          r.enforceRule();
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+
+          }
         }
-        System.out.println(startupMessage);
-        logger.info(startupMessage);
-        if (!props) {
-            System.exit(-1);
+      }
+    };
+
+    Thread managedWorkerThread = new Thread(managedWorker);
+    logger.info("Starting managed worker thread...");
+    managedWorkerThread.start();
+    logger.info("Managed worker thread started.");
+
+    // Start worker thread to see if any conditions need to be changed
+    Runnable unmanagedWorker = new Runnable() {
+      @Override
+      public void run() {
+        for (Rule r : unmanagedRules) {// enforce all rules
+          r.enforceRule();
         }
-        File yamlFile = new File(args[0]);
-        if (!yamlFile.exists() || !yamlFile.isFile()) {
-            String message
-                    = "YAML file at the path: " + args[0] + " does not exist. Application cannot start.";
-            System.err.println(message);
-            logger.error(message);
-            System.exit(-1);
-        }
-        Main main = new Main(yamlFile);
-        main.initApp();
+      }
+    };
+
+    Thread unmanagedWorkerThread = new Thread(unmanagedWorker);
+    logger.info("Starting unmanaged worker thread...");
+    unmanagedWorkerThread.start();
+    logger.info("Umanaged worker thread started.");
+    logger.info("Program successfully started up!");
+    while (true) {// wait till it dies
+      try {
+        Thread.sleep(500000);
+      } catch (InterruptedException e) {
+        logger.warn("Main thread interrupted; you probably don't care.", e);
+      }
     }
 
-    /**
-     * Constructor.
-     *
-     * @param yamlFile YAML file object for this app.
-     */
-    public Main(File yamlFile) {
-        this.yamlFile = yamlFile;
-    }
-
-    /**
-     * Does the actual work of starting up application.
-     */
-    public void initApp() {
-        ServerConfig.buildConfig(yamlFile);
-        logger.info("Configuration built for " + ServerConfig.getName());//let the user know they picked the right config
-        //setup our DB/DAO
-        HVACDao dao;
-        try {
-            dao = new SqliteHVACDao(ServerConfig.getDbPath());
-        } catch (SQLException e) {
-            String message = "Could not connect to the database at path: " + ServerConfig.getDbPath() + "; application cannot start.";
-            logger.fatal(message, e);
-            logger.error(message);
-            System.exit(-1);
-        }
-        // TODO: write config to DB (or maybe not?)
-
-        NodeService ns = new NodeService();
-        if (!ns.checkNodeConnections()) {
-            logger.warn("Warning, not all nodes are acccessable. Proceeding without all running nodes.");
-        } else {
-            logger.info("We are able to connect to all nodes.");
-        }
-        // Define Rules
-        ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
-        ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
-
-        // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
-        // TODO: Start REST API
-        // Start worker thread to see if any conditions need to be changed
-        Runnable managedWorker = new Runnable() {
-            @Override
-            public void run() {
-                for (Rule r : managedRules) {//enforce all rules
-                    r.enforceRule();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-
-                    }
-                }
-            }
-        };
-
-        Thread managedWorkerThread = new Thread(managedWorker);
-        logger.info("Starting managed worker thread...");
-        managedWorkerThread.start();
-        logger.info("Managed worker thread started.");
-
-        // Start worker thread to see if any conditions need to be changed
-        Runnable unmanagedWorker = new Runnable() {
-            @Override
-            public void run() {
-                for (Rule r : unmanagedRules) {//enforce all rules
-                    r.enforceRule();
-                }
-            }
-        };
-
-        Thread unmanagedWorkerThread = new Thread(unmanagedWorker);
-        logger.info("Starting unmanaged worker thread...");
-        unmanagedWorkerThread.start();
-        logger.info("Umanaged worker thread started.");
-        logger.info("Program successfully started up!");
-        while (true) {//wait till it dies
-            try {
-                Thread.sleep(500000);
-            } catch (InterruptedException e) {
-                logger.warn("Main thread interrupted; you probably don't care.", e);
-            }
-        }
-
-    }
+  }
 
 }

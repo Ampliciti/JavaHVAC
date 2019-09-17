@@ -61,28 +61,28 @@ public class ServerConfigTest {
     assertEquals("hall", ServerConfig.getRegions().get(0).getZones().get(0).getName());
     assertEquals("shop", ServerConfig.getRegions().get(1).getName());
     assertEquals("lights", ServerConfig.getRegions().get(2).getName());
-    
+
     assertEquals(0, ServerConfig.getRegions().get(1).getZones().get(0).getRuntime());
-    assertEquals(false, ServerConfig.getRegions().get(1).getZones().get(0).isManualAllowed());    
+    assertEquals(false, ServerConfig.getRegions().get(1).getZones().get(0).isManualAllowed());
     assertEquals("mill", ServerConfig.getRegions().get(1).getZones().get(0).getName());
-    
+
     assertEquals("chicken_coop", ServerConfig.getRegions().get(1).getZones().get(1).getName());
     assertEquals(5, ServerConfig.getRegions().get(1).getZones().get(1).getRuntime());
     assertEquals(true, ServerConfig.getRegions().get(1).getZones().get(1).isManualAllowed());
-    
+
     assertEquals("house_floods", ServerConfig.getRegions().get(2).getZones().get(0).getName());
     assertEquals(0, ServerConfig.getRegions().get(2).getZones().get(0).getRuntime());
     assertEquals(true, ServerConfig.getRegions().get(2).getZones().get(0).isManualAllowed());
-    
+
     assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
     assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());
-    
+
     assertEquals("furnace", ServerConfig.getSources().get(0).getName());
     assertEquals("house", ServerConfig.getSources().get(0).getRegions_served().get(0));
     assertEquals(Type.HEAT, ServerConfig.getSources().get(0).getType());
     assertEquals("ac", ServerConfig.getSources().get(1).getName());
     assertEquals("cistern", ServerConfig.getSources().get(2).getName());
-    
+
   }
 
 }

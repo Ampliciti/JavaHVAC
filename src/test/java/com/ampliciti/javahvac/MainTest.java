@@ -74,21 +74,21 @@ public class MainTest {
    * Test of main method, of class Main.
    */
   @Test
-  public void testMain1() throws Exception{
+  public void testMain1() throws Exception {
     System.out.println("main");
     String[] args = {"./config-samples/server.yaml.sample"};
-    //start it up in a thread so we can kill it after a brief period of time
-    Thread t = new Thread(){
-        @Override
-        public void run() {
-            Main.main(args);
-        }
-        
+    // start it up in a thread so we can kill it after a brief period of time
+    Thread t = new Thread() {
+      @Override
+      public void run() {
+        Main.main(args);
+      }
+
     };
     t.start();
     Thread.sleep(5000);
     assertTrue(t.isAlive());
-    t.stop();//not safe, but it's just a unit test
+    t.stop();// not safe, but it's just a unit test
   }
 
   /**
@@ -106,27 +106,26 @@ public class MainTest {
    * Test of run method, of class Main.
    */
   @Test
-  public void testRun() throws Exception
-  {
+  public void testRun() throws Exception {
     System.out.println("run");
     File yamlFile = new File("./config-samples/server.yaml.sample");
     if (!yamlFile.exists()) {
       fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
     }
     Main instance = new Main(yamlFile);
-    //start it up in a thread so we can kill it after a brief period of time
-    Thread t = new Thread(){
-        @Override
-        public void run() {
-                instance.initApp();
-    // at least check that something got loaded into config
-    assertEquals("Name of Building Complex", ServerConfig.getName());
-        }       
+    // start it up in a thread so we can kill it after a brief period of time
+    Thread t = new Thread() {
+      @Override
+      public void run() {
+        instance.initApp();
+        // at least check that something got loaded into config
+        assertEquals("Name of Building Complex", ServerConfig.getName());
+      }
     };
-        t.start();
+    t.start();
     Thread.sleep(5000);
     assertTrue(t.isAlive());
-    t.stop();//not safe, but it's just a unit test
+    t.stop();// not safe, but it's just a unit test
   }
 
 }

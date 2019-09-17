@@ -36,89 +36,89 @@ import org.hibernate.cfg.Environment;
  */
 public class SqliteHVACDao implements HVACDao {
 
-    /**
-     * SQLite URL prefix.
-     */
-    private static final String URL_PREFIX = "jdbc:sqlite:";
+  /**
+   * SQLite URL prefix.
+   */
+  private static final String URL_PREFIX = "jdbc:sqlite:";
 
-    /**
-     * URL for the database.
-     */
-    private final String url;
+  /**
+   * URL for the database.
+   */
+  private final String url;
 
-    /**
-     * Logger for this class.
-     */
-    public static Logger logger = Logger.getLogger(SqliteHVACDao.class);
+  /**
+   * Logger for this class.
+   */
+  public static Logger logger = Logger.getLogger(SqliteHVACDao.class);
 
-//    private static StandardServiceRegistry registry;
-    private static SessionFactory sessionFactory;
+  // private static StandardServiceRegistry registry;
+  private static SessionFactory sessionFactory;
 
-    /**
-     * Constructor. Checks that it can create a db connection as part of the
-     * setup.
-     *
-     * @param path Path or connection string to use.
-     * @throws SQLException if there's a problem
-     */
-    public SqliteHVACDao(String path) throws SQLException {
-        url = URL_PREFIX + path;
-        try (Connection c = createConnection()) {
-            if (c != null) {
-                DatabaseMetaData meta = c.getMetaData();
-                logger.info("Connected to SQLite DB with path:" + meta.getURL());
-                StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
-                registryBuilder.applySettings(establishSettings(url));
-                StandardServiceRegistry registry = registryBuilder.build();
-                MetadataSources sources = new MetadataSources(registry);
-                Metadata metadata = sources.getMetadataBuilder().build();
-                sessionFactory = metadata.getSessionFactoryBuilder().build();
-                sessionFactory.openSession().close();//open a session and close it, just as a test (probably not needed, but just in case)                
-            }
-        } catch (SQLException e) {
-            logger.error("Could not create/connect to DB at path: " + path, e);
-            throw e;
-        }
+  /**
+   * Constructor. Checks that it can create a db connection as part of the setup.
+   *
+   * @param path Path or connection string to use.
+   * @throws SQLException if there's a problem
+   */
+  public SqliteHVACDao(String path) throws SQLException {
+    url = URL_PREFIX + path;
+    try (Connection c = createConnection()) {
+      if (c != null) {
+        DatabaseMetaData meta = c.getMetaData();
+        logger.info("Connected to SQLite DB with path:" + meta.getURL());
+        StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+        registryBuilder.applySettings(establishSettings(url));
+        StandardServiceRegistry registry = registryBuilder.build();
+        MetadataSources sources = new MetadataSources(registry);
+        Metadata metadata = sources.getMetadataBuilder().build();
+        sessionFactory = metadata.getSessionFactoryBuilder().build();
+        sessionFactory.openSession().close();// open a session and close it, just as a test
+                                             // (probably not needed, but just in case)
+      }
+    } catch (SQLException e) {
+      logger.error("Could not create/connect to DB at path: " + path, e);
+      throw e;
     }
+  }
 
-    private static Map<String, String> establishSettings(String url) {
-        // Hibernate settings equivalent to hibernate.cfg.xml's properties
-        Map<String, String> settings = new HashMap<>();
-        settings.put(Environment.DRIVER, "org.sqlite.JDBC");
-        settings.put(Environment.URL, url);
-//            settings.put(Environment.USER, "postgres");
-//            settings.put(Environment.PASS, "admin");
-        settings.put(Environment.DIALECT, "org.hibernate.dialect.SQLiteDialect");
-        return settings;
-    }
+  private static Map<String, String> establishSettings(String url) {
+    // Hibernate settings equivalent to hibernate.cfg.xml's properties
+    Map<String, String> settings = new HashMap<>();
+    settings.put(Environment.DRIVER, "org.sqlite.JDBC");
+    settings.put(Environment.URL, url);
+    // settings.put(Environment.USER, "postgres");
+    // settings.put(Environment.PASS, "admin");
+    settings.put(Environment.DIALECT, "org.hibernate.dialect.SQLiteDialect");
+    return settings;
+  }
 
-    private Connection createConnection() throws SQLException {
-        return DriverManager.getConnection(url);
-    }
+  private Connection createConnection() throws SQLException {
+    return DriverManager.getConnection(url);
+  }
 
-    /**
-     * Safely closes a connection.
-     *
-     * @param c Connection to close. Can be null.
-     */
-    private void closeConnection(Connection c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (SQLException ex) {
-                //i don't care
-                logger.trace("Cannot close connection.", ex);
-            }
-        }
+  /**
+   * Safely closes a connection.
+   *
+   * @param c Connection to close. Can be null.
+   */
+  private void closeConnection(Connection c) {
+    if (c != null) {
+      try {
+        c.close();
+      } catch (SQLException ex) {
+        // i don't care
+        logger.trace("Cannot close connection.", ex);
+      }
     }
+  }
 
-    /**
-     * Gets the full URL/Path to the SQLite DB
-     *
-     * @return
-     */
-    public String getUrl() {
-        return url;
-    }
+  /**
+   * Gets the full URL/Path to the SQLite DB
+   *
+   * @return
+   */
+  public String getUrl() {
+    return url;
+  }
 
 }
