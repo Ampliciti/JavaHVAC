@@ -138,7 +138,6 @@ public class Main {
             public void run() {
                 for (Rule r : unmanagedRules) {//enforce all rules
                     r.enforceRule();
-
                 }
             }
         };
@@ -151,8 +150,8 @@ public class Main {
         while (true) {//wait till it dies
             try {
                 Thread.sleep(500000);
-            } catch (Exception e) {
-
+            } catch (InterruptedException e) {
+                logger.warn("Main thread interrupted; you probably don't care.", e);
             }
         }
 
