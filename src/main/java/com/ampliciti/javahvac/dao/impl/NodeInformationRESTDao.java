@@ -17,8 +17,13 @@ package com.ampliciti.javahvac.dao.impl;
 import com.ampliciti.javahvac.Utils;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
 import com.ampliciti.javahvac.dao.RESTDao;
+import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
 import com.ampliciti.javahvac.domain.NodeInformation;
-import java.net.URL;
+import com.ampliciti.javahvac.exceptions.RESTException;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 
 /**
  * REST Dao for getting self-reported information from nodes.
@@ -27,6 +32,14 @@ import java.net.URL;
  */
 public class NodeInformationRESTDao implements NodeInformationDao {
 
+  /**
+   * Logger for this class.
+   */
+  public static Logger logger = Logger.getLogger(NodeInformationRESTDao.class);
+
+  /**
+   * Constructor.
+   */
   public NodeInformationRESTDao() {}
 
   /**
@@ -36,10 +49,26 @@ public class NodeInformationRESTDao implements NodeInformationDao {
    * @return
    */
   @Override
-  public NodeInformation getInfo(String nodeAddress) {
+  public NodeInformation getInfo(String nodeAddress) throws NodeConnectionException {
+    Gson gson = new Gson();
     RESTDao restDao = new RESTDaoImpl(Utils.buildUrlFromAddressString(nodeAddress));
-    // restDao.doGetCall(nodeAddress);
-    throw new UnsupportedOperationException("Not done yet");
+    JSONObject restResponse = null;
+    try {
+      restResponse = restDao.doGetCall("/info");
+      logger.debug("Response from node: " + nodeAddress + " is: " + restResponse.toJSONString());
+      return gson.fromJson(restResponse.toJSONString(), NodeInformation.class);
+    } catch (RESTException e) {
+      throw new NodeConnectionException("Could not connect to node at: " + nodeAddress, e);
+    } catch (JsonSyntaxException e) {
+      if (restResponse != null) {
+        throw new NodeConnectionException("Was able to connect to node at: " + nodeAddress
+            + ", however, the response was not in the expected format: "
+            + restResponse.toJSONString(), e);
+      } else {
+        throw new NodeConnectionException("Was able to connect to node at: " + nodeAddress
+            + ", however, no response was returned.", e);
+      }
+    }
   }
 
 }

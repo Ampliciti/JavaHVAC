@@ -12,40 +12,30 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.domain;
+package com.ampliciti.javahvac.dao.exception;
 
-import java.util.ArrayList;
+import com.ampliciti.javahvac.exceptions.RESTException;
 
 /**
- * Used for self reporting from Nodes
+ * An exception that indicates a problem communicating with a node.
  * 
  * @author jeffrey
  */
-public class NodeInformation extends Node {
+public class NodeConnectionException extends Exception {
 
-  /**
-   * Self-reported zone information from this node.
-   */
-  private ArrayList<NodeZoneInformation> zones;
-
-  /**
-   * Get self-reported zone information from this node.
-   * 
-   * @return
-   */
-  public ArrayList<NodeZoneInformation> getZones() {
-    return zones;
+  public NodeConnectionException() {
+    super("Problem connecting to node.");
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder(super.toString());
-    sb.append(" Node Zone Information:");
-    for (NodeZoneInformation nzi : zones) {
-      sb.append(", ");
-      sb.append(nzi.toString());
-    }
-    return sb.toString();
+  public NodeConnectionException(String message) {
+    super("Problem connecting to node: " + message);
   }
 
+  public NodeConnectionException(Exception e) {
+    super("Problem connecting to node.", e);
+  }
+
+  public NodeConnectionException(String message, Exception e) {
+    super("Problem connecting to node: " + message, e);
+  }
 }

@@ -20,6 +20,7 @@ package com.ampliciti.javahvac.domain;
  * @author jeffrey
  */
 public class NodeZoneInformation {
+
   /**
    * Current temperature that the node is reporting for this zone. Using objects rather than
    * primitives here to allow for null values.
@@ -33,16 +34,31 @@ public class NodeZoneInformation {
   private Boolean state;
 
   /**
+   * Name of the zone that this node is reporting for.
+   */
+  private String name;
+
+  /**
    * Constructor.
+   * 
+   * @param name Name of the zone that this node is reporting for.
    * 
    * @param temp Current temperature that the node is reporting for this zone. Using objects rather
    *        than primitives here to allow for null values.
    * @param state Current state of the zones relay/switch. True = switch on, False = switch off.
    *        Using objects rather than primitives here to allow for null values.
    */
-  public NodeZoneInformation(Double temp, Boolean state) {
+  public NodeZoneInformation(String name, Double temp, Boolean state) {
+    this.name = name;
     this.temp = temp;
     this.state = state;
+  }
+
+  /**
+   * @return the Name of the zone that this node is reporting for.
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -63,6 +79,14 @@ public class NodeZoneInformation {
    */
   public Double getTemp() {
     return temp;
+  }
+
+
+
+  @Override
+  public String toString() {
+    return "NodeZoneInformation{" + "temp=" + temp + ", state=" + state + ", name=" + getName()
+        + '}';
   }
 
 

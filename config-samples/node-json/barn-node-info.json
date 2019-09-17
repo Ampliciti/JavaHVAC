@@ -3,23 +3,26 @@
    "address":"barn.lan",
    "zones":[
       {
-         "mill":{
-            "temp":75.4,
-            "state":"false"
-         },
-         "chicken_coop":{
-            "temp":90.5,
-            "state":"false"
-         },
-         "equipment_breaker":{
-            "state":"true"
-         },
-         "main_air":{
-            "state":"true"
-         },
-         "house_air":{
-            "state":"true"
-         }
+         "name":"mill",
+         "temp":75.4,
+         "state":"false"
+      },
+      {
+         "name":"chicken_coop",
+         "temp":90.5,
+         "state":"false"
+      },
+      {
+         "name":"equipment_breaker",
+         "state":"true"
+      },
+      {
+         "name":"main_air",
+         "state":"true"
+      },
+      {
+         "name":"house_air",
+         "state":"true"
       }
    ]
 }

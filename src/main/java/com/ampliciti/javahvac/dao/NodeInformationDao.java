@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.dao;
 
+import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
 import com.ampliciti.javahvac.domain.NodeInformation;
 
 /**
@@ -27,8 +28,9 @@ public interface NodeInformationDao {
    * Gets self reported node information from a single node.
    * 
    * @param nodeAddress Address to find the node on.
-   * @return
+   * @return Information about the node.
+   * @throws NodeConnectionException if there's a problem connecting to the node.
    */
-  public NodeInformation getInfo(String nodeAddress);
+  public NodeInformation getInfo(String nodeAddress) throws NodeConnectionException;
 
 }
