@@ -25,10 +25,17 @@ package com.ampliciti.javahvac.domain;
  */
 public class Node {
 
+
+  /**
+   * Name for this node.
+   */
+  private String name;
+
   /**
    * Address for this node.
    */
   private String address;
+
 
   /**
    * Default constructor.
@@ -53,6 +60,18 @@ public class Node {
     this.address = address;
   }
 
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
 }

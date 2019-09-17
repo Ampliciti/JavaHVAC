@@ -75,7 +75,9 @@ public class ServerConfigTest {
     assertEquals(true, ServerConfig.getRegions().get(2).getZones().get(0).isManualAllowed());
 
     assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
+    assertEquals("barn", ServerConfig.getNodes().get(0).getName());
     assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());
+    assertEquals("house-central", ServerConfig.getNodes().get(1).getName());
 
     assertEquals("furnace", ServerConfig.getSources().get(0).getName());
     assertEquals("house", ServerConfig.getSources().get(0).getRegions_served().get(0));
