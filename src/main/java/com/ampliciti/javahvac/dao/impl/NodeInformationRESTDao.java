@@ -12,16 +12,19 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.dao;
+package com.ampliciti.javahvac.dao.impl;
 
+import com.ampliciti.javahvac.dao.NodeInformationDao;
 import com.ampliciti.javahvac.domain.NodeInformation;
 
 /**
- * Dao for getting self-reported information from nodes.
+ * REST Dao for getting self-reported information from nodes.
  * 
  * @author jeffrey
  */
-public interface NodeInformationDao {
+public class NodeInformationRESTDao implements NodeInformationDao {
+
+  public NodeInformationRESTDao() {}
 
   /**
    * Gets self reported node information from a single node.
@@ -29,6 +32,11 @@ public interface NodeInformationDao {
    * @param nodeAddress Address to find the node on.
    * @return
    */
-  public NodeInformation getInfo(String nodeAddress);
+  @Override
+  public NodeInformation getInfo(String nodeName) {
+    throw new UnsupportedOperationException("Not supported yet."); // To change body of generated
+                                                                   // methods, choose Tools |
+                                                                   // Templates.
+  }
 
 }

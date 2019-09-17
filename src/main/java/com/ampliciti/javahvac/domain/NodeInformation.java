@@ -12,23 +12,30 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.dao;
+package com.ampliciti.javahvac.domain;
 
-import com.ampliciti.javahvac.domain.NodeInformation;
+import java.util.ArrayList;
 
 /**
- * Dao for getting self-reported information from nodes.
+ * Used for self reporting from Nodes
  * 
  * @author jeffrey
  */
-public interface NodeInformationDao {
+public class NodeInformation extends Node {
 
   /**
-   * Gets self reported node information from a single node.
+   * Self-reported zone information from this node.
+   */
+  private ArrayList<NodeZoneInformation> zones;
+
+  /**
+   * Get self-reported zone information from this node.
    * 
-   * @param nodeAddress Address to find the node on.
    * @return
    */
-  public NodeInformation getInfo(String nodeAddress);
+  public ArrayList<NodeZoneInformation> getZones() {
+    return zones;
+  }
+
 
 }
