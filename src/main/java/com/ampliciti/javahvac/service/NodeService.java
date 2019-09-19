@@ -23,6 +23,7 @@ import com.ampliciti.javahvac.domain.NodeInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 /**
@@ -75,11 +76,14 @@ public class NodeService {
   /**
    * Pulls the state from all nodes that it's presently able to talk to.
    */
-  public Map<String, NodeInformation> pullNodeState() {
+  public ConcurrentHashMap<String, NodeInformation> pullNodeState() {
     ArrayList<Node> allNodes = ServerConfig.getNodes();
-    Map<String, NodeInformation> toReturn = new HashMap<>();
+    ConcurrentHashMap<String, NodeInformation> toReturn = new ConcurrentHashMap<>();
     for (Node node : allNodes) {
-      toReturn.put(node.getName(), pullNodeState(node));
+      NodeInformation ni = pullNodeState(node);
+      if (ni != null) {
+        toReturn.put(node.getName(), ni);
+      }
     }
     return toReturn;
   }

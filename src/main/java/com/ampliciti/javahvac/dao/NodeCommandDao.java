@@ -15,7 +15,8 @@
 package com.ampliciti.javahvac.dao;
 
 /**
- *
+ * Dao for sending commands to a node telling them to take action on something.
+ * 
  * @author jeffrey
  */
 public interface NodeCommandDao {

@@ -100,6 +100,27 @@ public class NodeServiceTest extends ParentNodeTest {
    * Test of checkNodeConnections method, of class NodeService.
    */
   @Test
+  public void testPullNodeStateMissingNodes() throws Exception {
+    System.out.println("testPullNodeStateMissingNodes");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+
+    // test
+    NodeService instance = new NodeService();
+    Map<String, NodeInformation> res = instance.pullNodeState();
+    assertNotNull(res);
+  }
+
+  /**
+   * Test of checkNodeConnections method, of class NodeService.
+   */
+  @Test
   public void testPullNodeStateSingle() throws Exception {
     System.out.println("testPullNodeState");
     // setup

@@ -17,6 +17,7 @@ package com.ampliciti.javahvac;
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.HVACDao;
 import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
+import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.rules.Rule;
 import com.ampliciti.javahvac.rules.RuleGenerator;
 import com.ampliciti.javahvac.service.NodeService;
@@ -108,9 +109,42 @@ public class Main {
     } else {
       logger.info("We are able to connect to all nodes.");
     }
+    startUpThreads();
+    logger.info("Program successfully started up!");
+    while (true) {// wait till it dies
+      try {
+        Thread.sleep(500000);
+      } catch (InterruptedException e) {
+        logger.warn("Main thread interrupted; you probably don't care.", e);
+      }
+    }
+
+  }
+
+  private static void startUpThreads() {
     // Define Rules
     ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
     ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
+
+    // See what our nodes are up to...
+    CurrentNodeState.refreshNodeState();
+    // start up a thread to keep an eye on our nodes:
+    Runnable nodeWatcher = new Runnable() {
+      @Override
+      public void run() {
+        try {
+          Thread.sleep(5000);// check on the nodes every 5 seconds
+        } catch (InterruptedException e) {
+
+        }
+        CurrentNodeState.refreshNodeState();
+      }
+    };
+
+    Thread nodeWatcherThread = new Thread(nodeWatcher);
+    logger.info("Starting node watcher worker thread...");
+    nodeWatcherThread.start();
+    logger.info("Node watcher thread started.");
 
     // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
     // TODO: Start REST API
@@ -134,7 +168,7 @@ public class Main {
     managedWorkerThread.start();
     logger.info("Managed worker thread started.");
 
-    // Start worker thread to see if any conditions need to be changed
+    // Start worker thread to see if any conditions need to be changed -- TODO, may not be needed
     Runnable unmanagedWorker = new Runnable() {
       @Override
       public void run() {
@@ -148,14 +182,6 @@ public class Main {
     logger.info("Starting unmanaged worker thread...");
     unmanagedWorkerThread.start();
     logger.info("Umanaged worker thread started.");
-    logger.info("Program successfully started up!");
-    while (true) {// wait till it dies
-      try {
-        Thread.sleep(500000);
-      } catch (InterruptedException e) {
-        logger.warn("Main thread interrupted; you probably don't care.", e);
-      }
-    }
 
   }
 

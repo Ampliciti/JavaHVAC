@@ -87,6 +87,7 @@ public class MainTest {
     };
     t.start();
     Thread.sleep(2000);
+    assertNotNull(t);
     assertTrue(t.isAlive());
     t.stop();// not safe, but it's just a unit test
   }
@@ -124,6 +125,7 @@ public class MainTest {
     };
     t.start();
     Thread.sleep(2000);
+    assertNotNull(t);
     assertTrue(t.isAlive());
     t.stop();// not safe, but it's just a unit test
   }

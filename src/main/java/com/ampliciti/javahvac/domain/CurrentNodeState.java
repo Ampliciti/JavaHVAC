@@ -16,7 +16,7 @@ package com.ampliciti.javahvac.domain;
 
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.service.NodeService;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Holds the current state of all the nodes in the system, in-memory for rapid access.
@@ -28,9 +28,10 @@ public class CurrentNodeState {
   /**
    * In memory map for the current node states.
    */
-  private static Map<String, NodeInformation> currentNodeState;
+  private static ConcurrentHashMap<String, NodeInformation> currentNodeState;
 
-  public static Map<String, NodeInformation> getCurrentNodeState() {
+  public static ConcurrentHashMap<String, NodeInformation> getCurrentNodeState() {
+    buildMapIfNotExists();
     return currentNodeState;
   }
 
@@ -40,6 +41,7 @@ public class CurrentNodeState {
    * @param toRefresh
    */
   public static synchronized void refreshSingleNode(Node toRefresh) {
+    buildMapIfNotExists();
     NodeService nodeService = new NodeService();
     NodeInformation ni = nodeService.pullNodeState(toRefresh);
     currentNodeState.put(toRefresh.getName(), ni);
@@ -52,6 +54,15 @@ public class CurrentNodeState {
   public static synchronized void refreshNodeState() {
     NodeService nodeService = new NodeService();
     currentNodeState = nodeService.pullNodeState();
+  }
+
+  /**
+   * Creates the map object if it does not already exist.
+   */
+  private static void buildMapIfNotExists() {
+    if (currentNodeState == null) {
+      currentNodeState = new ConcurrentHashMap<>();
+    }
   }
 
 }
