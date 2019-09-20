@@ -145,12 +145,14 @@ public class Main {
     Runnable nodeWatcher = new Runnable() {
       @Override
       public void run() {
-        try {
-          Thread.sleep(5000);// check on the nodes every 5 seconds
-        } catch (InterruptedException e) {
+        while (true) {
+          try {
+            Thread.sleep(5000);// check on the nodes every 5 seconds
+          } catch (InterruptedException e) {
 
+          }
+          CurrentNodeState.refreshNodeState();
         }
-        CurrentNodeState.refreshNodeState();
       }
     };
 
@@ -165,12 +167,14 @@ public class Main {
     Runnable managedWorker = new Runnable() {
       @Override
       public void run() {
-        for (Rule r : managedRules) {// enforce all rules
-          r.enforceRule();
-          try {
-            Thread.sleep(1000);
-          } catch (InterruptedException e) {
+        while (true) {
+          for (Rule r : managedRules) {// enforce all rules
+            r.enforceRule();
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e) {
 
+            }
           }
         }
       }
