@@ -139,7 +139,7 @@ public class Main {
   private static void startUpThreads() {
     // Define Rules
     ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
-    ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
+    // ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
 
     // start up a thread to keep an eye on our nodes:
     Runnable nodeWatcher = new Runnable() {

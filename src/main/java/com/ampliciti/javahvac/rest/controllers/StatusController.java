@@ -16,11 +16,10 @@ package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import org.apache.log4j.Logger;
 import org.restexpress.ContentType;
 import org.restexpress.Request;
 import org.restexpress.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * REST Controller for getting the current system status.
@@ -29,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StatusController {
 
-  private static final Logger logger = LoggerFactory.getLogger(StatusController.class);
+  public static Logger logger = Logger.getLogger(StatusController.class);
 
   public Object read(Request request, Response response) {
     try {

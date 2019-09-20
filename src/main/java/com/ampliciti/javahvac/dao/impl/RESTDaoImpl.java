@@ -32,13 +32,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -54,7 +53,7 @@ public class RESTDaoImpl implements RESTDao {
   /**
    * Logger for this class.
    */
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private Logger logger = Logger.getLogger(this.getClass());
 
   /**
    * Our http client.

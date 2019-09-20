@@ -33,7 +33,6 @@ public class HealthCheckControllerTest extends ParentControllerTest {
   public void testGetHealth() {
     System.out.println("getHealth");
     given().expect().statusCode(200).body("isHealthy", equalTo(true)).when().get("/health");
-
   }
 
 }
