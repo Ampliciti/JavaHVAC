@@ -109,9 +109,13 @@ public class Main {
     } else {
       logger.info("We are able to connect to all nodes.");
     }
+    // See what our nodes are up to right now...
+    CurrentNodeState.refreshNodeState();
+    // start up our worker threads
     startUpThreads();
     logger.info("Program successfully started up!");
-    while (true) {// wait till it dies
+    // wait till it dies
+    while (true) {
       try {
         Thread.sleep(500000);
       } catch (InterruptedException e) {
@@ -121,13 +125,14 @@ public class Main {
 
   }
 
+  /**
+   * Starts up the worker threads.
+   */
   private static void startUpThreads() {
     // Define Rules
     ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
     ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
 
-    // See what our nodes are up to...
-    CurrentNodeState.refreshNodeState();
     // start up a thread to keep an eye on our nodes:
     Runnable nodeWatcher = new Runnable() {
       @Override
