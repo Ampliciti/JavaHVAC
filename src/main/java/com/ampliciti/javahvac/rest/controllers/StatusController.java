@@ -16,6 +16,9 @@ package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.restexpress.ContentType;
 import org.restexpress.Request;
@@ -28,7 +31,7 @@ import org.restexpress.Response;
  */
 public class StatusController {
 
-  public static Logger logger = Logger.getLogger(StatusController.class);
+  private static Logger logger = Logger.getLogger(StatusController.class);
 
   public Object read(Request request, Response response) {
     try {
@@ -36,8 +39,9 @@ public class StatusController {
       // // Construct the response for create...
       response.setResponseStatus(HttpResponseStatus.OK);
       response.setContentType(ContentType.JSON);
-      return CurrentNodeState.getCurrentNodeState();
-      // logger.info("State change request completed.");
+      List toReturn = new ArrayList(CurrentNodeState.getCurrentNodeState().values());
+      logger.debug("Status is returning: " + Arrays.toString(toReturn.toArray()));
+      return toReturn;
     } catch (Exception e) {
       logger.error("Problem performing action", e);
       response.setResponseStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR);

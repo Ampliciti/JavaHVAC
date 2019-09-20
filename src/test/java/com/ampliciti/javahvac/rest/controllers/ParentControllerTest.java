@@ -15,20 +15,25 @@
 package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.Main;
+import com.ampliciti.javahvac.ParentNodeTest;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author jeffrey
  */
-public class ParentControllerTest {
+public abstract class ParentControllerTest extends ParentNodeTest {
 
   private static Thread mainThread;
 
   @BeforeClass
-  public static void setUpClass() {
-    String[] args = {"./config-samples/server.yaml.sample"};
+  public static void setUpClassController() throws InterruptedException {
+    startMocks();// start up our mock nodes
+    Thread.sleep(2000);// for some reason the mocks take a bit to come up online
+    String[] args = {"./config-samples/server.yaml.sample-network-test"};
     // start it up in a thread so we can kill it when we're done with the test
     mainThread = new Thread() {
       @Override
@@ -38,13 +43,22 @@ public class ParentControllerTest {
 
     };
     mainThread.start();
+    Thread.sleep(2000);// let the service startup
   }
 
   @AfterClass
-  public static void tearDownClass() {
+  public static void tearDownClassController() {
     mainThread.stop();// not safe, but it's just a unit test
+
   }
 
+  @Before
+  public void setUp() {
+    ;// do not do the normal tear down of mocks; they need to stay up for this set of tests
+  }
 
-
+  @After
+  public void tearDown() {
+    ;// do not do the normal tear down of mocks; they need to stay up for this set of tests
+  }
 }

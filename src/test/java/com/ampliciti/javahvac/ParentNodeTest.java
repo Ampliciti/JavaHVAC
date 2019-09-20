@@ -14,9 +14,11 @@
  */
 package com.ampliciti.javahvac;
 
+import com.ampliciti.javahvac.rest.controllers.StatusController;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -31,6 +33,8 @@ import static org.mockserver.model.HttpResponse.response;
  * @author jeffrey
  */
 public class ParentNodeTest {
+
+  private static Logger logger = Logger.getLogger(ParentNodeTest.class);
 
   private static String barnResponse;
   private static String atticResponse;
@@ -66,21 +70,26 @@ public class ParentNodeTest {
   }
 
   protected static void startMocks() {
-    mockServerBarn = ClientAndServer.startClientAndServer(8082);
-    mockServerBarn.when(request().withPath("/info"))
-        .respond(response().withBody(barnResponse).withStatusCode(200));
-
-    mockServerCentral = ClientAndServer.startClientAndServer(8083);
-    mockServerCentral.when(request().withPath("/info"))
-        .respond(response().withBody(centralResponse).withStatusCode(200));
-
-    mockServerAttic = ClientAndServer.startClientAndServer(8084);
-    mockServerAttic.when(request().withPath("/info"))
-        .respond(response().withBody(atticResponse).withStatusCode(200));
-
+    logger.debug("Starting mock nodes....");
+    if (mockServerBarn == null || !mockServerBarn.isRunning()) {
+      mockServerBarn = ClientAndServer.startClientAndServer(8082);
+      mockServerBarn.when(request().withPath("/info"))
+          .respond(response().withBody(barnResponse).withStatusCode(200));
+    }
+    if (mockServerCentral == null || !mockServerCentral.isRunning()) {
+      mockServerCentral = ClientAndServer.startClientAndServer(8083);
+      mockServerCentral.when(request().withPath("/info"))
+          .respond(response().withBody(centralResponse).withStatusCode(200));
+    }
+    if (mockServerAttic == null || !mockServerAttic.isRunning()) {
+      mockServerAttic = ClientAndServer.startClientAndServer(8084);
+      mockServerAttic.when(request().withPath("/info"))
+          .respond(response().withBody(atticResponse).withStatusCode(200));
+    }
   }
 
   private static void stopMocks() {
+    logger.debug("Stopping mock nodes.");
     stopMock(mockServerBarn);
     stopMock(mockServerCentral);
     stopMock(mockServerAttic);
