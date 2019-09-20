@@ -14,11 +14,28 @@
  */
 package com.ampliciti.javahvac.dao;
 
+import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+
 /**
  * Dao for sending commands to a node telling them to take action on something.
  * 
  * @author jeffrey
  */
 public interface NodeCommandDao {
+
+
+  /**
+   * Sends a command to the specified node.
+   * 
+   * @param address Address to the node to send the command to.
+   * @param zone Zone to change the state of.
+   * @param command Command to send. True means turn the zone on, false means turn it off.
+   * @return true if the command was executed successfully, false if it failed for some reason.
+   * @throws NodeConnectionException if there's a problem connecting to the node.
+   */
+  public boolean sendCommand(String address, String zone, boolean command)
+      throws NodeConnectionException;
+
+
 
 }
