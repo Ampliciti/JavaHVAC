@@ -17,7 +17,7 @@ package com.ampliciti.javahvac.dao.impl;
 import com.ampliciti.javahvac.Utils;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
 import com.ampliciti.javahvac.dao.RESTDao;
-import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 import com.ampliciti.javahvac.domain.NodeInformation;
 import com.ampliciti.javahvac.exceptions.RESTException;
 import com.google.gson.Gson;

@@ -30,7 +30,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.restexpress.RestExpress;
-import org.restexpress.serialization.SerializationProvider;
 
 /**
  * Main class. This is what starts the <b>Server Application</b> for JavaHVAC.
@@ -199,7 +198,13 @@ public class Main {
 
   }
 
-  private void startRestAPI() {
+  /**
+   * Starts up the REST API.
+   * 
+   * Normally we'd not make this public, but it makes testing easier for now, and I'm too lazy to
+   * use Reflection.
+   */
+  public void startRestAPI() {
 
     logger.info("Starting up REST API...");
     try {
@@ -216,7 +221,6 @@ public class Main {
       // mapExceptions(server);
       server.bind(8080);
       logger.info("-----JavaHVAC REST API initalized.-----");
-
       server.awaitShutdown();
       Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
         @Override
@@ -228,6 +232,13 @@ public class Main {
       logger.error("Runtime exception when starting/running JavaHVAC. Could not start.", e);
       System.exit(-1);
     }
+  }
+
+  /**
+   * Shuts down the REST API, mainly for testing purposes.
+   */
+  public void shutdownRestAPI() {
+
   }
 
 }

@@ -12,25 +12,28 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.dao;
+package com.ampliciti.javahvac.rest.controllers;
 
-import com.ampliciti.javahvac.exceptions.NodeConnectionException;
-import com.ampliciti.javahvac.domain.NodeInformation;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import org.junit.Test;
 
 /**
- * Dao for getting self-reported information from nodes.
- * 
+ *
  * @author jeffrey
  */
-public interface NodeInformationDao {
+public class HealthCheckControllerTest extends ParentControllerTest {
+
+  public HealthCheckControllerTest() {}
 
   /**
-   * Gets self reported node information from a single node.
-   * 
-   * @param nodeAddress Address to find the node on.
-   * @return Information about the node.
-   * @throws NodeConnectionException if there's a problem connecting to the node.
+   * Test of getHealth method, of class HealthCheckController.
    */
-  public NodeInformation getInfo(String nodeAddress) throws NodeConnectionException;
+  @Test
+  public void testGetHealth() {
+    System.out.println("getHealth");
+    given().expect().statusCode(200).body("isHealthy", equalTo(true)).when().get("/health");
+
+  }
 
 }

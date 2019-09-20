@@ -12,25 +12,39 @@
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
-package com.ampliciti.javahvac.dao;
+package com.ampliciti.javahvac.rest.controllers;
 
-import com.ampliciti.javahvac.exceptions.NodeConnectionException;
-import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.Main;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
- * Dao for getting self-reported information from nodes.
- * 
+ *
  * @author jeffrey
  */
-public interface NodeInformationDao {
+public class ParentControllerTest {
 
-  /**
-   * Gets self reported node information from a single node.
-   * 
-   * @param nodeAddress Address to find the node on.
-   * @return Information about the node.
-   * @throws NodeConnectionException if there's a problem connecting to the node.
-   */
-  public NodeInformation getInfo(String nodeAddress) throws NodeConnectionException;
+  private static Thread mainThread;
+
+  @BeforeClass
+  public static void setUpClass() {
+    String[] args = {"./config-samples/server.yaml.sample"};
+    // start it up in a thread so we can kill it when we're done with the test
+    mainThread = new Thread() {
+      @Override
+      public void run() {
+        Main.main(args);
+      }
+
+    };
+    mainThread.start();
+  }
+
+  @AfterClass
+  public static void tearDownClass() {
+    mainThread.stop();// not safe, but it's just a unit test
+  }
+
+
 
 }

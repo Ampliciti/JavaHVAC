@@ -16,7 +16,7 @@ package com.ampliciti.javahvac.service;
 
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
-import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;

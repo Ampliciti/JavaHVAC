@@ -15,7 +15,7 @@
 package com.ampliciti.javahvac.dao.impl;
 
 import com.ampliciti.javahvac.ParentNodeTest;
-import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

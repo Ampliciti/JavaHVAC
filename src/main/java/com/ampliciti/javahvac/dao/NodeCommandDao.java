@@ -14,7 +14,7 @@
  */
 package com.ampliciti.javahvac.dao;
 
-import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 
 /**
  * Dao for sending commands to a node telling them to take action on something.
