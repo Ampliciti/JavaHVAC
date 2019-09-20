@@ -14,8 +14,6 @@
  */
 package com.ampliciti.javahvac.dao.exception;
 
-import com.ampliciti.javahvac.exceptions.RESTException;
-
 /**
  * An exception that indicates a problem communicating with a node.
  * 
@@ -37,5 +35,15 @@ public class NodeConnectionException extends Exception {
 
   public NodeConnectionException(String message, Exception e) {
     super("Problem connecting to node: " + message, e);
+  }
+
+  // there are better ways to do this, but I'm coding on my day off and in a hurry
+  @Override
+  public String getMessage() {
+    if (super.getCause() != null) {
+      return super.getMessage() + ": " + super.getCause().getMessage();
+    } else {
+      return super.getMessage();
+    }
   }
 }

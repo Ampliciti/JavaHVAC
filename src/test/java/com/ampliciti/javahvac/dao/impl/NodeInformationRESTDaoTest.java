@@ -14,38 +14,18 @@
  */
 package com.ampliciti.javahvac.dao.impl;
 
+import com.ampliciti.javahvac.ParentNodeTest;
 import com.ampliciti.javahvac.domain.NodeInformation;
-import java.io.File;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.mockserver.integration.ClientAndServer;
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
 
 /**
  *
  * @author jeffrey
  */
-public class NodeInformationRESTDaoTest {
+public class NodeInformationRESTDaoTest extends ParentNodeTest {
 
   public NodeInformationRESTDaoTest() {}
-
-  @BeforeClass
-  public static void setUpClass() {}
-
-  @AfterClass
-  public static void tearDownClass() {}
-
-  @Before
-  public void setUp() {}
-
-  @After
-  public void tearDown() {}
 
   /**
    * Test of getInfo method, of class NodeInformationRESTDao.
@@ -54,13 +34,8 @@ public class NodeInformationRESTDaoTest {
   public void testGetInfo() throws Exception {
     System.out.println("getInfo");
     // setup the mock
-    int testPort = 8081;
-    ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
-    mockServer.when(request().withPath("/info"))
-        .respond(response()
-            .withBody(FileUtils.readFileToString(
-                new File("./config-samples/node-json/barn-node-info.json"), "UTF-8"))
-            .withStatusCode(200));
+    startMocks();
+    int testPort = 8082;
     String nodeAddress = "localhost:" + testPort;
 
     NodeInformationRESTDao instance = new NodeInformationRESTDao();

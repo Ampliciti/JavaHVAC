@@ -86,7 +86,7 @@ public class ParentNodeTest {
     stopMock(mockServerAttic);
   }
 
-  private static void stopMock(ClientAndServer mockToStop) {
+  protected static void stopMock(ClientAndServer mockToStop) {
     if (mockToStop != null) {
       mockToStop.stop();
     }

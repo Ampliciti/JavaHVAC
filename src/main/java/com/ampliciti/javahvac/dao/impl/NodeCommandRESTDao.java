@@ -14,9 +14,17 @@
  */
 package com.ampliciti.javahvac.dao.impl;
 
+import com.ampliciti.javahvac.Utils;
 import com.ampliciti.javahvac.dao.NodeCommandDao;
+import com.ampliciti.javahvac.dao.RESTDao;
 import com.ampliciti.javahvac.dao.exception.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.RESTException;
+import com.google.gson.JsonSyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONAware;
+import org.json.simple.JSONObject;
 
 /**
  * Dao for sending commands to a node telling them to take action on something via REST.
@@ -38,18 +46,43 @@ public class NodeCommandRESTDao implements NodeCommandDao {
   /**
    * Sends a command to the specified node via REST.
    * 
-   * @param address Address to the node to send the command to.
+   * @param nodeAddress Address to the node to send the command to.
    * @param zone Zone to change the state of.
    * @param command Command to send. True means turn the zone on, false means turn it off.
    * @return true if the command was executed successfully, false if it failed for some reason.
    * @throws NodeConnectionException if there's a problem connecting to the node.
    */
   @Override
-  public boolean sendCommand(String address, String zone, boolean command)
+  public boolean sendCommand(String nodeAddress, String zone, boolean command)
       throws NodeConnectionException {
-    throw new UnsupportedOperationException("Not supported yet."); // To change body of generated
-                                                                   // methods, choose Tools |
-                                                                   // Templates.
+    RESTDao restDao = new RESTDaoImpl(Utils.buildUrlFromAddressString(nodeAddress));
+    JSONAware restResponse = null;
+    try {
+      Map mapToPost = new HashMap();
+      mapToPost.put("zone", zone);
+      mapToPost.put("state", command);
+      JSONObject toPost = new JSONObject(mapToPost);
+      restResponse = restDao.doPostCall("/action", toPost);
+      String jsonResponse = restResponse.toJSONString();
+      logger.debug("Response from node: " + nodeAddress + " is: " + jsonResponse);
+      if (jsonResponse != null && jsonResponse.contains(zone)
+          && jsonResponse.contains(Boolean.toString(command))) { // quick/lazy
+        return true;
+      } else {
+        return false;
+      }
+    } catch (RESTException e) {
+      throw new NodeConnectionException("Could not connect to node at: " + nodeAddress, e);
+    } catch (JsonSyntaxException e) {
+      if (restResponse != null) {
+        throw new NodeConnectionException("Was able to connect to node at: " + nodeAddress
+            + ", however, the response was not in the expected format: "
+            + restResponse.toJSONString(), e);
+      } else {
+        throw new NodeConnectionException("Was able to connect to node at: " + nodeAddress
+            + ", however, no response was returned.", e);
+      }
+    }
   }
 
 
