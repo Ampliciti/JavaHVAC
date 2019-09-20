@@ -21,8 +21,6 @@ import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
