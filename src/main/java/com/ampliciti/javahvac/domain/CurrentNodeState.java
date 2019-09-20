@@ -57,7 +57,7 @@ public class CurrentNodeState {
   }
 
   /**
-   * Creates the map object if it does not already exist.
+   * Creates an (empty) ConcurrentHashMap object if it does not already exist.
    */
   private static void buildMapIfNotExists() {
     if (currentNodeState == null) {
