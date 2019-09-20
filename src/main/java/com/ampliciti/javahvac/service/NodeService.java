@@ -15,11 +15,18 @@
 package com.ampliciti.javahvac.service;
 
 import com.ampliciti.javahvac.config.ServerConfig;
+import com.ampliciti.javahvac.dao.NodeCommandDao;
 import com.ampliciti.javahvac.dao.NodeInformationDao;
+import com.ampliciti.javahvac.dao.impl.NodeCommandRESTDao;
 import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
+import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.domain.NodeZoneInformation;
+import com.ampliciti.javahvac.domain.config.Region;
+import com.ampliciti.javahvac.domain.config.Zone;
+import com.ampliciti.javahvac.exceptions.PermissionsException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
@@ -34,14 +41,18 @@ public class NodeService {
   /**
    * Logger for this class.
    */
-  public static Logger logger = Logger.getLogger(NodeService.class);
+  private static Logger logger = Logger.getLogger(NodeService.class);
 
-  // TODO: Consider making methods statically accessable.
+  private NodeCommandDao nodeCommander;
+  private NodeInformationDao nodeInformation;
 
   /**
    * Default constructor.
    */
-  public NodeService() {}
+  public NodeService() {
+    nodeCommander = new NodeCommandRESTDao();
+    nodeInformation = new NodeInformationRESTDao();
+  }
 
   /**
    * Checks that we can connect to our nodes and that they are up and running. Used as a basic
@@ -52,12 +63,12 @@ public class NodeService {
   public boolean checkNodeConnections() {
     boolean connectedToAll = true;
     ArrayList<Node> allNodes = ServerConfig.getNodes();
-    NodeInformationDao nodeDao = new NodeInformationRESTDao();
+
     for (Node node : allNodes) {
       logger.info(
           "Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
       try {
-        NodeInformation ni = nodeDao.getInfo(node.getAddress());
+        NodeInformation ni = nodeInformation.getInfo(node.getAddress());
         logger.info(
             "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
       } catch (NodeConnectionException e) {
@@ -107,6 +118,91 @@ public class NodeService {
       return null;
     }
 
+  }
+
+  /**
+   * Method that gets called when a zone needs to change state.
+   * 
+   * @param zoneName Name of the zone to change.
+   * @param command State to change it to.
+   * @return True if the state was changed successfully. False if there was a problem.
+   * @throws NodeConnectionException If the node is unreachable.
+   */
+  public boolean changeZoneState(String zoneName, boolean command) throws NodeConnectionException {
+    Node nodeforZone = lookUpNodeForZone(zoneName);
+    if (nodeforZone == null) {
+      throw new NodeConnectionException("No node for that zone could be found.");
+    }
+    return nodeCommander.sendCommand(nodeforZone.getAddress(), zoneName, command);
+
+  }
+
+  /**
+   * Method that gets called when an end user wants to change a Zone state.
+   * 
+   * @param zoneName Name of the zone to change.
+   * @param command State to change it to.
+   * @return True if the state was changed successfully. False if there was a problem.
+   * @throws NodeConnectionException If the node is unreachable.
+   * @throws PermissionsException if the user isn't allowed to set this zone manually per
+   *         configuration rules.
+   */
+  public boolean endUserChangeZoneState(String zoneName, boolean command)
+      throws NodeConnectionException, PermissionsException {
+    // check permissions
+    Zone zone = lookupZoneInRegion(zoneName);
+    if (zone == null) {// doesn't exist in config
+      throw new NodeConnectionException("Zone: " + zoneName + " does not exist in configuration.");
+    } else if (zone.isManualAllowed()) {// all ok
+      return changeZoneState(zoneName, command);
+    } else {// no manual control allowed.
+      throw new PermissionsException("Manual control on zone: " + zoneName + " is not allowed.");
+    }
+  }
+
+  /**
+   * Helper method that looks up the Node that controls a Zone.
+   * 
+   * @param zoneName
+   * @return The node if a zone exists. Null otherwise.
+   */
+  private Node lookUpNodeForZone(String zoneName) {
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    for (NodeInformation ni : currentNodes) {
+      for (NodeZoneInformation nzi : ni.getZones())
+        if (nzi.getName().equals(zoneName)) { // hey, this node controls this zone
+          ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
+          // ^^ lets pull the nodes from ServerConfig as we know them
+          // and find the Node object we want
+          for (Node n : serverConfigNodes) {
+            if (n.getName().equals(ni.getName())) {
+              return n;// and return it from there instead: it will have the right DNS/IP and port,
+                       // rather than relying on the self reported address
+            }
+          }
+          logger.error("Node found for zone: " + zoneName + ", but it was not in the ServerConfig");
+        }
+    }
+    return null; // node not found for this zone
+  }
+
+  /**
+   * Looks up a zone by zone name.
+   * 
+   * @param zone
+   * @return
+   */
+  private Zone lookupZoneInRegion(String zone) {
+    for (Region r : ServerConfig.getRegions()) {
+      for (Zone z : r.getZones()) {
+        if (z.getName().equals(zone)) {
+          return z;
+        }
+      }
+    }
+    return null;
   }
 
 }

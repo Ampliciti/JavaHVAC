@@ -34,3 +34,4 @@ nb-configuration.xml
 
 
 unit-test.db
+config-samples/server.yaml

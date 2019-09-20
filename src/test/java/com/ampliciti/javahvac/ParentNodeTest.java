@@ -40,11 +40,11 @@ public class ParentNodeTest {
   private static String atticResponse;
   private static String centralResponse;
 
-  private static ClientAndServer mockServerBarn = null;
+  protected static ClientAndServer mockServerBarn = null;
 
-  private static ClientAndServer mockServerCentral = null;
+  protected static ClientAndServer mockServerCentral = null;
 
-  private static ClientAndServer mockServerAttic = null;
+  protected static ClientAndServer mockServerAttic = null;
 
   @BeforeClass
   public static void setUpClass() throws IOException {

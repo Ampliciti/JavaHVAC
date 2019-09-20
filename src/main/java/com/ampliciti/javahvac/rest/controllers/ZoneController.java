@@ -14,22 +14,144 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
+import com.ampliciti.javahvac.exceptions.NodeConnectionException;
+import com.ampliciti.javahvac.exceptions.PermissionsException;
+import com.ampliciti.javahvac.service.NodeService;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import org.apache.log4j.Logger;
 import org.restexpress.Request;
 import org.restexpress.Response;
 
 /**
  * Route for modifying a zone state directly.
- * 
+ *
  * @author jeffrey
  */
 public class ZoneController {
 
-  public Object create(Request request, Response response) {
-    throw new UnsupportedOperationException("not done yet");
+  private NodeService service;
+  /**
+   * Logger for this class.
+   */
+  private static Logger logger = Logger.getLogger(ZoneController.class);
+
+  public ZoneController() {
+    service = new NodeService();
   }
 
+  /**
+   * POST call.
+   *
+   * @param request
+   * @param response
+   * @return
+   */
+  public Object create(Request request, Response response) {
+    ChangeRequest cr = request.getBodyAs(ChangeRequest.class);
+    try {
+      if (service.endUserChangeZoneState(cr.getZone(), cr.getState())) {
+        response.setResponseStatus(HttpResponseStatus.CREATED);
+        return cr;
+      } else {
+        response.setResponseStatus(HttpResponseStatus.EXPECTATION_FAILED);
+        return "The node refused to change state.";
+      }
+
+    } catch (NodeConnectionException e) {
+      String error =
+          "Could not set node state because it is offline or malfunctioning. " + cr.toString();
+      logger.error(error, e);
+      response.setResponseStatus(HttpResponseStatus.SERVICE_UNAVAILABLE);
+      return error;
+    } catch (PermissionsException e) {
+      String error = "This zone is not allowed to be manually changed. " + cr.toString();
+      logger.error(error, e);
+      response.setResponseStatus(HttpResponseStatus.FORBIDDEN);
+      return error;
+    }
+
+  }
+
+  /**
+   * PUT call
+   *
+   * @param request
+   * @param response
+   * @return
+   */
   public Object update(Request request, Response response) {
     return create(request, response);
   }
 
+  /**
+   * POJO for request.
+   */
+  private static final class ChangeRequest {
+
+    /**
+     * Zone name to change.
+     */
+    private String zone;
+    /**
+     * State to change the zone to.
+     */
+    private boolean state;
+
+    /**
+     * Default constructor; needed for serialization.
+     */
+    public ChangeRequest() {}
+
+    /**
+     *
+     * @param zone Zone name to change.
+     * @param state State to change the zone to.
+     */
+    public ChangeRequest(String zone, boolean state) {
+      this.zone = zone;
+      this.state = state;
+    }
+
+    /**
+     * Zone name to change.
+     *
+     * @return the zone
+     */
+    public String getZone() {
+      return zone;
+    }
+
+    /**
+     * Zone name to change.
+     *
+     * @param zone the zone to set
+     */
+    public void setZone(String zone) {
+      this.zone = zone;
+    }
+
+    /**
+     * State to change the zone to.
+     *
+     * @return the state
+     */
+    public boolean getState() {
+      return state;
+    }
+
+    /**
+     * State to change the zone to.
+     *
+     * @param state the state to set
+     */
+    public void setState(boolean state) {
+      this.state = state;
+    }
+
+    @Override
+    public String toString() {
+      return "ChangeRequest{" + "zone=" + zone + ", state=" + state + '}';
+    }
+
+  }
 }

@@ -16,12 +16,18 @@ package com.ampliciti.javahvac.service;
 
 import com.ampliciti.javahvac.ParentNodeTest;
 import com.ampliciti.javahvac.config.ServerConfig;
+import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.NodeInformation;
 import com.ampliciti.javahvac.domain.config.Node;
+import com.ampliciti.javahvac.exceptions.PermissionsException;
 import java.io.File;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
+import static org.mockserver.model.StringBody.exact;
+import org.mockserver.verify.VerificationTimes;
 
 /**
  *
@@ -30,7 +36,6 @@ import static org.junit.Assert.*;
 public class NodeServiceTest extends ParentNodeTest {
 
   public NodeServiceTest() {}
-
 
   /**
    * Test of checkNodeConnections method, of class NodeService.
@@ -137,6 +142,94 @@ public class NodeServiceTest extends ParentNodeTest {
     NodeInformation result = instance.pullNodeState(new Node("house-attic", "localhost:8084"));
     assertNotNull(result);
     assertEquals(1, result.getZones().size());
+  }
+
+
+
+  /**
+   * Test of changeZoneState method, of class NodeService.
+   */
+  @Test
+  public void testChangeZoneState() throws Exception {
+    System.out.println("changeZoneState");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    super.mockServerAttic
+        .when(request().withPath("/action")
+            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+        .respond(
+            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+    VerificationTimes.exactly(1);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String zoneName = "house_floods";
+    boolean command = true;
+    NodeService instance = new NodeService();
+    boolean expResult = true;
+    boolean result = instance.changeZoneState(zoneName, command);
+    assertEquals(expResult, result);
+  }
+
+  /**
+   * Test of endUserChangeZoneState method, of class NodeService.
+   */
+  @Test
+  public void testEndUserChangeZoneState() throws Exception {
+    System.out.println("endUserChangeZoneState");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    super.mockServerAttic
+        .when(request().withPath("/action")
+            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+        .respond(
+            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+    VerificationTimes.exactly(1);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String zoneName = "house_floods";
+    boolean command = true;
+    NodeService instance = new NodeService();
+    boolean expResult = true;
+    boolean result = instance.endUserChangeZoneState(zoneName, command);
+    assertEquals(expResult, result);
+  }
+
+  /**
+   * Test of endUserChangeZoneState method, of class NodeService.
+   */
+  @Test(expected = PermissionsException.class)
+  public void testEndUserChangeZoneStatePermissionDenied() throws Exception {
+    System.out.println("endUserChangeZoneState");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    super.mockServerCentral
+        .when(request().withPath("/action").withBody(exact("{\"zone\":\"hall\",\"state\":true}")))
+        .respond(response().withBody("{\"zone\":\"hall\",\"state\":true}").withStatusCode(201));
+    VerificationTimes.exactly(1);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String zoneName = "hall";
+    boolean command = true;
+    NodeService instance = new NodeService();
+    instance.endUserChangeZoneState(zoneName, command); // should throw an exception
   }
 
 }

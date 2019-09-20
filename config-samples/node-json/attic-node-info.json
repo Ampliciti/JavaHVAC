@@ -3,7 +3,7 @@
    "address":"attic.lan",
    "zones":[
       {
-         "name":"lights",
+         "name":"house_floods",
          "state":"false"
       }
    ]

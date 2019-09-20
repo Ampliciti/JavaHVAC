@@ -4,6 +4,7 @@
    "zones":[
       {
          "name":"hall",
+         "state":false,
          "temp":75.6
       },
       {
