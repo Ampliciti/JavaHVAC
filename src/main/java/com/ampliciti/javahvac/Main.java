@@ -18,6 +18,10 @@ import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.HVACDao;
 import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
+import com.ampliciti.javahvac.rest.Routes;
+import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
+import com.ampliciti.javahvac.rest.controllers.StatusController;
+import com.ampliciti.javahvac.rest.controllers.ZoneController;
 import com.ampliciti.javahvac.rules.Rule;
 import com.ampliciti.javahvac.rules.RuleGenerator;
 import com.ampliciti.javahvac.service.NodeService;
@@ -25,6 +29,8 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
+import org.restexpress.RestExpress;
+import org.restexpress.serialization.SerializationProvider;
 
 /**
  * Main class. This is what starts the <b>Server Application</b> for JavaHVAC.
@@ -113,6 +119,9 @@ public class Main {
     CurrentNodeState.refreshNodeState();
     // start up our worker threads
     startUpThreads();
+    // Start up the REST API
+    startRestAPI();
+
     logger.info("Program successfully started up!");
     // wait till it dies
     while (true) {
@@ -173,21 +182,52 @@ public class Main {
     managedWorkerThread.start();
     logger.info("Managed worker thread started.");
 
-    // Start worker thread to see if any conditions need to be changed -- TODO, may not be needed
-    Runnable unmanagedWorker = new Runnable() {
-      @Override
-      public void run() {
-        for (Rule r : unmanagedRules) {// enforce all rules
-          r.enforceRule();
+    // // Start worker thread to see if any conditions need to be changed -- TODO, may not be needed
+    // Runnable unmanagedWorker = new Runnable() {
+    // @Override
+    // public void run() {
+    // for (Rule r : unmanagedRules) {// enforce all rules
+    // r.enforceRule();
+    // }
+    // }
+    // };
+    //
+    // Thread unmanagedWorkerThread = new Thread(unmanagedWorker);
+    // logger.info("Starting unmanaged worker thread...");
+    // unmanagedWorkerThread.start();
+    // logger.info("Umanaged worker thread started.");
+
+  }
+
+  private void startRestAPI() {
+
+    logger.info("Starting up REST API...");
+    try {
+      // RestExpress.setDefaultSerializationProvider(new SerializationProvider());
+      logger.info("-----Attempting to start up JavaHVAC REST API-----");
+      RestExpress server = new RestExpress().setName("Java HVAC")
+          // .setBaseUrl(config.getBaseUrl())
+          .setExecutorThreadCount(15).setMaxContentSize(512000);// half a meg
+
+      Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(),
+          server);
+      // Relationships.define(server);
+      // configurePlugins(config, server);
+      // mapExceptions(server);
+      server.bind(8080);
+      logger.info("-----JavaHVAC REST API initalized.-----");
+
+      server.awaitShutdown();
+      Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+        @Override
+        public void run() {
+          logger.info("Shutting down JavaHVAC...");
         }
-      }
-    };
-
-    Thread unmanagedWorkerThread = new Thread(unmanagedWorker);
-    logger.info("Starting unmanaged worker thread...");
-    unmanagedWorkerThread.start();
-    logger.info("Umanaged worker thread started.");
-
+      }, "Shutdown-thread"));
+    } catch (Exception e) {
+      logger.error("Runtime exception when starting/running JavaHVAC. Could not start.", e);
+      System.exit(-1);
+    }
   }
 
 }
