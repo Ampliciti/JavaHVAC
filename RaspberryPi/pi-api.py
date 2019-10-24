@@ -47,7 +47,7 @@ actors = [
 class Sensor(Resource):
     def get(self, name):
         for sensor in sensors:
-            if(sensor == sensor["name"]):
+            if(name == sensor["name"]):
                 return sensor, 200
         return "Sensor not found", 404
 
