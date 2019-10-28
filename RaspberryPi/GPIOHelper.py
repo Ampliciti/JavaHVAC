@@ -1,4 +1,7 @@
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    print "Unable to load GPIO lib; this is probaly not a RaspberryPi. Continuing without GPIO support."
 
 
 #consturctor

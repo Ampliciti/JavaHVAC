@@ -23,7 +23,7 @@ def loadServiceConfig():
     return loadJsonFile('service-config.json')
 
 def loadRelayConfig():
-    return loadJsonFile('relay-config.json')
+    return loadJsonFile('relay-config.json')['relays']
 
 sensor_config = loadSensorConfig()
 service_config = loadServiceConfig()
@@ -138,11 +138,13 @@ class Info(Resource):
 
         for relay in relay_config:
             relayR = {}
+            print str(relay)
             relayR['name'] = relay['name']
             try:
                 relayR['state'] = GPIOHelper.getPinState(relay['GPIO'])
             except Exception as ex:
                 print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+                relayR['state'] = "null"
             #source type relays
             if sensor['source'] != None:
                 relayR['source'] = relay['source']
