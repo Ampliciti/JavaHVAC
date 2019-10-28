@@ -18,5 +18,5 @@ def setup(pins):
 def getPinState(pin):
     print "Getting state for GPIO pin: " + str(pin)
     state = GPIO.input(int(pin))
-    print "State for pin: " + str(pin) + " is: " + state
+    print "State for pin: " + str(pin) + " is: " + str(state)
     return state
