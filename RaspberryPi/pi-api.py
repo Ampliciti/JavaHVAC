@@ -5,6 +5,7 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import json
 import ReadDS18B20
+import GPIOHelper
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,9 +22,12 @@ def loadSensorConfig():
 def loadServiceConfig():
     return loadJsonFile('service-config.json')
 
+def loadRelayConfig():
+    return loadJsonFile('relay-config.json')
 
 sensor_config = loadSensorConfig()
 service_config = loadServiceConfig()
+relay_config = loadRelayConfig();
 
 #general server info
 name = service_config['name']
@@ -110,7 +114,6 @@ class Info(Resource):
         #add our top level stuff
         response['name'] = name
         response['address'] = address + ":" + port
-        #todo here -- add zones (if we have any)
         #start with an empty source and zone objects
         sources = []
         zones = []
@@ -133,6 +136,22 @@ class Info(Resource):
                 sensorR['zone'] = sensor['zone']
                 zones.append(sensorR)
 
+        for relay in relay_config:
+            relayR = {}
+            relayR['name'] = relay['name']
+            try:
+                relayR['state'] = GPIOHelper.getPinState(relay['GPIO'])
+            except Exception as ex:
+                print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+            #source type relays
+            if sensor['source'] != None:
+                relayR['source'] = relay['source']
+                sources.append(relayR)
+            #zone type relays
+            elif sensor['zone'] != None:
+                relayR['zone'] = relay['zone']
+                zones.append(relayR)
+
         response['sources'] = sources
         response['zones'] = zones
         return response, 200
@@ -152,5 +171,5 @@ api.add_resource(Sensor, "/sensor/<string:name>")
 api.add_resource(Actor, "/actor/<string:name>")
 api.add_resource(Info, "/info")
 
-#run in non-debug mode, on port 5000, open to all network (not very secure)
+#run in non-debug mode, on port <whatever the user set in the config file>, open to all network (not very secure)
 app.run(debug=False, port=port, host='0.0.0.0')
