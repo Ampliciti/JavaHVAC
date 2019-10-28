@@ -28,7 +28,7 @@ def loadRelayConfig():
 def setupGPIO():
     pins = []
     for relay in relay_config:
-        pins.append(relay['GPIO'])
+        pins.append(int(relay['GPIO']))
     GPIOHelper.setup(pins)
 
 sensor_config = loadSensorConfig()
