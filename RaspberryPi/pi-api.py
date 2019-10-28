@@ -4,6 +4,7 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import json
+import ReadDS18B20
 
 app = Flask(__name__)
 api = Api(app)
@@ -40,6 +41,12 @@ class Sensor(Resource):
     def get(self, name):
         for sensor in sensor_config:
             if(name == sensor["name"]):
+                #see if we can actually get a reading on this
+                if sensor["model"] == "DS18B20":
+                    try:
+                        sensor["temp"] = ReadDS18B20.read_temp(sensor["address"])
+                    except Exception as ex:
+                        print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
                 return sensor, 200
         return "Sensor not found", 404
 
