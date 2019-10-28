@@ -8,14 +8,14 @@ import json
 app = Flask(__name__)
 api = Api(app)
 
-print "Is this here?"
+#this probably doesn't follow python best practices, this is my first python rest app like this.
 
 def loadSensorConfig():
     with open('sensor-config.json') as json_file:
         data = json.load(json_file)
         return data['sensors']
 
-sensors = loadSensorConfig()
+sensor_config = loadSensorConfig()
 
 actors = [
     {
@@ -38,7 +38,7 @@ actors = [
 
 class Sensor(Resource):
     def get(self, name):
-        for sensor in sensors:
+        for sensor in sensor_config:
             if(name == sensor["name"]):
                 return sensor, 200
         return "Sensor not found", 404
@@ -88,5 +88,6 @@ class Actor(Resource):
 
 api.add_resource(Sensor, "/sensor/<string:name>")
 api.add_resource(Actor, "/actor/<string:name>")
+#api.add_resource(Info, "/info")
 
 app.run(debug=False)
