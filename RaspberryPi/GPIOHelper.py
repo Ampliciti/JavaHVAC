@@ -19,7 +19,7 @@ def getPinState(pin):
     print "Getting state for GPIO pin: " + str(pin)
     if GPIO.input(int(pin)):
         state = True
-    else
+    else:
         state = False
     print "State for pin: " + str(pin) + " is: " + str(state)
     return state
