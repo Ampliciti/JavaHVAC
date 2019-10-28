@@ -15,7 +15,7 @@ def loadSensorConfig():
         data = json.load(json_file)
         return data['sensors']
 
-sensor = loadSensorConfig()
+sensors = loadSensorConfig()
 
 actors = [
     {
