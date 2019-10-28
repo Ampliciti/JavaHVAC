@@ -15,7 +15,7 @@
       {
          "source": "cistern",
          "name":"panelPump",
-         "state":"true"
+         "state":true
       }
    ]
 }
