@@ -16,7 +16,7 @@ def setup(pins):
         print "Unable to setup GPIO; this is probaly not a RaspberryPi. Continuing without GPIO support."
 
 def getPinState(pin):
-    print "Getting state for GPIO pin: " + pin
+    print "Getting state for GPIO pin: " + str(pin)
     state = GPIO.input(int(pin))
-    print "State for pin: " + pin + " is: " + state
+    print "State for pin: " + str(pin) + " is: " + state
     return state
