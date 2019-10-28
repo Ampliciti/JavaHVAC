@@ -25,6 +25,12 @@ def loadServiceConfig():
 def loadRelayConfig():
     return loadJsonFile('relay-config.json')['relays']
 
+def setupGPIO():
+    pins = []
+    for relay in relay_config:
+        pins.append(relay['GPIO'])
+    GPIOHelper.setup(pins)
+
 sensor_config = loadSensorConfig()
 service_config = loadServiceConfig()
 relay_config = loadRelayConfig();
@@ -33,6 +39,10 @@ relay_config = loadRelayConfig();
 name = service_config['name']
 address = service_config['address'].split(":")[0]
 port = service_config['address'].split(":")[1]
+
+setupGPIO()
+
+
 
 actors = [
     {
