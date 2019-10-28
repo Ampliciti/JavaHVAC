@@ -13,4 +13,7 @@ def __init__(self, pins):
     GPIO.setup(pins, GPIO.OUT, initial=GPIO.LOW)
 
 def getPinState(pin):
-    return GPIO.input(pin)
+    print "Getting state for GPIO pin: " + pin
+    state = GPIO.input(pin)
+    print "State for pin: " + pin + " is: " + state
+    return state
