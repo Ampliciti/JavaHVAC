@@ -38,3 +38,5 @@ config-samples/server.yaml
 
 #virtual env files
 */.venv/
+
+*.pyc
