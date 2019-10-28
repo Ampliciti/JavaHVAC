@@ -11,12 +11,24 @@ api = Api(app)
 
 #this probably doesn't follow python best practices, this is my first python rest app like this.
 
+def loadJsonFile(json_file):
+    with open(json_file) as json_file:
+        return json.load(json_file)
+
 def loadSensorConfig():
-    with open('sensor-config.json') as json_file:
-        data = json.load(json_file)
-        return data['sensors']
+    return loadJsonFile('sensor-config.json')['sensors']
+
+def loadServiceConfig():
+    return loadJsonFile('service-config.json')
+
 
 sensor_config = loadSensorConfig()
+service_config = loadServiceConfig()
+
+#general server info
+name = service_config['name']
+address = service_config['address'].split(":")[0]
+port = service_config['address'].split(":")[1]
 
 actors = [
     {
@@ -91,11 +103,36 @@ class Actor(Resource):
         return "Delete is not supported.", 405
 
 
+class Info(Resource):
+    def get(self):
+        #start with an empty response that we can build up
+        response = {}
+        for sensor in sensor_config:
+            if(name == sensor["name"]):
+                #see if we can actually get a reading on this
+                if sensor["model"] == "DS18B20":
+                    try:
+                        sensor["temp"] = ReadDS18B20.read_temp(sensor["address"])
+                    except Exception as ex:
+                        print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
+                #return sensor, 200
+        return response
+        #return "Sensor not found", 404
+
+    def post(self):
+        return "Mutators are not supported on /info route", 405
+
+    def put(self):
+        return self.post()
+
+    def delete(self):
+        return self.post()
+
 
 
 api.add_resource(Sensor, "/sensor/<string:name>")
 api.add_resource(Actor, "/actor/<string:name>")
-#api.add_resource(Info, "/info")
+api.add_resource(Info, "/info")
 
 #run in non-debug mode, on port 5000, open to all network (not very secure)
-app.run(debug=False, port=5000, host= '0.0.0.0')
+app.run(debug=False, port=port, host='0.0.0.0')
