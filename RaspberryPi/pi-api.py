@@ -97,4 +97,4 @@ api.add_resource(Sensor, "/sensor/<string:name>")
 api.add_resource(Actor, "/actor/<string:name>")
 #api.add_resource(Info, "/info")
 
-app.run(debug=False)
+app.run(debug=False, port=5000, host= '0.0.0.0')
