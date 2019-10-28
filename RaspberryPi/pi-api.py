@@ -107,17 +107,35 @@ class Info(Resource):
     def get(self):
         #start with an empty response that we can build up
         response = {}
+        #add our top level stuff
+        response['name'] = name
+        response['address'] = address + ":" + port
+        #todo here -- add zones (if we have any)
+        #start with an empty source and zone objects
+        sources = []
+        zones = []
         for sensor in sensor_config:
-            if(name == sensor["name"]):
-                #see if we can actually get a reading on this
-                if sensor["model"] == "DS18B20":
-                    try:
-                        sensor["temp"] = ReadDS18B20.read_temp(sensor["address"])
-                    except Exception as ex:
-                        print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
-                #return sensor, 200
-        return response
-        #return "Sensor not found", 404
+            #common to all sensors
+            sensorR = {}
+            sensorR['name'] = sensor['name']
+            try:
+                sensorR['temp'] = ReadDS18B20.read_temp(sensor["address"])
+            except Exception as ex:
+                print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
+                sensorR['temp'] = "null"
+            #end common to all sensors
+            #source type sensors
+            if sensor['source'] != None:
+                sensorR['source'] = sensor['source']
+                sources.append(sensorR)
+            #zone type sensors
+            elif sensor['zone'] != None:
+                sensorR['zone'] = sensor['zone']
+                zones.append(sensorR)
+
+        response['sources'] = sources
+        response['zones'] = zones
+        return response, 200
 
     def post(self):
         return "Mutators are not supported on /info route", 405

@@ -1,0 +1,21 @@
+{
+   "name": "pump-pi",
+   "address": "pump-pi.lan:5000"
+   "sources":[
+      {
+         "source": "cistern",
+         "name":"cisternBottom",
+         "temp":75.4
+      },
+      {
+         "source": "cistern",
+         "name":"cisternTop",
+         "temp":90.5,
+      },
+      {
+         "source": "cistern",
+         "name":"panelPump",
+         "state":"true"
+      }
+   ]
+}
