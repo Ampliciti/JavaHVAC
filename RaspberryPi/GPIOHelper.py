@@ -14,6 +14,6 @@ def __init__(self, pins):
 
 def getPinState(pin):
     print "Getting state for GPIO pin: " + pin
-    state = GPIO.input(pin)
+    state = GPIO.input(int(pin))
     print "State for pin: " + pin + " is: " + state
     return state
