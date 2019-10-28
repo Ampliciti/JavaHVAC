@@ -3,27 +3,19 @@
 
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
+import json
 
 app = Flask(__name__)
 api = Api(app)
 
-sensors = [
-    {
-        "name": "Nicholas",
-        "age": 42,
-        "occupation": "Network Engineer"
-    },
-    {
-        "name": "Elvin",
-        "age": 32,
-        "occupation": "Doctor"
-    },
-    {
-        "name": "Jass",
-        "age": 22,
-        "occupation": "Web Developer"
-    }
-]
+print "Is this here?"
+
+def loadSensorConfig():
+    with open('sensor-config.json') as json_file:
+        data = json.load(json_file)
+        return data['sensors']
+
+sensor = loadSensorConfig()
 
 actors = [
     {
@@ -90,7 +82,10 @@ class Actor(Resource):
 
     def delete(self, name):
         return "Delete is not supported.", 405
-      
+
+
+
+
 api.add_resource(Sensor, "/sensor/<string:name>")
 api.add_resource(Actor, "/actor/<string:name>")
 
