@@ -2,7 +2,7 @@
 #Also, this may be the best file name I've ever had in an application.
 
 from flask import Flask
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api, Resource, request
 import json
 import ReadDS18B20
 import GPIOHelper
@@ -56,8 +56,18 @@ def smartAppend(listToAppendTo, key, toAppend):
 
     if not set:
         listToAppendTo.append(toAppend)
-
     return listToAppendTo
+
+def getRelayByName(name):
+    for relay in relay_config:
+        if relay['name'] == name:
+            print str(relay)
+            try:
+                relay['state'] = GPIOHelper.getPinState(relay['GPIO'])
+            except Exception as ex:
+                print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+                relay['state'] = "null"
+            return relay
 
 class Sensor(Resource):
     def get(self, name):
@@ -83,15 +93,9 @@ class Sensor(Resource):
 
 class Actor(Resource):
     def get(self, name):
-        for relay in relay_config:
-            if relay['name'] == name:
-                print str(relay)
-                try:
-                    relay['state'] = GPIOHelper.getPinState(relay['GPIO'])
-                except Exception as ex:
-                    print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
-                    relay['state'] = "null"
-                return relay, 200
+        relay = getRelayByName(name)
+        if relay is not None:
+            return relay, 200
         return name + " is not a valid actor", 404
 
     def post(self, name):
@@ -107,23 +111,25 @@ class Action(Resource):
     def get(self, name):
         return "GET are not supported on action route. Use /actor route.", 405
 
-    def post(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
+    def post(self):
+        body = request.get_json(force=True)
+        for relay in relay_config:
+            exists = False
+            print str(relay)
+            print body['name']
+            if(relay['name'] == body['name']):
+                exists = True
+                #Actually change the actors state, then return a 201
+                try:
+                    GPIOHelper.setPinState(relay['GPIO'], body['state']) #probably slightly unsafe
+                    return getRelayByName(body['name']), 201
+                except Exception as exception:
+                    print str(exception)
+                    return "Could not complete the action: " + str(exception), 500
 
-        for actor in actors:
-            if(name == actor["name"]):
-                return "User with name {} already exists".format(name), 400
+        if not exists:
+            return "A relay (GPIO output) does not exist with that name.", 404
 
-        actor = {
-            "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
-        }
-        actors.append(actor)
-        return user, 201
 
     def put(self, name):
         return self.post(name)

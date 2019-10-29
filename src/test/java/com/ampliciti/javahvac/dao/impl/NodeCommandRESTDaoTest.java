@@ -59,8 +59,8 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
       mockServer
-          .when(request().withPath("/action").withBody(exact("{\"zone\":\"mill\",\"state\":true}")))
-          .respond(response().withBody("{\"zone\":\"mill\",\"state\":true}").withStatusCode(201));
+          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
+          .respond(response().withBody("{\"name\":\"mill\",\"state\":true}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
       String zone = "mill";
@@ -86,8 +86,8 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     try {
       mockServer
           .when(
-              request().withPath("/action").withBody(exact("{\"zone\":\"mill\",\"state\":false}")))
-          .respond(response().withBody("{\"zone\":\"mill\",\"state\":false}").withStatusCode(201));
+              request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":false}")))
+          .respond(response().withBody("{\"name\":\"mill\",\"state\":false}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
       String zone = "mill";
@@ -112,8 +112,8 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
       mockServer
-          .when(request().withPath("/action").withBody(exact("{\"zone\":\"mill\",\"state\":true}")))
-          .respond(response().withBody("{\"zone\":\"mill\",\"state\":false}").withStatusCode(201));
+          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
+          .respond(response().withBody("{\"name\":\"mill\",\"state\":false}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
       String zone = "mill";
@@ -138,7 +138,7 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
       mockServer
-          .when(request().withPath("/action").withBody(exact("{\"zone\":\"mill\",\"state\":true}")))
+          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
           .respond(response().withBody("{\"error\":\"botched!\"}").withStatusCode(400));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;

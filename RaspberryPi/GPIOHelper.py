@@ -23,3 +23,10 @@ def getPinState(pin):
         state = False
     print "State for pin: " + str(pin) + " is: " + str(state)
     return state
+
+def setPinState(pin, value):
+    print "Setting state for GPIO pin: " + str(pin) + ", value: " + str(value)
+    if value:
+        GPIO.output(int(pin), GPIO.HIGH)
+    else:
+        GPIO.output(int(pin), GPIO.LOW)

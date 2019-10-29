@@ -20,4 +20,4 @@ virtualenv .venv
 GET /info -- gets all info needed for a server to make decisions (all non-hardware info)
 GET /sensor/$sensor_name -- gets all info relating to the sensor (including hardware info)
 GET /actor/$relay_name -- gets all info related to the relay (including hardware info)
-POST /action with body: {"zone":<zoneOrSourceName>:,"state":true|false}"
+POST /action with body: {"name":<zoneOrSourceName>:,"state":true|false}"

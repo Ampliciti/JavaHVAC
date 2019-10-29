@@ -47,25 +47,25 @@ public class NodeCommandRESTDao implements NodeCommandDao {
    * Sends a command to the specified node via REST.
    * 
    * @param nodeAddress Address to the node to send the command to.
-   * @param zoneOrSource Zone or source to change the state of.
-   * @param command Command to send. True means turn the zoneOrSource on, false means turn it off.
+   * @param name Zone or source to change the state of.
+   * @param command Command to send. True means turn the name on, false means turn it off.
    * @return true if the command was executed successfully, false if it failed for some reason.
    * @throws NodeConnectionException if there's a problem connecting to the node.
    */
   @Override
-  public boolean sendCommand(String nodeAddress, String zoneOrSource, boolean command)
+  public boolean sendCommand(String nodeAddress, String name, boolean command)
       throws NodeConnectionException {
     RESTDao restDao = new RESTDaoImpl(Utils.buildUrlFromAddressString(nodeAddress));
     JSONAware restResponse = null;
     try {
       Map mapToPost = new HashMap();
-      mapToPost.put("zone", zoneOrSource);
+      mapToPost.put("name", name);
       mapToPost.put("state", command);
       JSONObject toPost = new JSONObject(mapToPost);
       restResponse = restDao.doPostCall("/action", toPost);
       String jsonResponse = restResponse.toJSONString();
       logger.debug("Response from node: " + nodeAddress + " is: " + jsonResponse);
-      if (jsonResponse != null && jsonResponse.contains(zoneOrSource)
+      if (jsonResponse != null && jsonResponse.contains(name)
           && jsonResponse.contains(Boolean.toString(command))) { // quick/lazy
         return true;
       } else {
