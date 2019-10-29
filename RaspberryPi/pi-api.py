@@ -46,10 +46,10 @@ setupGPIO()
 
 #helper method for combining two data objects in a list with the same key -- there's probably a better way to do this
 def smartAppend(listToAppendTo, key, toAppend):
-    print "list: " + str(listToAppendTo)
+    #print "list: " + str(listToAppendTo)
     set = False
     for item in listToAppendTo:
-        print item[key] + ":" + toAppend[key]
+        #print item[key] + ":" + toAppend[key]
         if item[key] == toAppend[key]:
             set = True
             item = item.update(toAppend)
@@ -58,26 +58,6 @@ def smartAppend(listToAppendTo, key, toAppend):
         listToAppendTo.append(toAppend)
 
     return listToAppendTo
-
-
-actors = [
-    {
-        "name": "Nicholas",
-        "age": 42,
-        "occupation": "Network Engineer"
-    },
-    {
-        "name": "Elvin",
-        "age": 32,
-        "occupation": "Doctor"
-    },
-    {
-        "name": "Jass",
-        "age": 22,
-        "occupation": "Web Developer"
-    }
-]
-
 
 class Sensor(Resource):
     def get(self, name):
@@ -103,10 +83,29 @@ class Sensor(Resource):
 
 class Actor(Resource):
     def get(self, name):
-        for actor in actors:
-            if(name == actor["name"]):
-                return actor, 200
-        return "Actor not found", 404
+        for relay in relay_config:
+            if relay['name'] == name:
+                print str(relay)
+                try:
+                    relay['state'] = GPIOHelper.getPinState(relay['GPIO'])
+                except Exception as ex:
+                    print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+                    relay['state'] = "null"
+                return relay, 200
+        return name + " is not a valid actor", 404
+
+    def post(self, name):
+        return "Mutators are not supported on actor route. Use /action route.", 405
+
+    def put(self, name):
+        return self.post(name)
+
+    def delete(self, name):
+        return "Delete is not supported.", 405
+
+class Action(Resource):
+    def get(self, name):
+        return "GET are not supported on action route. Use /actor route.", 405
 
     def post(self, name):
         parser = reqparse.RequestParser()
@@ -198,7 +197,8 @@ class Info(Resource):
 
 
 api.add_resource(Sensor, "/sensor/<string:name>")
-api.add_resource(Actor, "/action")
+api.add_resource(Actor, "/actor/<string:name>", endpoint="actor")
+api.add_resource(Action, "/action", endpoint="action")
 api.add_resource(Info, "/info")
 
 #run in non-debug mode, on port <whatever the user set in the config file>, open to all network (not very secure)
