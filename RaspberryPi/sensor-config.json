@@ -1,7 +1,7 @@
 {
    "sensors":[
       {
-         "name":"cisternBottom",
+         "name":"housePump",
          "model":"DS18B20",
          "address":"28-0000087e1f2b",
          "source": "cistern"

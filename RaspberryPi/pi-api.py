@@ -42,6 +42,22 @@ port = service_config['address'].split(":")[1]
 
 setupGPIO()
 
+#end setup
+
+#helper method for combining two data objects in a list with the same key -- there's probably a better way to do this
+def smartAppend(listToAppendTo, key, toAppend):
+    print "list: " + str(listToAppendTo)
+    set = False
+    for item in listToAppendTo:
+        print item[key] + ":" + toAppend[key]
+        if item[key] == toAppend[key]:
+            set = True
+            item = item.update(toAppend)
+
+    if not set:
+        listToAppendTo.append(toAppend)
+
+    return listToAppendTo
 
 
 actors = [
@@ -158,11 +174,13 @@ class Info(Resource):
             #source type relays
             if sensor['source'] != None:
                 relayR['source'] = relay['source']
-                sources.append(relayR)
+                smartAppend(sources, 'name', relayR)
+                #sources.append(relayR)
             #zone type relays
             elif sensor['zone'] != None:
                 relayR['zone'] = relay['zone']
-                zones.append(relayR)
+                smartAppend(zones, 'name', relayR)
+                #zones.append(relayR)
 
         response['sources'] = sources
         response['zones'] = zones
@@ -180,7 +198,7 @@ class Info(Resource):
 
 
 api.add_resource(Sensor, "/sensor/<string:name>")
-api.add_resource(Actor, "/actor/<string:name>")
+api.add_resource(Actor, "/action")
 api.add_resource(Info, "/info")
 
 #run in non-debug mode, on port <whatever the user set in the config file>, open to all network (not very secure)

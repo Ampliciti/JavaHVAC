@@ -28,12 +28,12 @@ public interface NodeCommandDao {
    * Sends a command to the specified node.
    * 
    * @param nodeAddress Address to the node to send the command to.
-   * @param zone Zone to change the state of.
+   * @param zoneOrSource Zone or source to change the state of.
    * @param command Command to send. True means turn the zone on, false means turn it off.
    * @return true if the command was executed successfully, false if it failed for some reason.
    * @throws NodeConnectionException if there's a problem connecting to the node.
    */
-  public boolean sendCommand(String nodeAddress, String zone, boolean command)
+  public boolean sendCommand(String nodeAddress, String zoneOrSource, boolean command)
       throws NodeConnectionException;
 
 
