@@ -63,7 +63,11 @@ def getRelayByName(name):
         if relay['name'] == name:
             print str(relay)
             try:
-                relay['state'] = GPIOHelper.getPinState(relay['GPIO'])
+                switch_state = GPIOHelper.getPinState(relay['GPIO'])
+                #if LOW means on, we have a flag for that (which means HIGH is off)
+                if relay.get('GPIOSwap'):
+                    switch_state = not switch_state
+                relay['state'] = switch_state
             except Exception as ex:
                 print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
                 relay['state'] = "null"
@@ -121,7 +125,11 @@ class Action(Resource):
                 exists = True
                 #Actually change the actors state, then return a 201
                 try:
-                    GPIOHelper.setPinState(relay['GPIO'], body['state']) #probably slightly unsafe
+                    switch_state = body['state']
+                    #if LOW means on, we have a flag for that (which means HIGH is off)
+                    if relay.get('GPIOSwap'):
+                        switch_state = not switch_state
+                    GPIOHelper.setPinState(relay['GPIO'], switch_state)
                     return getRelayByName(body['name']), 201
                 except Exception as exception:
                     print str(exception)
