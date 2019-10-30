@@ -193,6 +193,7 @@ class Info(Resource):
 
         response['sources'] = sources
         response['zones'] = zones
+        response['misc'] = misc
         return response, 200
 
     def post(self):
