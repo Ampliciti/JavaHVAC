@@ -1,0 +1,19 @@
+{
+   "relays":[
+      {
+         "name":"recirculatorPump",
+         "GPIO": 8,
+         "source": "cistern"
+      },
+      {
+         "name":"barnPump",
+         "GPIO": 10,
+         "source": "cistern"
+      },
+      {
+         "name":"housePump",
+         "GPIO": 12,
+         "source": "cistern"
+      }
+   ]
+}

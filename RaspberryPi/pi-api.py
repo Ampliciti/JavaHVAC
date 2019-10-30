@@ -145,9 +145,10 @@ class Info(Resource):
         #add our top level stuff
         response['name'] = name
         response['address'] = address + ":" + port
-        #start with an empty source and zone objects
+        #start with an empty source, zone, and misc objects
         sources = []
         zones = []
+        misc = [] #relays and sensors with nothing associated with them
         for sensor in sensor_config:
             #common to all sensors
             sensorR = {}
@@ -159,13 +160,15 @@ class Info(Resource):
                 sensorR['temp'] = "null"
             #end common to all sensors
             #source type sensors
-            if sensor['source'] != None:
+            if sensor.get('source') != None:
                 sensorR['source'] = sensor['source']
                 sources.append(sensorR)
             #zone type sensors
-            elif sensor['zone'] != None:
+            elif sensor.get('zone') != None:
                 sensorR['zone'] = sensor['zone']
                 zones.append(sensorR)
+            else: #unmanaged sensors
+                misc.append(sensorR)
 
         for relay in relay_config:
             relayR = {}
@@ -177,15 +180,16 @@ class Info(Resource):
                 print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
                 relayR['state'] = "null"
             #source type relays
-            if sensor['source'] != None:
+            if relay.get('source') != None:
                 relayR['source'] = relay['source']
                 smartAppend(sources, 'name', relayR)
-                #sources.append(relayR)
             #zone type relays
-            elif sensor['zone'] != None:
+            elif relay.get('zone') != None:
                 relayR['zone'] = relay['zone']
                 smartAppend(zones, 'name', relayR)
-                #zones.append(relayR)
+            else: #unmanaged relays
+                misc.append(relayR)
+
 
         response['sources'] = sources
         response['zones'] = zones
