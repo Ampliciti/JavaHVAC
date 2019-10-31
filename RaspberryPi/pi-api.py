@@ -65,8 +65,9 @@ def getRelayByName(name):
             try:
                 switch_state = GPIOHelper.getPinState(relay['GPIO'])
                 #if LOW means on, we have a flag for that (which means HIGH is off)
-                if relay.get('GPIOSwap'):
+                if relay.get('GPIOInvert'):
                     switch_state = not switch_state
+                    print "Swapping True/High for False/High on fetch: " + str(switch_state)
                 relay['state'] = switch_state
             except Exception as ex:
                 print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
@@ -127,8 +128,9 @@ class Action(Resource):
                 try:
                     switch_state = body['state']
                     #if LOW means on, we have a flag for that (which means HIGH is off)
-                    if relay.get('GPIOSwap'):
+                    if relay.get('GPIOInvert'):
                         switch_state = not switch_state
+                        print "Swapping True/High for False/High on set: " + str(switch_state)
                     GPIOHelper.setPinState(relay['GPIO'], switch_state)
                     return getRelayByName(body['name']), 201
                 except Exception as exception:
@@ -183,7 +185,12 @@ class Info(Resource):
             print str(relay)
             relayR['name'] = relay['name']
             try:
-                relayR['state'] = GPIOHelper.getPinState(relay['GPIO'])
+                switch_state = GPIOHelper.getPinState(relay['GPIO'])
+                #if LOW means on, we have a flag for that (which means HIGH is off)
+                if relay.get('GPIOInvert'):
+                    switch_state = not switch_state
+                    print "Swapping True/High for False/High on fetch: " + str(switch_state)
+                relayR['state'] = switch_state
             except Exception as ex:
                 print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
                 relayR['state'] = "null"
