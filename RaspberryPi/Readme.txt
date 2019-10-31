@@ -15,6 +15,8 @@ virtualenv .venv
 
 #run:
 .venv/bin/python pi-api.py
+#or better yet:
+nohup .venv/bin/python pi-api.py & 2> nohup.out
 
 #supported routes
 GET /info -- gets all info needed for a server to make decisions (all non-hardware info)
