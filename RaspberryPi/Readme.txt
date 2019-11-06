@@ -20,6 +20,76 @@ nohup .venv/bin/python pi-api.py & 2> nohup.out
 
 #supported routes
 GET /info -- gets all info needed for a server to make decisions (all non-hardware info)
+Example response body:
+{
+    "zones": [],
+    "sources": [
+        {
+            "source": "cistern",
+            "name": "cisternBottom",
+            "temp": 42.9116
+        },
+        {
+            "source": "cistern",
+            "name": "cisternInlet",
+            "temp": 42.461600000000004
+        },
+        {
+            "source": "cistern",
+            "name": "cisternTop",
+            "temp": 43.025
+        },
+        {
+            "source": "cistern",
+            "name": "cisternHotWaterPreheat",
+            "temp": 40.55
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "recirculatorPump"
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "barnPump"
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "housePump"
+        }
+    ],
+    "misc": [
+        {
+            "name": "EastTemp",
+            "temp": 53.2616
+        }
+    ],
+    "name": "pump-pi",
+    "address": "pump-pi.lan:5000"
+}
 GET /sensor/$sensor_name -- gets all info relating to the sensor (including hardware info)
+Example response body:
+{
+    "model": "DS18B20",
+    "name": "EastTemp",
+    "temp": 53.15,
+    "address": "28-0000087f0ccc"
+}
 GET /actor/$relay_name -- gets all info related to the relay (including hardware info)
+Example response body:
+{
+    "GPIO": 8,
+    "state": false,
+    "name": "housePump",
+    "source": "cistern"
+}
 POST /action with body: {"name":<zoneOrSourceName>:,"state":true|false}"
+Example response body:
+{
+    "GPIO": 3,
+    "state": true,
+    "name": "recirculatorPump",
+    "source": "cistern"
+}

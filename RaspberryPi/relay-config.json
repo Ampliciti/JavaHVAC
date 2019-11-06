@@ -3,16 +3,19 @@
       {
          "name":"recirculatorPump",
          "GPIO": 3,
+         "GPIOInvert": true,
          "source": "cistern"
       },
       {
          "name":"barnPump",
          "GPIO": 5,
+         "GPIOInvert": true,
          "source": "cistern"
       },
       {
          "name":"housePump",
          "GPIO": 8,
+         "GPIOInvert": true,
          "source": "cistern"
       }
    ]
