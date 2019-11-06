@@ -17,6 +17,12 @@
          "GPIO": 8,
          "GPIOInvert": true,
          "source": "cistern"
+      },
+      {
+         "name":"TBD1",
+         "GPIO": 10,
+         "GPIOInvert": true,
+         "source": "cistern"
       }
    ]
 }
