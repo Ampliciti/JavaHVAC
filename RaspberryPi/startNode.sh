@@ -10,4 +10,4 @@ then
   echo "Done setting up Virtual environment."
 fi
 
-.venv/bin/python pi-api.py
+nohup .venv/bin/python pi-api.py &
