@@ -2,8 +2,10 @@
 This is a bit of Python code that is intended to run on a RaspberryPi to act on behalf of the JavaHVAC server and gather sensor data.
 
 #To install:
-1. Extract the package into /home/pi on a RaspberryPi
-2. ./install.sh
+1. Login to the Pi and ensure you're in /home/pi
+2. wget https://github.com/Ampliciti/JavaHVAC/blob/master/RaspberryPi/JavaHVAC-Node-0.0.1.tar.gz
+3. tar xvfz JavaHVAC-Node-0.0.1.tar.gz
+4. ./install.sh
 
 #Manual setup system (do this first):
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
