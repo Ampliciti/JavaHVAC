@@ -7,7 +7,7 @@ then
   virtualenv .venv
   echo "Installing dependencies to virtual environment..."
   .venv/bin/pip install -r requirements.txt
-  echo "Done setting up Virtual environment.,"
+  echo "Done setting up Virtual environment."
 fi
 
 .venv/bin/python pi-api.py

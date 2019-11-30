@@ -1,9 +1,9 @@
 To setup on a RaspberryPi node:
 
-#Setup system:
+#Setup system (do this first):
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
 
-#Setup software:
+#Manual software setup:
 sudo apt-get update
 sudo apt-get -y install python-pip
 sudo apt-get -y install virtualenv
@@ -13,7 +13,7 @@ cd $project_home/RaspberryPi
 virtualenv .venv
 .venv/bin/pip install -r requirements.txt
 
-#run:
+#Manual run:
 .venv/bin/python pi-api.py
 #or better yet:
 nohup .venv/bin/python pi-api.py & 2> nohup.out
