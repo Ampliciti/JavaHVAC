@@ -3,9 +3,10 @@ This is a bit of Python code that is intended to run on a RaspberryPi to act on 
 
 #To install:
 1. Login to the Pi and ensure you're in /home/pi
-2. wget https://github.com/Ampliciti/JavaHVAC/blob/master/RaspberryPi/JavaHVAC-Node-0.0.1.tar.gz
-3. tar xvfz JavaHVAC-Node-0.0.1.tar.gz
-4. ./install.sh
+2. wget https://github.com/Ampliciti/JavaHVAC/raw/master/JavaHVAC-Node.tar.gz
+3. tar xvfz JavaHVAC-Node.tar.gz
+4. cd JavaHVAC-Node
+5. sudo ./install.sh
 
 #Manual setup system (do this first):
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20

@@ -33,6 +33,7 @@ then
   $APP_HOME/.venv/bin/pip install -r requirements.txt
   echo "Done setting up Virtual environment."
 fi
+chown -R pi:pi $APP_HOME
 
 echo "Setting up service..."
 mv ./JavaHVAC-Node.service /etc/systemd/system/
@@ -40,13 +41,13 @@ systemctl daemon-reload
 systemctl enable JavaHVAC-Node.service
 
 #one wire temp sensor setup
-ONE_WIRE="/boot/config.txt"
-if grep $ONE_WIRE /boot/config.txt
+ONE_WIRE="dtoverlay=w1-gpio"
+if grep "$ONE_WIRE" /boot/config.txt
 then
   echo "One-wire interface for temperature sensors already enabled."
 else
   echo "One-wire interface for temperature sensors not enabled; enabling now..."
-  echo $ONE_WIRE >> /boot/config.txt
+  echo "$ONE_WIRE" >> /boot/config.txt
   echo "You will need to restart this PI after installation is complete to enable on-wire."
 fi
 echo "Done with installation... attempting to start up!"
