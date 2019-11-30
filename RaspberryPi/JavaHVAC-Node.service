@@ -1,0 +1,12 @@
+[Unit]
+Description=JAVAHvac's Python-based Raspberry PI Node Service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/JavaHVAC-Node
+ExecStart=/home/pi/JavaHVAC-Node/startNode.sh
+Type=forking
+User=pi
+
+[Install]
+WantedBy=default.target
