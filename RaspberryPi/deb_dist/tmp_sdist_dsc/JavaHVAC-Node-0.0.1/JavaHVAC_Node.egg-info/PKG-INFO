@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: JavaHVAC-Node
+Version: 0.0.1
+Summary: JAVAHvac's Python-based Raspberry PI Node Service
+Home-page: https://github.com/Ampliciti/JavaHVAC/tree/master/RaspberryPi
+Author: Jeffrey DeYoung
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: This is a bit of Python code that is intended to run on a RaspberryPi to act on behalf of the JavaHVAC server and gather sensor data.
+Platform: UNKNOWN

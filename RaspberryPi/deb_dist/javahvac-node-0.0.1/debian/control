@@ -1,0 +1,17 @@
+Source: javahvac-node
+Maintainer: unknown <unknown@unknown>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), debhelper (>= 7)
+Standards-Version: 3.9.1
+
+
+
+Package: python-javahvac-node
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: JAVAHvac's Python-based Raspberry PI Node Service
+ This is a bit of Python code that is intended to run on a RaspberryPi to act on behalf of the JavaHVAC server and gather sensor data.
+
+
+
