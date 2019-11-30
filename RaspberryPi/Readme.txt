@@ -1,4 +1,5 @@
-To setup on a RaspberryPi node:
+#What this is:
+This is a bit of Python code that is intended to run on a RaspberryPi to act on behalf of the JavaHVAC server and gather sensor data.
 
 #Setup system (do this first):
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
