@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 echo "Starting up the JavaHVAC Raspberry PI Service..."
 if [ ! -d ".venv" ]
