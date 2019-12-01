@@ -4,7 +4,7 @@
 
 echo "Setting up the JavaHVAC Raspberry PI Service..."
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+  then echo "Please run as root."
   exit
 fi
 

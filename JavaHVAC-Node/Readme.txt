@@ -7,6 +7,16 @@ This is a bit of Python code that is intended to run on a RaspberryPi to act on 
 3. tar xvfz JavaHVAC-Node.tar.gz
 4. cd JavaHVAC-Node
 5. sudo ./install.sh
+6. Copy over or modify the config files for your needs. Restart the service after you make any config changes.
+
+#Running as a service
+The installation script will run the script as a systemd service. Standard systemd commands will work.
+sudo service JavaHVAC-Node status
+sudo service JavaHVAC-Node start
+sudo service JavaHVAC-Node stop
+sudo service JavaHVAC-Node restart
+
+
 
 #Manual setup system (do this first):
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
