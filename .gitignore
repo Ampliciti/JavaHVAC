@@ -40,3 +40,4 @@ config-samples/server.yaml
 */.venv/
 
 *.pyc
+nbactions.xml
