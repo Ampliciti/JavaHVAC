@@ -10,8 +10,8 @@ def setup(pins):
     try:
         #use board numbering, because it's less confusing
         GPIO.setmode(GPIO.BOARD)
-        #only supporting output at this time (ie, relays or other binary outputs); default to off
-        GPIO.setup(pins, GPIO.OUT, initial=GPIO.LOW)
+        #only supporting output at this time (ie, relays or other binary outputs); default to HIGH
+        GPIO.setup(pins, GPIO.OUT, initial=GPIO.HIGH)
     except NameError:
         print "Unable to setup GPIO; this is probaly not a RaspberryPi. Continuing without GPIO support."
 
