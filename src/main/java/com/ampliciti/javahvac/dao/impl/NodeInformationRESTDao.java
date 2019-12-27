@@ -21,7 +21,9 @@ import com.ampliciti.javahvac.exceptions.NodeConnectionException;
 import com.ampliciti.javahvac.domain.NodeInformation;
 import com.ampliciti.javahvac.exceptions.RESTException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.GsonBuildConfig;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
@@ -50,7 +52,9 @@ public class NodeInformationRESTDao implements NodeInformationDao {
    */
   @Override
   public NodeInformation getInfo(String nodeAddress) throws NodeConnectionException {
-    Gson gson = new Gson();
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.serializeNulls();
+    Gson gson = gsonBuilder.create();
     RESTDao restDao = new RESTDaoImpl(Utils.buildUrlFromAddressString(nodeAddress));
     JSONObject restResponse = null;
     try {

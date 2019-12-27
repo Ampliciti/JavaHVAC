@@ -167,7 +167,7 @@ class Info(Resource):
                 sensorR['temp'] = ReadDS18B20.read_temp(sensor["address"])
             except Exception as ex:
                 print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
-                sensorR['temp'] = "null"
+                sensorR['temp'] = None
             #end common to all sensors
             #source type sensors
             if sensor.get('source') != None:

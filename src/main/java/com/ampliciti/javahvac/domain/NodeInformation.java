@@ -30,6 +30,11 @@ public class NodeInformation extends Node {
   private ArrayList<NodeZoneInformation> zones;
 
   /**
+   * Self-reported source information from this node.
+   */
+  private ArrayList<NodeSourceInformation> sources;
+
+  /**
    * Get self-reported zone information from this node.
    * 
    * @return
@@ -38,13 +43,33 @@ public class NodeInformation extends Node {
     return zones;
   }
 
+
+  /**
+   * Self-reported source information from this node.
+   * 
+   * @return the sources
+   */
+  public ArrayList<NodeSourceInformation> getSources() {
+    return sources;
+  }
+
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder(super.toString());
     sb.append(" Node Zone Information:");
-    for (NodeZoneInformation nzi : zones) {
-      sb.append(", ");
-      sb.append(nzi.toString());
+    if (zones != null) {
+      for (NodeZoneInformation nzi : zones) {
+        sb.append(", ");
+        sb.append(nzi.toString());
+      }
+    }
+    if (sources != null) {
+      sb.append(" Node Source Information:");
+      for (NodeSourceInformation nsi : sources) {
+        sb.append(", ");
+        sb.append(nsi.toString());
+      }
     }
     return sb.toString();
   }

@@ -52,4 +52,30 @@ public class NodeInformationRESTDaoTest extends ParentNodeTest {
     assertEquals(true, result.getZones().get(2).getState());
   }
 
+  /**
+   * Test of getInfo method, of class NodeInformationRESTDao.
+   */
+  @Test
+  public void testGetInfoWithSource() throws Exception {
+    System.out.println("getInfoWithSource");
+    // setup the mock
+    startMocks();
+    int testPort = 8085;
+    String nodeAddress = "localhost:" + testPort;
+
+    NodeInformationRESTDao instance = new NodeInformationRESTDao();
+    NodeInformation result = instance.getInfo(nodeAddress);
+    assertNotNull(result);
+    assertEquals("pump-pi", result.getName());
+    assertEquals("pump-pi.lan", result.getAddress());
+    assertEquals(0, result.getZones().size());
+    assertEquals(8, result.getSources().size());
+    assertEquals("cisternBottom", result.getSources().get(0).getName());
+    assertEquals(new Double(65.975), result.getSources().get(0).getTemp());
+    // ...
+    assertEquals("recirculatorPump", result.getSources().get(4).getName());
+    assertEquals(null, result.getSources().get(4).getTemp());// no temp here
+    assertEquals(false, result.getSources().get(4).getState());
+  }
+
 }

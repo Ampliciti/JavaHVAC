@@ -14,7 +14,6 @@
  */
 package com.ampliciti.javahvac;
 
-import com.ampliciti.javahvac.rest.controllers.StatusController;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
@@ -39,12 +38,15 @@ public class ParentNodeTest {
   private static String barnResponse;
   private static String atticResponse;
   private static String centralResponse;
+  private static String cisternResponse;
 
   protected static ClientAndServer mockServerBarn = null;
 
   protected static ClientAndServer mockServerCentral = null;
 
   protected static ClientAndServer mockServerAttic = null;
+
+  protected static ClientAndServer mockServerCistern = null;
 
   @BeforeClass
   public static void setUpClass() throws IOException {
@@ -54,6 +56,9 @@ public class ParentNodeTest {
         .readFileToString(new File("./config-samples/node-json/attic-node-info.json"), "UTF-8");
     centralResponse = FileUtils
         .readFileToString(new File("./config-samples/node-json/central-node-info.json"), "UTF-8");
+
+    cisternResponse = FileUtils
+        .readFileToString(new File("./config-samples/node-json/cistern-node-info.json"), "UTF-8");
   }
 
   @AfterClass
@@ -86,6 +91,11 @@ public class ParentNodeTest {
       mockServerAttic.when(request().withPath("/info"))
           .respond(response().withBody(atticResponse).withStatusCode(200));
     }
+    if (mockServerCistern == null || !mockServerCistern.isRunning()) {
+      mockServerCistern = ClientAndServer.startClientAndServer(8085);
+      mockServerCistern.when(request().withPath("/info"))
+          .respond(response().withBody(cisternResponse).withStatusCode(200));
+    }
   }
 
   private static void stopMocks() {
@@ -93,6 +103,7 @@ public class ParentNodeTest {
     stopMock(mockServerBarn);
     stopMock(mockServerCentral);
     stopMock(mockServerAttic);
+    stopMock(mockServerCistern);
   }
 
   protected static void stopMock(ClientAndServer mockToStop) {

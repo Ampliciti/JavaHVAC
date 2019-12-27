@@ -1,0 +1,53 @@
+{
+    "zones": [],
+    "sources": [
+        {
+            "source": "cistern",
+            "name": "cisternBottom",
+            "temp": 65.975
+        },
+        {
+            "source": "cistern",
+            "name": "cisternInlet",
+            "temp": 64.85
+        },
+        {
+            "source": "cistern",
+            "name": "cisternTop",
+            "temp": 65.975
+        },
+        {
+            "source": "cistern",
+            "name": "cisternHotWaterPreheat",
+            "temp": null
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "recirculatorPump"
+        },
+        {
+            "source": "cistern",
+            "state": true,
+            "name": "barnPump"
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "housePump"
+        },
+        {
+            "source": "cistern",
+            "state": false,
+            "name": "TBD1"
+        }
+    ],
+    "misc": [
+        {
+            "name": "EastTemp",
+            "temp": "null"
+        }
+    ],
+    "name": "pump-pi",
+    "address": "pump-pi.lan"
+}
