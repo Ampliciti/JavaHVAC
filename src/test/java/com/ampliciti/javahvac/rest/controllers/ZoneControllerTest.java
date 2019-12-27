@@ -44,14 +44,14 @@ public class ZoneControllerTest extends ParentControllerTest {
     System.out.println("create");
     super.mockServerAttic
         .when(request().withPath("/action")
-            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
         .respond(
-            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
-    ResponseOptions response = given().body("{\"zone\":\"house_floods\",\"state\":true}").expect()
-        .statusCode(201).body("zone", equalTo("house_floods")).body("state", equalTo(true)).when()
+    ResponseOptions response = given().body("{\"name\":\"house_floods\",\"state\":true}").expect()
+        .statusCode(201).body("name", equalTo("house_floods")).body("state", equalTo(true)).when()
         .post("/zone").andReturn();
   }
 
@@ -63,14 +63,14 @@ public class ZoneControllerTest extends ParentControllerTest {
     System.out.println("update");
     super.mockServerAttic
         .when(request().withPath("/action")
-            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
         .respond(
-            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
-    ResponseOptions response = given().body("{\"zone\":\"house_floods\",\"state\":true}").expect()
-        .statusCode(201).body("zone", equalTo("house_floods")).body("state", equalTo(true)).when()
+    ResponseOptions response = given().body("{\"name\":\"house_floods\",\"state\":true}").expect()
+        .statusCode(201).body("name", equalTo("house_floods")).body("state", equalTo(true)).when()
         .put("/zone").andReturn();
   }
 
@@ -81,12 +81,12 @@ public class ZoneControllerTest extends ParentControllerTest {
   public void testCreateFail() {
     System.out.println("create");
     super.mockServerCentral
-        .when(request().withPath("/action").withBody(exact("{\"zone\":\"hall\",\"state\":true}")))
-        .respond(response().withBody("{\"zone\":\"hall\",\"state\":true}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"hall\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"hall\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
-    ResponseOptions response = given().body("{\"zone\":\"hall\",\"state\":true}").expect()
+    ResponseOptions response = given().body("{\"name\":\"hall\",\"state\":true}").expect()
         .statusCode(403).when().post("/zone").andReturn();
     assertTrue(
         response.getBody().print().contains("This zone is not allowed to be manually changed."));

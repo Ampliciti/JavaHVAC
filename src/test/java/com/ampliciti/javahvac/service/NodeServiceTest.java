@@ -162,9 +162,9 @@ public class NodeServiceTest extends ParentNodeTest {
     startMocks();
     super.mockServerAttic
         .when(request().withPath("/action")
-            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
         .respond(
-            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
@@ -192,9 +192,9 @@ public class NodeServiceTest extends ParentNodeTest {
     startMocks();
     super.mockServerAttic
         .when(request().withPath("/action")
-            .withBody(exact("{\"zone\":\"house_floods\",\"state\":true}")))
+            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
         .respond(
-            response().withBody("{\"zone\":\"house_floods\",\"state\":true}").withStatusCode(201));
+            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 

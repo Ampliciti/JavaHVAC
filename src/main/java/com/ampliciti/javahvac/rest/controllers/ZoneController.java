@@ -23,7 +23,7 @@ import org.restexpress.Request;
 import org.restexpress.Response;
 
 /**
- * Route for modifying a zone state directly.
+ * Route for modifying a name state directly.
  *
  * @author jeffrey
  */
@@ -49,7 +49,7 @@ public class ZoneController {
   public Object create(Request request, Response response) {
     ChangeRequest cr = request.getBodyAs(ChangeRequest.class);
     try {
-      if (service.endUserChangeZoneState(cr.getZone(), cr.getState())) {
+      if (service.endUserChangeZoneState(cr.getName(), cr.getState())) {
         response.setResponseStatus(HttpResponseStatus.CREATED);
         return cr;
       } else {
@@ -89,11 +89,11 @@ public class ZoneController {
   private static final class ChangeRequest {
 
     /**
-     * Zone name to change.
+     * Name of zone/area to change.
      */
-    private String zone;
+    private String name;
     /**
-     * State to change the zone to.
+     * State to change the name to.
      */
     private boolean state;
 
@@ -104,34 +104,34 @@ public class ZoneController {
 
     /**
      *
-     * @param zone Zone name to change.
-     * @param state State to change the zone to.
+     * @param name Name of zone/area to change.
+     * @param state State to change the name to.
      */
-    public ChangeRequest(String zone, boolean state) {
-      this.zone = zone;
+    public ChangeRequest(String name, boolean state) {
+      this.name = name;
       this.state = state;
     }
 
     /**
      * Zone name to change.
      *
-     * @return the zone
+     * @return the name
      */
-    public String getZone() {
-      return zone;
+    public String getName() {
+      return name;
     }
 
     /**
      * Zone name to change.
      *
-     * @param zone the zone to set
+     * @param name the name to set
      */
-    public void setZone(String zone) {
-      this.zone = zone;
+    public void setName(String name) {
+      this.name = name;
     }
 
     /**
-     * State to change the zone to.
+     * State to change the name to.
      *
      * @return the state
      */
@@ -140,7 +140,7 @@ public class ZoneController {
     }
 
     /**
-     * State to change the zone to.
+     * State to change the name to.
      *
      * @param state the state to set
      */
@@ -150,7 +150,7 @@ public class ZoneController {
 
     @Override
     public String toString() {
-      return "ChangeRequest{" + "zone=" + zone + ", state=" + state + '}';
+      return "ChangeRequest{" + "name=" + name + ", state=" + state + '}';
     }
 
   }
