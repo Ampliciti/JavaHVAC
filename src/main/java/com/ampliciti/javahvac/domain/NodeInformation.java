@@ -35,6 +35,12 @@ public class NodeInformation extends Node {
   private ArrayList<NodeSourceInformation> sources;
 
   /**
+   * Self-reported misc information from this node.
+   */
+  private ArrayList<NodeSourceInformation> misc;
+
+
+  /**
    * Get self-reported zone information from this node.
    * 
    * @return

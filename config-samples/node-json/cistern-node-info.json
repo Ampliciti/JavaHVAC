@@ -45,7 +45,7 @@
     "misc": [
         {
             "name": "EastTemp",
-            "temp": "null"
+            "temp": null
         }
     ],
     "name": "pump-pi",

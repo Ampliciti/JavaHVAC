@@ -56,8 +56,8 @@ public class NodeInformationRESTDaoTest extends ParentNodeTest {
    * Test of getInfo method, of class NodeInformationRESTDao.
    */
   @Test
-  public void testGetInfoWithSource() throws Exception {
-    System.out.println("getInfoWithSource");
+  public void testGetInfoWithSourceAndMisc() throws Exception {
+    System.out.println("getInfoWithSourceAndMisc");
     // setup the mock
     startMocks();
     int testPort = 8085;

@@ -114,3 +114,8 @@ Example response body:
     "name": "recirculatorPump",
     "source": "cistern"
 }
+
+
+#to package for distro
+#from parent dir
+tar --exclude=".*" --exclude="*.pyc" -czvf JavaHVAC-Node.tar.gz JavaHVAC-Node
