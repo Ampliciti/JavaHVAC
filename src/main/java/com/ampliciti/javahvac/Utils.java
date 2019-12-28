@@ -15,10 +15,15 @@
 package com.ampliciti.javahvac;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Commonly needed util methods.
- * 
+ *
  * @author jeffrey
  */
 public class Utils {
@@ -30,7 +35,7 @@ public class Utils {
    * Converts a string address from our config file into a Java usable URL object. There are better
    * ways to do this, esp with exception handling, but winter is literally coming and I need this
    * code working soon to heat my house. Don't judge me.
-   * 
+   *
    * @param address String of the address of a node -- expects no protocol with port being optional
    * @return Java URL object
    */
@@ -48,6 +53,20 @@ public class Utils {
       throw new RuntimeException("The address passed in was not in a correct format: " + address
           + ". Expected format is: [IP|DNS]:port", e);
     }
+  }
+
+  /**
+   * Converts dates from the Sun API (https://api.sunrise-sunset.org/) to milliseconds UTC.
+   * 
+   * @param dateStr String in the format of 2019-12-28T14:18:30+00:00.
+   * @return MS since epoc.
+   * @throws ParseException If the date cannot be read/translated/etc.
+   */
+  public static long fromISO8601UTC(String dateStr) throws ParseException {
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    df.setTimeZone(tz);
+    return df.parse(dateStr).getTime();
   }
 
 }

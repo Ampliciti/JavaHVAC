@@ -16,6 +16,7 @@ package com.ampliciti.javahvac;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -67,6 +68,18 @@ public class UtilsTest {
     URL result = Utils.buildUrlFromAddressString(address);
     assertEquals(expResult, result);
     assertEquals("http://attic.lan:8080", result.toExternalForm());
+  }
+
+  /**
+   * Test of fromISO8601UTC method, of class Utils.
+   */
+  @Test
+  public void testFromISO8601UTC() throws Exception {
+    System.out.println("fromISO8601UTC");
+    String dateStr = "2019-12-28T14:18:30+00:00";
+    long expResult = 1577542710000l;
+    long result = Utils.fromISO8601UTC(dateStr);
+    assertEquals(expResult, result);
   }
 
 }

@@ -83,7 +83,10 @@ public class ServerConfigTest {
     assertEquals("house", ServerConfig.getSources().get(0).getRegions_served().get(0));
     assertEquals(Type.HEAT, ServerConfig.getSources().get(0).getType());
     assertEquals("ac", ServerConfig.getSources().get(1).getName());
-    assertEquals("cistern", ServerConfig.getSources().get(2).getName());
+    assertEquals("cistern", ServerConfig.getSources().get(2).getName());   
+    
+    assertEquals(new Double(39.0000), ServerConfig.getLocation().getLatitude());
+    assertEquals(new Double(-104.0000), ServerConfig.getLocation().getLongitude());
 
   }
 
