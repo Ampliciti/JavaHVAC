@@ -23,7 +23,6 @@ import com.ampliciti.javahvac.exceptions.RESTException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.internal.GsonBuildConfig;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 

@@ -37,7 +37,7 @@ public class NodeInformation extends Node {
   /**
    * Self-reported misc information from this node.
    */
-  private ArrayList<NodeSourceInformation> misc;
+  private ArrayList<NodeMiscInformation> misc;
 
 
   /**
@@ -59,6 +59,14 @@ public class NodeInformation extends Node {
     return sources;
   }
 
+  /**
+   * Self-reported misc information from this node.
+   * 
+   * @return the misc
+   */
+  public ArrayList<NodeMiscInformation> getMisc() {
+    return misc;
+  }
 
   @Override
   public String toString() {
@@ -75,6 +83,14 @@ public class NodeInformation extends Node {
       for (NodeSourceInformation nsi : sources) {
         sb.append(", ");
         sb.append(nsi.toString());
+      }
+    }
+
+    if (misc != null) {
+      sb.append(" Node Misc Information:");
+      for (NodeMiscInformation nmi : misc) {
+        sb.append(", ");
+        sb.append(nmi.toString());
       }
     }
     return sb.toString();

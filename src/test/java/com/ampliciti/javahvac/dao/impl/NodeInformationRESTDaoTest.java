@@ -76,6 +76,10 @@ public class NodeInformationRESTDaoTest extends ParentNodeTest {
     assertEquals("recirculatorPump", result.getSources().get(4).getName());
     assertEquals(null, result.getSources().get(4).getTemp());// no temp here
     assertEquals(false, result.getSources().get(4).getState());
+
+    // ...
+    assertEquals("EastTemp", result.getMisc().get(0).getName());
+    assertEquals(null, result.getMisc().get(0).getTemp());// no temp here for now
   }
 
 }
