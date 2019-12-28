@@ -62,7 +62,7 @@ public class CurrentNodeStateTest extends ParentNodeTest {
     ServerConfig.buildConfig(yamlFile);
     startMocks();
     CurrentNodeState.refreshNodeState();
-    assertEquals(3, CurrentNodeState.getCurrentNodeState().size());
+    assertEquals(4, CurrentNodeState.getCurrentNodeState().size());
   }
 
 }

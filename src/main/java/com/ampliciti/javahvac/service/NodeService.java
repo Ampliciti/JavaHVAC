@@ -23,11 +23,14 @@ import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.domain.NodeSourceInformation;
 import com.ampliciti.javahvac.domain.NodeZoneInformation;
 import com.ampliciti.javahvac.domain.config.Region;
 import com.ampliciti.javahvac.domain.config.Zone;
 import com.ampliciti.javahvac.exceptions.PermissionsException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
@@ -186,6 +189,35 @@ public class NodeService {
         }
     }
     return null; // node not found for this zone
+  }
+
+  /**
+   * Helper method that looks up the Nodes that control a source.
+   * 
+   * @param sourceName
+   * @return The nodes for a source if they exist. Empty otherwise.
+   */
+  public ArrayList<Node> lookUpNodesForSource(String sourceName) {
+    Set<Node> toReturn = new HashSet<>();
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getSources() != null) {
+        for (NodeSourceInformation nsi : ni.getSources())
+          if (nsi.getSource().equals(sourceName)) { // hey, this node controls this source
+            ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
+            // ^^ lets pull the nodes from ServerConfig as we know them
+            // and find the Node object we want
+            for (Node n : serverConfigNodes) {
+              if (n.getName().equals(ni.getName())) {
+                toReturn.add(n);// and return it from there instead: it will have the right DNS/IP and port, rather than relying on the self reported address
+              }
+            }
+          }
+      }
+    }
+    return new ArrayList<>(toReturn);
   }
 
   /**

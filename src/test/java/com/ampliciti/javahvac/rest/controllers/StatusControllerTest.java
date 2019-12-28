@@ -40,7 +40,7 @@ public class StatusControllerTest extends ParentControllerTest {
     ResponseOptions response = given().expect().statusCode(200).when().get("/status").andReturn();
     ArrayList<LinkedHashMap> items = response.getBody().as(ArrayList.class);
     Assert.assertNotNull(items);
-    Assert.assertEquals(3, items.size());
+    Assert.assertEquals(4, items.size());
     Assert.assertEquals("barn", items.get(0).get("name"));
     Assert.assertNotNull(items.get(0).get("zones"));
     Assert.assertEquals("house-attic", items.get(1).get("name"));

@@ -14,6 +14,8 @@
  */
 package com.ampliciti.javahvac.domain.config;
 
+import java.util.Objects;
+
 /**
  * Nodes are actors and/or sensors that talk to the server to send data and take actions. Nodes
  * themselves are not associated with zones, however, node functions are. The purpose of having the
@@ -90,6 +92,37 @@ public class Node {
   public String toString() {
     return "Node{" + "name=" + name + ", address=" + address + '}';
   }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.name);
+        hash = 47 * hash + Objects.hashCode(this.address);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
+            return false;
+        }
+        return true;
+    }
+  
+  
 
 
 

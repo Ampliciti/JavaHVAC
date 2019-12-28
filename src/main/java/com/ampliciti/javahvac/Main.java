@@ -170,11 +170,12 @@ public class Main {
         while (true) {
           for (Rule r : managedRules) {// enforce all rules
             r.enforceRule();
-            try {
-              Thread.sleep(1000);
-            } catch (InterruptedException e) {
 
-            }
+          }
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            ;
           }
         }
       }

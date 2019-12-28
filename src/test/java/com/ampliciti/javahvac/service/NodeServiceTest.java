@@ -21,6 +21,7 @@ import com.ampliciti.javahvac.domain.NodeInformation;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.exceptions.PermissionsException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -36,6 +37,7 @@ import org.mockserver.verify.VerificationTimes;
 public class NodeServiceTest extends ParentNodeTest {
 
   public NodeServiceTest() {}
+
 
   /**
    * Test of checkNodeConnections method, of class NodeService.
@@ -97,7 +99,7 @@ public class NodeServiceTest extends ParentNodeTest {
     NodeService instance = new NodeService();
     Map<String, NodeInformation> res = instance.pullNodeState();
     assertNotNull(res);
-    assertEquals(3, res.size());
+    assertEquals(4, res.size());
     assertEquals("hall", res.get("house-central").getZones().get(0).getName());
   }
 
@@ -231,5 +233,28 @@ public class NodeServiceTest extends ParentNodeTest {
     NodeService instance = new NodeService();
     instance.endUserChangeZoneState(zoneName, command); // should throw an exception
   }
+
+  @Test
+  public void testLookUpNodesForSource() throws Exception {
+    System.out.println("testLookUpNodesForSource");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String sourceName = "cistern";
+    NodeService instance = new NodeService();
+    ArrayList<Node> cisternNodes = instance.lookUpNodesForSource(sourceName);
+    assertEquals(1, cisternNodes.size());
+
+
+  }
+
 
 }
