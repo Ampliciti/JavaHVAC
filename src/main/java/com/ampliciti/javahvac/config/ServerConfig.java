@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.config;
 
+import com.ampliciti.javahvac.domain.config.Location;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.config.Region;
 import com.ampliciti.javahvac.domain.config.Source;
@@ -33,7 +34,6 @@ import org.apache.log4j.Logger;
  * @author jeffrey
  */
 public class ServerConfig {
-
 
   /**
    * Logger for this class.
@@ -70,6 +70,11 @@ public class ServerConfig {
    * Email address that critical notifications will be sent.
    */
   private static ArrayList<String> notificationEmail;
+
+  /**
+   * Location of this building complex.
+   */
+  private static Location location;
 
   /**
    * Path where the database will be stored.
@@ -203,6 +208,24 @@ public class ServerConfig {
    */
   public void setNotificationEmail(ArrayList<String> aNotificationEmail) {
     notificationEmail = aNotificationEmail;
+  }
+
+  /**
+   * Location of this building complex.
+   *
+   * @return the location
+   */
+  public static Location getLocation() {
+    return location;
+  }
+
+  /**
+   * Location of this building complex.
+   *
+   * @param aLocation the location to set
+   */
+  public void setLocation(Location aLocation) {
+    location = aLocation;
   }
 
   // builder stuff

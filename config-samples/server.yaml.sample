@@ -19,7 +19,7 @@ regions:
     - name: shop
       zones:
        - name: mill
-       - name: chicken_coop 
+       - name: chicken_coop
          manualAllowed: true #Flag indicating if manual control/override of this zone by the end user is permitted. Defaults to false.
          runtime: 5 #Runtime for this zone in seconds. This is used to allow regions to round robin heat sources between zones. (See javadoc.)
 
@@ -36,10 +36,10 @@ nodes:
 
     - name: house-central
       address: central.lan
-    
+
     - name: house-attic
       address: attic.lan
-    
+
     - name: missing
       address: idonotexist.lan
 
@@ -62,3 +62,8 @@ sources:
       detail: SOLAR
       max_temp: 120
 
+#location of the building complex -- used to calculate solar run times
+#lat/long must be decimal format
+location:
+    latitude: 39.0000
+    longitude: -104.0000
