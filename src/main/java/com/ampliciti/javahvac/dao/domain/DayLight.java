@@ -77,11 +77,12 @@ public class DayLight {
     return false;
   }
 
-    @Override
-    public String toString() {
-        return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight="+isDaylight()+"}";
-    }
-  
-  
+  @Override
+  public String toString() {
+    return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight=" + isDaylight()
+        + "}";
+  }
+
+
 
 }
