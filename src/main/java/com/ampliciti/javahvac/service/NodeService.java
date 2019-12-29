@@ -211,7 +211,8 @@ public class NodeService {
             // and find the Node object we want
             for (Node n : serverConfigNodes) {
               if (n.getName().equals(ni.getName())) {
-                toReturn.add(n);// and return it from there instead: it will have the right DNS/IP and port, rather than relying on the self reported address
+                toReturn.add(n);// and return it from there instead: it will have the right DNS/IP
+                                // and port, rather than relying on the self reported address
               }
             }
           }

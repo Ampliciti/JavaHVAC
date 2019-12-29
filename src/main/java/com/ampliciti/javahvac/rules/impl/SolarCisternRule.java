@@ -14,7 +14,17 @@
  */
 package com.ampliciti.javahvac.rules.impl;
 
+import com.ampliciti.javahvac.Main;
+import com.ampliciti.javahvac.domain.CurrentNodeState;
+import com.ampliciti.javahvac.domain.MiscNotices;
+import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.domain.NodeSourceInformation;
+import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.rules.Rule;
+import com.ampliciti.javahvac.service.DaylightService;
+import com.ampliciti.javahvac.service.NodeService;
+import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 /**
  * Rule for maintaining a solar cistern.
@@ -34,6 +44,29 @@ public class SolarCisternRule implements Rule {
   private String name;
 
   /**
+   * Node Service for us to use.
+   */
+  private NodeService nodeService;
+
+  /**
+   * Logger for this class.
+   */
+  public static Logger logger = Logger.getLogger(SolarCisternRule.class);
+
+  /**
+   * Temp at cistern inlet from panels.
+   */
+  private Double cisternInletTemp = null;
+  /**
+   * Temp at cistern top.
+   */
+  private Double cisternTopTemp = null;
+  /**
+   * Temp at cistern bottom.
+   */
+  private Double cisternBottomTemp = null;
+
+  /**
    * Constructor.
    *
    * @param name Name for this solar cistern.
@@ -42,6 +75,7 @@ public class SolarCisternRule implements Rule {
   public SolarCisternRule(String name, float maxTemp) {
     this.maxTemp = maxTemp;
     this.name = name;
+    this.nodeService = new NodeService();
   }
 
   @Override
@@ -51,13 +85,95 @@ public class SolarCisternRule implements Rule {
 
   @Override
   public boolean enforceRule() {
-    int currentTemp = 0;// TODO; implement this!
-    if (currentTemp > maxTemp) {
-      // TODO: Turn off pump
-    } else {
-      // TODO: Turn on pump
+    // NOTE: This is rather specific to my setup. Either override with your own rules, or use the
+    // exact same conventions found in cinstern-node-info.json.
+    ArrayList<Node> cisternNodes = nodeService.lookUpNodesForSource("cistern");
+    establishTempVariables(cisternNodes);
+    if (cisternTopTemp > maxTemp || cisternBottomTemp > maxTemp) { // if it is too hot
+      changeReciculatorState(false,
+          "Reciculator off: Cistern's tempature is above the maxium allowed. Current temp: "
+              + cisternTopTemp + ". Max temp allowed: " + maxTemp);
+      return true;
     }
+    if (!DaylightService.getDayLight().isDaylight()) {// if it's night
+      changeReciculatorState(false, "Reciculator off: Not enough light.");
+      return true;
+    }
+    // TODO if there's no reason to have it off, turn it on! Leave message about temp gain/loss.
     return true;
+  }
+
+  private void changeReciculatorState(boolean state, String reason) {
+    MiscNotices.setCisternNotice(reason);
+    // TODO: Find reciculators and turn them off
+  }
+
+  private void establishTempVariables(ArrayList<Node> cisternNodes) {
+
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> cisternNodeInformation = new ArrayList<>();
+    // ^^ note, pulls from cache rather than reloading
+    for (NodeInformation ni : currentNodes) {// this could be more efficient, but it's cold outside
+      for (Node n : cisternNodes) {
+        if (ni.getName().equals(n.getName())) {
+          cisternNodeInformation.add(ni);
+        }
+      }
+    }
+    // this could be more efficient as well
+    for (NodeInformation cni : cisternNodeInformation) {
+      for (NodeSourceInformation s : cni.getSources()) {
+        Double temp = s.getTemp();
+        if (temp != null) { // if it's null, it means the sensor errored, go with the last known
+                            // good reading.
+          switch (s.getName()) {
+            case "cisternInlet":
+              cisternInletTemp = temp;
+              break;
+            case "cisternTop":
+              cisternTopTemp = temp;
+              break;
+            case "cisternBottom":
+              cisternBottomTemp = temp;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
+    }
+    // assuming we found everything at this point... probably not a good assumption
+    logger.info("Cistern temps: inlet: " + cisternInletTemp + " top: " + cisternTopTemp
+        + " bottom: " + cisternBottomTemp);
+  }
+
+  /**
+   * Temp at cistern inlet from panels.
+   * 
+   * @return the cisternInletTemp
+   */
+  public double getCisternInletTemp() {
+    return cisternInletTemp;
+  }
+
+  /**
+   * Temp at cistern top.
+   * 
+   * @return the cisternTopTemp
+   */
+  public double getCisternTopTemp() {
+    return cisternTopTemp;
+  }
+
+  /**
+   * Temp at cistern bottom.
+   * 
+   * @return the cisternBottomTemp
+   */
+  public double getCisternBottomTemp() {
+    return cisternBottomTemp;
   }
 
 }

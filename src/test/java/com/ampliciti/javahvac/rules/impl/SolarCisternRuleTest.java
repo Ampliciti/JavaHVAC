@@ -14,6 +14,10 @@
  */
 package com.ampliciti.javahvac.rules.impl;
 
+import com.ampliciti.javahvac.ParentNodeTest;
+import com.ampliciti.javahvac.config.ServerConfig;
+import com.ampliciti.javahvac.domain.CurrentNodeState;
+import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,21 +29,10 @@ import static org.junit.Assert.*;
  *
  * @author jeffrey
  */
-public class SolarCisternRuleTest {
+public class SolarCisternRuleTest extends ParentNodeTest {
 
   public SolarCisternRuleTest() {}
 
-  @BeforeClass
-  public static void setUpClass() {}
-
-  @AfterClass
-  public static void tearDownClass() {}
-
-  @Before
-  public void setUp() {}
-
-  @After
-  public void tearDown() {}
 
   /**
    * Test of getDefinition method, of class SolarCisternRule.
@@ -59,10 +52,30 @@ public class SolarCisternRuleTest {
   @Test
   public void testEnforceRule() {
     System.out.println("enforceRule");
-    SolarCisternRule instance = new SolarCisternRule("Cistern", 140);
+
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    // end setup
+
+    SolarCisternRule instance = new SolarCisternRule("Cistern", 120);
     boolean expResult = true;
     boolean result = instance.enforceRule();
     assertEquals(expResult, result);
+    assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
+    assertEquals(64.85, instance.getCisternInletTemp(), .0001);
+    assertEquals(65.975, instance.getCisternTopTemp(), .0001);
+
+
+
   }
 
 }
