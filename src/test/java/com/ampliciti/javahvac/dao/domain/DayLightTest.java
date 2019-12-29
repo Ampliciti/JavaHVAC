@@ -63,9 +63,10 @@ public class DayLightTest {
     System.out.println("isDaylight");
     DayLight instance = new DayLight(1577538000000l, 1577581200000l);// not real times, but close
                                                                      // enough
-    boolean expResult = true;
     boolean result = instance.isDaylight();
-    assertEquals(expResult, result);
+    // just make sure the above doesn't error -- since this relys on actual clock time, the test
+    // would fail or pass depending on the time of day it was run
+    // assertEquals(expResult, result);
   }
 
 }
