@@ -179,6 +179,36 @@ public class NodeServiceTest extends ParentNodeTest {
   }
 
   /**
+   * Test of changeSourceState method, of class NodeService.
+   */
+  @Test
+  public void testChangeSourceState() throws Exception {
+    System.out.println("changeSourceState");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
+            .withStatusCode(201));
+    VerificationTimes.exactly(1);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String sourceName = "recirculatorPump";
+    boolean command = true;
+    NodeService instance = new NodeService();
+    boolean expResult = true;
+    boolean result = instance.changeSourceState(sourceName, command);
+    assertEquals(expResult, result);
+  }
+
+  /**
    * Test of endUserChangeZoneState method, of class NodeService.
    */
   @Test

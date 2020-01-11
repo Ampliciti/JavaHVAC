@@ -137,7 +137,23 @@ public class NodeService {
       throw new NodeConnectionException("No node for that zone could be found.");
     }
     return nodeCommander.sendCommand(nodeforZone.getAddress(), zoneName, command);
+  }
 
+  /**
+   * Method that gets called when a source needs to change state.
+   * 
+   * @param sourceName Name of the source to change.
+   * @param command State to change it to.
+   * @return True if the state was changed successfully. False if there was a problem.
+   * @throws NodeConnectionException If the node is unreachable.
+   */
+  public boolean changeSourceState(String sourceName, boolean command)
+      throws NodeConnectionException {
+    Node nodeforSource = lookUpNodeForSource(sourceName);
+    if (nodeforSource == null) {
+      throw new NodeConnectionException("No node for that source could be found.");
+    }
+    return nodeCommander.sendCommand(nodeforSource.getAddress(), sourceName, command);
   }
 
   /**
@@ -174,19 +190,55 @@ public class NodeService {
         new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {
-      for (NodeZoneInformation nzi : ni.getZones())
-        if (nzi.getName().equals(zoneName)) { // hey, this node controls this zone
-          ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
-          // ^^ lets pull the nodes from ServerConfig as we know them
-          // and find the Node object we want
-          for (Node n : serverConfigNodes) {
-            if (n.getName().equals(ni.getName())) {
-              return n;// and return it from there instead: it will have the right DNS/IP and port,
-                       // rather than relying on the self reported address
+      if (ni.getZones() != null) {
+        for (NodeZoneInformation nzi : ni.getZones())
+          if (nzi.getName().equals(zoneName)) { // hey, this node controls this zone
+            ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
+            // ^^ lets pull the nodes from ServerConfig as we know them
+            // and find the Node object we want
+            for (Node n : serverConfigNodes) {
+              if (n.getName().equals(ni.getName())) {
+                return n;// and return it from there instead: it will have the right DNS/IP and
+                         // port,
+                         // rather than relying on the self reported address
+              }
             }
+            logger
+                .error("Node found for zone: " + zoneName + ", but it was not in the ServerConfig");
           }
-          logger.error("Node found for zone: " + zoneName + ", but it was not in the ServerConfig");
-        }
+      }
+    }
+    return null; // node not found for this zone
+  }
+
+  /**
+   * Helper method that looks up the Node that controls a Source.
+   * 
+   * @param sourceName
+   * @return The node if a source exists. Null otherwise.
+   */
+  private Node lookUpNodeForSource(String sourceName) {
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getSources() != null) {
+        for (NodeSourceInformation nzi : ni.getSources())
+          if (nzi.getName().equals(sourceName)) { // hey, this node controls this zone
+            ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
+            // ^^ lets pull the nodes from ServerConfig as we know them
+            // and find the Node object we want
+            for (Node n : serverConfigNodes) {
+              if (n.getName().equals(ni.getName())) {
+                return n;// and return it from there instead: it will have the right DNS/IP and
+                         // port,
+                         // rather than relying on the self reported address
+              }
+            }
+            logger.error(
+                "Node found for source: " + sourceName + ", but it was not in the ServerConfig");
+          }
+      }
     }
     return null; // node not found for this zone
   }

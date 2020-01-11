@@ -15,10 +15,13 @@
 package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.domain.CurrentNodeState;
+import com.ampliciti.javahvac.domain.MiscNotices;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.restexpress.ContentType;
 import org.restexpress.Request;
@@ -39,8 +42,15 @@ public class StatusController {
       // // Construct the response for create...
       response.setResponseStatus(HttpResponseStatus.OK);
       response.setContentType(ContentType.JSON);
-      List toReturn = new ArrayList(CurrentNodeState.getCurrentNodeState().values());
-      logger.debug("Status is returning: " + Arrays.toString(toReturn.toArray()));
+      Map toReturn = new HashMap();
+      List currentState = new ArrayList(CurrentNodeState.getCurrentNodeState().values());
+      logger.debug(
+          "Status is returning current node state of: " + Arrays.toString(currentState.toArray()));
+      toReturn.put("nodeState", currentState);
+      String cisternNotices = MiscNotices.getCisternNotice();
+      if (cisternNotices != null) {
+        toReturn.put("cisternStatus", cisternNotices);
+      }
       return toReturn;
     } catch (Exception e) {
       logger.error("Problem performing action", e);

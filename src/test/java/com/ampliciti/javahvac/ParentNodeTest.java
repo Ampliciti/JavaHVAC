@@ -33,12 +33,12 @@ import static org.mockserver.model.HttpResponse.response;
  */
 public class ParentNodeTest {
 
-  private static Logger logger = Logger.getLogger(ParentNodeTest.class);
+  protected static Logger logger = Logger.getLogger(ParentNodeTest.class);
 
-  private static String barnResponse;
-  private static String atticResponse;
-  private static String centralResponse;
-  private static String cisternResponse;
+  protected static String barnResponse;
+  protected static String atticResponse;
+  protected static String centralResponse;
+  protected static String cisternResponse;
 
   protected static ClientAndServer mockServerBarn = null;
 

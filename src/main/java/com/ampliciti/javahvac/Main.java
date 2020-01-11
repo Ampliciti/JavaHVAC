@@ -48,6 +48,11 @@ public class Main {
   private final File yamlFile;
 
   /**
+   * Our managed rules.
+   */
+  private static ArrayList<Rule> managedRules;
+
+  /**
    * Main method. Only one argument expected; a path to a properties file. Checks the arguments,
    * then calls the constructor for this class.
    *
@@ -138,7 +143,7 @@ public class Main {
    */
   private static void startUpThreads() {
     // Define Rules
-    ArrayList<Rule> managedRules = RuleGenerator.generateManagedRules();
+    managedRules = RuleGenerator.generateManagedRules();
     // ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
 
     // start up a thread to keep an eye on our nodes:
@@ -162,13 +167,12 @@ public class Main {
     logger.info("Node watcher thread started.");
 
     // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
-    // TODO: Start REST API
     // Start worker thread to see if any conditions need to be changed
     Runnable managedWorker = new Runnable() {
       @Override
       public void run() {
         while (true) {
-          for (Rule r : managedRules) {// enforce all rules
+          for (Rule r : getManagedRules()) {// enforce all rules
             r.enforceRule();
 
           }
@@ -245,5 +249,16 @@ public class Main {
   public void shutdownRestAPI() {
 
   }
+
+  /**
+   * Our managed rules.
+   * 
+   * @return the managedRules
+   */
+  public static ArrayList<Rule> getManagedRules() {
+    return managedRules;
+  }
+
+
 
 }
