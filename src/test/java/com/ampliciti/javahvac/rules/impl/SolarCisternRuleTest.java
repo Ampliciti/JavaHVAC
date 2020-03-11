@@ -65,6 +65,35 @@ public class SolarCisternRuleTest extends ParentNodeTest {
   }
 
   /**
+   * Mocks the daylight service so that it will return what you want it to.
+   * 
+   * @param dark If true, returns a nighttime daylight. If false, returns a daytime daylight.
+   */
+  private static void mockDayLight(boolean dark) {
+    // dark like me)
+    PowerMockito.mockStatic(DaylightService.class);
+    DateTime nowDateTime = new DateTime(); // Gives the default time zone.
+    DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
+    long currentTime = dateTime.getMillis();
+    DayLight daylight;
+    if (dark) { // make it night
+      daylight = new DayLight(currentTime + 30 * 60000, currentTime + 43200000); // sunrises in 30
+                                                                                 // minutes, and
+                                                                                 // sets in 12 hours
+
+    } else { // make it day
+      daylight = new DayLight(currentTime - 30 * 60000, currentTime + 30 * 60000);
+      // make it think that the sun rose 30 minutes ago and will set in 30 minutes -- i guess we're
+      // on
+      // a spinning astroid?
+    }
+
+    BDDMockito.given(DaylightService.getDayLight()).willReturn(daylight);
+    // end daylight mock -- a heck of a lot of work for this stupid problem
+
+  }
+
+  /**
    * Test of enforceRule method, of class SolarCisternRule.
    */
   @Test
@@ -94,16 +123,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     // end hack
 
     // mock the daylight service so it thinks it is daylight (even if you're coding this well after
-    // dark like me)
-    PowerMockito.mockStatic(DaylightService.class);
-    DateTime nowDateTime = new DateTime(); // Gives the default time zone.
-    DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
-    long currentTime = dateTime.getMillis();
-    BDDMockito.given(DaylightService.getDayLight())
-        .willReturn(new DayLight(currentTime - 30 * 60000, currentTime + 30000 * 60000));
-    // make it think that the sun rose 30 minutes ago and will set in 30 minutes -- i guess we're on
-    // a spinning astroid?
-    // end daylight mock -- a heck of a lot of work for this stupid problem
+    mockDayLight(false);
 
     // our current rules would require the cistern to be turned on; make sure that happens
     super.mockServerCistern
@@ -166,4 +186,122 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
 
   }
+
+
+  /**
+   * Test of enforceRule method, of class SolarCisternRule.
+   */
+  @Test
+  public synchronized void testEnforceRuleDayToNightToDay() throws Exception {
+    System.out.println("testEnforceRuleDayToNightToDay");
+
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    // end setup
+    SolarCisternRule instance = new SolarCisternRule("Cistern", 120);
+    // hack the instance with reflection so we don't wait minutes to return
+    Field maxColdRuntimeField = SolarCisternRule.class.getDeclaredField("maxColdRuntime");
+    Field retryTimeField = SolarCisternRule.class.getDeclaredField("retryTime");
+    maxColdRuntimeField.setAccessible(true);
+    retryTimeField.setAccessible(true);
+    maxColdRuntimeField.set(instance, 5000);
+    retryTimeField.set(instance, 15000);
+    // end hack
+
+    // make it think it is night
+    mockDayLight(true);
+
+    // our current rules would require the cistern to be turned off; make sure that happens
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
+            .withStatusCode(201));
+
+    VerificationTimes.exactly(1);
+    MiscNotices.setCisternNotice(null);
+    boolean expResult = true;
+    boolean result = instance.enforceRule();
+    assertEquals(expResult, result);
+    assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
+    assertEquals(64.85, instance.getCisternInletTemp(), .0001);
+    assertEquals(65.975, instance.getCisternTopTemp(), .0001);
+    assertEquals(65.975, instance.getCisternAverageTemp(), .0001);
+    assertEquals(-1.125, instance.getTempGain(), .0001);
+    String cisternStatus = MiscNotices.getCisternNotice();
+    assertNotNull(cisternStatus);
+    assertEquals("Reciculator off: Not enough light.", cisternStatus);
+
+    // wait
+    Thread.sleep(16000);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes again
+
+    // make it think it is daytime
+    mockDayLight(false);
+
+    // make sure the cistern gets turned on
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
+            .withStatusCode(201));
+    VerificationTimes.exactly(1);
+    result = instance.enforceRule();
+    assertEquals(expResult, result);
+    // make sure it tries to start up the cistern
+    cisternStatus = MiscNotices.getCisternNotice();
+    assertNotNull(cisternStatus);
+    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125,
+        cisternStatus);
+
+    // wait
+    Thread.sleep(16000);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes again
+
+
+    // make it think it is night again
+    mockDayLight(true);
+    // make sure the cistern gets turned off
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
+            .withStatusCode(201));
+    VerificationTimes.exactly(1);
+    result = instance.enforceRule();
+    assertEquals(expResult, result);
+
+
+        // wait
+    Thread.sleep(16000);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes again
+    
+    // make it think it is daytime yet again
+    mockDayLight(false);
+
+    // make sure the cistern gets turned on
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
+            .withStatusCode(201));
+    VerificationTimes.exactly(1);
+    result = instance.enforceRule();
+    assertEquals(expResult, result);
+    // make sure it tries to start up the cistern
+    cisternStatus = MiscNotices.getCisternNotice();
+    assertNotNull(cisternStatus);
+    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125,
+        cisternStatus);
+  }
+
 }
