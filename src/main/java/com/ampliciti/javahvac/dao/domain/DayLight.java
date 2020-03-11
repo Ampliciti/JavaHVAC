@@ -24,14 +24,19 @@ import org.joda.time.DateTimeZone;
  * @author jeffrey
  */
 public class DayLight {
+
+  /**
+   * Twenty minutes in milliseconds.
+   */
+  private static final long TWENTY_MINUTES = 60000 * 20;
   /**
    * Time of sunrise.
    */
-  private long sunrise;
+  private final long sunrise;
   /**
    * Time of sunset.
    */
-  private long sunset;
+  private final long sunset;
 
   /**
    * Constructor.
@@ -64,6 +69,8 @@ public class DayLight {
 
   /**
    * Returns true if it is currently light outside. Assumes the sunset/sunrise times are for today.
+   * Makes the assumption that it is functionally dark 20 minutes before sunset and 20 minutes after
+   * sunrise.
    * 
    * @return True if it is light outside, false if it is dark.
    */
@@ -71,7 +78,7 @@ public class DayLight {
     DateTime nowDateTime = new DateTime(); // Gives the default time zone.
     DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
     long now = dateTime.getMillis();
-    if (now > sunrise && now < sunset) {
+    if (now > sunrise + TWENTY_MINUTES && now < sunset - TWENTY_MINUTES) {
       return true;
     }
     return false;

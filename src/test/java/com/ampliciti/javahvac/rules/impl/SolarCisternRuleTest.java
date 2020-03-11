@@ -68,8 +68,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
    * Test of enforceRule method, of class SolarCisternRule.
    */
   @Test
-  public synchronized void testEnforceRule() throws Exception {
-    System.out.println("enforceRule");
+  public synchronized void testEnforceRuleTooCold() throws Exception {
+    System.out.println("testEnforceRuleTooCold");
 
     // setup
     File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
@@ -84,7 +84,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // end setup
     SolarCisternRule instance = new SolarCisternRule("Cistern", 120);
-    // hack the instance with reflection so we don't want minutes to return
+    // hack the instance with reflection so we don't wait minutes to return
     Field maxColdRuntimeField = SolarCisternRule.class.getDeclaredField("maxColdRuntime");
     Field retryTimeField = SolarCisternRule.class.getDeclaredField("retryTime");
     maxColdRuntimeField.setAccessible(true);
@@ -100,8 +100,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
     long currentTime = dateTime.getMillis();
     BDDMockito.given(DaylightService.getDayLight())
-        .willReturn(new DayLight(currentTime - 30000, currentTime + 30000));
-    // make it think that the sun rose 30 seconds ago and will set in 30 seconds -- i guess we're on
+        .willReturn(new DayLight(currentTime - 30 * 60000, currentTime + 30000 * 60000));
+    // make it think that the sun rose 30 minutes ago and will set in 30 minutes -- i guess we're on
     // a spinning astroid?
     // end daylight mock -- a heck of a lot of work for this stupid problem
 
