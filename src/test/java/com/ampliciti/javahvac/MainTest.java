@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
@@ -85,6 +86,7 @@ public class MainTest {
       }
 
     };
+    t.setName("testMain1Thread");
     t.start();
     Thread.sleep(2000);
     assertNotNull(t);
@@ -124,6 +126,7 @@ public class MainTest {
       }
     };
     t.start();
+    t.setName("testRunThread");
     Thread.sleep(2000);
     assertNotNull(t);
     assertTrue(t.isAlive());

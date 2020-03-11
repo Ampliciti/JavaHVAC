@@ -162,6 +162,7 @@ public class Main {
     };
 
     Thread nodeWatcherThread = new Thread(nodeWatcher);
+    nodeWatcherThread.setName("NodeWatcherThread");
     logger.info("Starting node watcher worker thread...");
     nodeWatcherThread.start();
     logger.info("Node watcher thread started.");
@@ -186,6 +187,7 @@ public class Main {
     };
 
     Thread managedWorkerThread = new Thread(managedWorker);
+    managedWorkerThread.setName("ManagedWorkerThread");
     logger.info("Starting managed worker thread...");
     managedWorkerThread.start();
     logger.info("Managed worker thread started.");

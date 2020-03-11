@@ -48,6 +48,7 @@ public abstract class ParentControllerTest extends ParentNodeTest {
 
   @AfterClass
   public static void tearDownClassController() {
+    stopMocks();
     mainThread.stop();// not safe, but it's just a unit test
 
   }

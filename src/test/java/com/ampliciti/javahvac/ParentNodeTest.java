@@ -28,7 +28,7 @@ import static org.mockserver.model.HttpResponse.response;
 
 /**
  * Parent class for any test that does node mocking.
- * 
+ *
  * @author jeffrey
  */
 public class ParentNodeTest {
@@ -75,41 +75,62 @@ public class ParentNodeTest {
   }
 
   protected static void startMocks() {
-    logger.debug("Starting mock nodes....");
-    if (mockServerBarn == null || !mockServerBarn.isRunning()) {
-      mockServerBarn = ClientAndServer.startClientAndServer(8082);
-      mockServerBarn.when(request().withPath("/info"))
-          .respond(response().withBody(barnResponse).withStatusCode(200));
-    }
-    if (mockServerCentral == null || !mockServerCentral.isRunning()) {
-      mockServerCentral = ClientAndServer.startClientAndServer(8083);
-      mockServerCentral.when(request().withPath("/info"))
-          .respond(response().withBody(centralResponse).withStatusCode(200));
-    }
-    if (mockServerAttic == null || !mockServerAttic.isRunning()) {
-      mockServerAttic = ClientAndServer.startClientAndServer(8084);
-      mockServerAttic.when(request().withPath("/info"))
-          .respond(response().withBody(atticResponse).withStatusCode(200));
-    }
-    if (mockServerCistern == null || !mockServerCistern.isRunning()) {
-      mockServerCistern = ClientAndServer.startClientAndServer(8085);
-      mockServerCistern.when(request().withPath("/info"))
-          .respond(response().withBody(cisternResponse).withStatusCode(200));
+    logger.debug("Starting mock nodes...");
+    try {
+      if (mockServerBarn == null || !mockServerBarn.isRunning()) {
+        mockServerBarn = ClientAndServer.startClientAndServer(8082);
+        mockServerBarn.when(request().withPath("/info"))
+            .respond(response().withBody(barnResponse).withStatusCode(200));
+      }
+      if (mockServerCentral == null || !mockServerCentral.isRunning()) {
+        mockServerCentral = ClientAndServer.startClientAndServer(8083);
+        mockServerCentral.when(request().withPath("/info"))
+            .respond(response().withBody(centralResponse).withStatusCode(200));
+      }
+      if (mockServerAttic == null || !mockServerAttic.isRunning()) {
+        mockServerAttic = ClientAndServer.startClientAndServer(8084);
+        mockServerAttic.when(request().withPath("/info"))
+            .respond(response().withBody(atticResponse).withStatusCode(200));
+      }
+      if (mockServerCistern == null || !mockServerCistern.isRunning()) {
+        mockServerCistern = ClientAndServer.startClientAndServer(8085);
+        mockServerCistern.when(request().withPath("/info"))
+            .respond(response().withBody(cisternResponse).withStatusCode(200));
+      }
+    } catch (RuntimeException e) {
+      // try {
+      // Thread.sleep(1000);
+      // } catch (InterruptedException interruppted) {
+      // Thread.currentThread().isInterrupted();//eh.
+      // }
+      // logger.debug("Mock service already in use by something? Waiting and trying again.");
+      // startMocks();//recurse
+      //^^ comment back in to assist with troubleshooting if needed
+      throw e;
     }
   }
 
-  private static void stopMocks() {
+  protected static void stopMocks() {
     logger.debug("Stopping mock nodes.");
     stopMock(mockServerBarn);
     stopMock(mockServerCentral);
     stopMock(mockServerAttic);
     stopMock(mockServerCistern);
+    // try {
+    // Thread.sleep(500);
+    // } catch (Exception e) {
+    // Thread.currentThread().isInterrupted();
+    // }
   }
 
   protected static void stopMock(ClientAndServer mockToStop) {
     if (mockToStop != null) {
       mockToStop.stop();
+      while (mockToStop.isRunning()) {
+        logger.debug("Waiting for mock to stop.");
+      }
     }
+
   }
 
 }

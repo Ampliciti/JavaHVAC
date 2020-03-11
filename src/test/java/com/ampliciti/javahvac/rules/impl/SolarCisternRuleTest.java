@@ -16,22 +16,38 @@ package com.ampliciti.javahvac.rules.impl;
 
 import com.ampliciti.javahvac.ParentNodeTest;
 import com.ampliciti.javahvac.config.ServerConfig;
+import com.ampliciti.javahvac.dao.domain.DayLight;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
+import com.ampliciti.javahvac.service.DaylightService;
 import java.io.File;
 import java.lang.reflect.Field;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.internal.runners.JUnit4ClassRunner;
+import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockserver.integration.ClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.StringBody.exact;
 import org.mockserver.verify.VerificationTimes;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 /**
  *
  * @author jeffrey
  */
+@RunWith(PowerMockRunner.class) // needed for mocking daylight
+@PowerMockRunnerDelegate(JUnit4ClassRunner.class)
+@PrepareForTest(DaylightService.class) // needed for mocking daylight
+@PowerMockIgnore("javax.net.ssl.*") // needed for mocking daylight
 public class SolarCisternRuleTest extends ParentNodeTest {
 
   public SolarCisternRuleTest() {}
@@ -52,7 +68,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
    * Test of enforceRule method, of class SolarCisternRule.
    */
   @Test
-  public void testEnforceRule() throws Exception {
+  public synchronized void testEnforceRule() throws Exception {
     System.out.println("enforceRule");
 
     // setup
@@ -76,6 +92,18 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     maxColdRuntimeField.set(instance, 5000);
     retryTimeField.set(instance, 15000);
     // end hack
+
+    // mock the daylight service so it thinks it is daylight (even if you're coding this well after
+    // dark like me)
+    PowerMockito.mockStatic(DaylightService.class);
+    DateTime nowDateTime = new DateTime(); // Gives the default time zone.
+    DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
+    long currentTime = dateTime.getMillis();
+    BDDMockito.given(DaylightService.getDayLight())
+        .willReturn(new DayLight(currentTime - 30000, currentTime + 30000));
+    // make it think that the sun rose 30 seconds ago and will set in 30 seconds -- i guess we're on
+    // a spinning astroid?
+    // end daylight mock -- a heck of a lot of work for this stupid problem
 
     // our current rules would require the cistern to be turned on; make sure that happens
     super.mockServerCistern
@@ -107,13 +135,15 @@ public class SolarCisternRuleTest extends ParentNodeTest {
             + "            \"name\": \"recirculatorPump\"\n" + "        }");
     logger.debug("recicOnCisternResponse: " + recicOnCisternResponse);
     mockServerCistern.stop();
-    mockServerCistern = ClientAndServer.startClientAndServer(8085);//this is kinda ugly; not sure why i have to restart this
+    mockServerCistern = ClientAndServer.startClientAndServer(8085);// this is kinda ugly; not sure
+                                                                   // why i have to restart this
     mockServerCistern.when(request().withPath("/info"))
         .respond(response().withBody(recicOnCisternResponse).withStatusCode(200));
 
     // wait
     Thread.sleep(16000);
-    CurrentNodeState.refreshNodeState();// build our registry of nodes again (with the new cistern running state)
+    CurrentNodeState.refreshNodeState();// build our registry of nodes again (with the new cistern
+                                        // running state)
     // run again -- nothing's changed temp wise
 
     // however, at this point, we're giving up that it's going to get better
@@ -122,7 +152,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
             .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
         .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
             .withStatusCode(201));
-    
+
     result = instance.enforceRule();
     assertEquals(expResult, result);
     assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
