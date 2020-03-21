@@ -133,6 +133,10 @@ public class SolarCisternRule implements Rule {
     // check the temps and reciculator pump state for those nodes
     establishTempVariablesAndReciculatorState();
 
+    if (cisternBottomTemp == null || cisternInletTemp == null || cisternTopTemp == null) {
+      logger.error("Could not determine temps to run cistern rule. Will try again later.");
+    }
+
     // find the average temp
     establishAverageTemp();
 
