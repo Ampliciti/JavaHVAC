@@ -74,6 +74,7 @@ public class DaylightService {
 
       }
     }
+    logger.debug("Current daylight is: " + daylight.toString());
     return daylight;
   }
 

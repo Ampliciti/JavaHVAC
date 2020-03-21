@@ -174,8 +174,9 @@ public class Main {
       public void run() {
         while (true) {
           for (Rule r : getManagedRules()) {// enforce all rules
+            logger.info("Enforcing rule: " + r.getDefinition());
             r.enforceRule();
-
+            logger.info("Done enforcing rule: " + r.getDefinition());
           }
           try {
             Thread.sleep(1000);

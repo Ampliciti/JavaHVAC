@@ -281,10 +281,10 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     assertEquals(expResult, result);
 
 
-        // wait
+    // wait
     Thread.sleep(16000);
     CurrentNodeState.refreshNodeState();// build our registry of nodes again
-    
+
     // make it think it is daytime yet again
     mockDayLight(false);
 
