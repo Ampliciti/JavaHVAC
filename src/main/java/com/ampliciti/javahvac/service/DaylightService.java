@@ -44,13 +44,13 @@ public class DaylightService {
   private static Logger logger = Logger.getLogger(DaylightService.class);
 
   /**
-   * Method to get the current daylight within the time range of six hours or so. Uses cached values
-   * when possible.
+   * Method to get the current daylight within the time range of four hours or so. Uses cached
+   * values when possible.
    * 
    * @return a populated daylight object.
    */
   public static synchronized DayLight getDayLight() {
-    if (daylight == null || lastUpdated > new Date().getTime() + (3600000 * 6)) {// daylight is not
+    if (daylight == null || lastUpdated < new Date().getTime() - (3600000 * 4)) {// daylight is not
       // populated, or its out
       // of date.
       DayLightDao dao = new DayLightDao();

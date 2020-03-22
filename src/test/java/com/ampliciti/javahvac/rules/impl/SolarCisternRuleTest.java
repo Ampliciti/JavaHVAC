@@ -65,25 +65,24 @@ public class SolarCisternRuleTest extends ParentNodeTest {
   }
 
   /**
-   * Mocks the daylight service so that it will return what you want it to.
+   * Mocks the daylight service so that it will return what you want it to. Allow for coding after dark.
    * 
    * @param dark If true, returns a nighttime daylight. If false, returns a daytime daylight.
    */
   private static void mockDayLight(boolean dark) {
-    // dark like me)
     PowerMockito.mockStatic(DaylightService.class);
     DateTime nowDateTime = new DateTime(); // Gives the default time zone.
     DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
     long currentTime = dateTime.getMillis();
     DayLight daylight;
     if (dark) { // make it night
-      daylight = new DayLight(currentTime + 30 * 60000, currentTime + 43200000); // sunrises in 30
+      daylight = new DayLight(currentTime + 45 * 60000, currentTime + 43200000); // sunrises in 45
                                                                                  // minutes, and
                                                                                  // sets in 12 hours
 
     } else { // make it day
-      daylight = new DayLight(currentTime - 30 * 60000, currentTime + 30 * 60000);
-      // make it think that the sun rose 30 minutes ago and will set in 30 minutes -- i guess we're
+      daylight = new DayLight(currentTime - 45 * 60000, currentTime + 45 * 60000);
+      // make it think that the sun rose 45 minutes ago and will set in 45 minutes -- i guess we're
       // on
       // a spinning astroid?
     }
