@@ -14,8 +14,10 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
+import com.ampliciti.javahvac.dao.domain.DayLight;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
+import com.ampliciti.javahvac.service.DaylightService;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +52,8 @@ public class StatusController {
       String cisternNotices = MiscNotices.getCisternNotice();
       if (cisternNotices != null) {
         toReturn.put("cisternStatus", cisternNotices);
-      }
+      }      
+      toReturn.put("sun", DaylightService.getDayLight().asMap());
       return toReturn;
     } catch (Exception e) {
       logger.error("Problem performing action", e);

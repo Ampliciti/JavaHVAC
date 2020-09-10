@@ -14,6 +14,9 @@
  */
 package com.ampliciti.javahvac.dao.domain;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -88,6 +91,18 @@ public class DayLight {
   public String toString() {
     return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight=" + isDaylight()
         + "}";
+  }
+  
+  /**
+   * Returns the DayLight as a Map with human readable times.
+   * @return 
+   */
+  public Map asMap(){
+      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+      Map toReturn = new HashMap();
+      toReturn.put("sunrise", sdf.format(sunrise));
+      toReturn.put("sunset", sdf.format(sunset));
+      return toReturn;
   }
 
 
