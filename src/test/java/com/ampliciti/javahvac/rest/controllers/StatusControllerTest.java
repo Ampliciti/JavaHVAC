@@ -65,11 +65,11 @@ public class StatusControllerTest extends ParentControllerTest {
     // assertNotNull(items.get(1).get("zones"));
     // assertEquals("house-central", items.get(2).get("name"));
     // assertNotNull(items.get(2).get("zones"));
-    
-    JSONObject sun = (JSONObject)fullResponse.get("sun");
+
+    JSONObject sun = (JSONObject) fullResponse.get("sun");
     assertNotNull(sun);
     assertEquals(2, sun.size());
-    
+
     logger.info("get status test end");
   }
 

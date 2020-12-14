@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2020 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,6 +14,8 @@
  */
 package com.ampliciti.javahvac.rules.impl;
 
+import com.ampliciti.javahvac.config.OverrideHolder;
+import com.ampliciti.javahvac.dao.domain.SourceOverride;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.domain.NodeInformation;
@@ -78,9 +80,9 @@ public class SolarCisternRule implements Rule {
   private Double tempGain = null;
 
   /**
-   * Last time in ms that the reciculator ran.
+   * Last time in ms that the recirculator ran.
    */
-  private long lastReciculatorRunTime = 0l;
+  private long lastRecirculatorRunTime = 0l;
 
   /**
    * Nodes that control/read from the cistern.
@@ -88,9 +90,9 @@ public class SolarCisternRule implements Rule {
   private ArrayList<Node> cisternNodes = null;
 
   /**
-   * Current state of the reciculator.
+   * Current state of the recirculator.
    */
-  private boolean reciculatorState = false;
+  private boolean recirculatorState = false;
 
   /**
    * Max time we'll let the cistern run while losing heat.
@@ -125,13 +127,14 @@ public class SolarCisternRule implements Rule {
     // NOTE: This is rather specific to my setup. Either override with your own rules, or use the
     // exact same conventions found in cinstern-node-info.json.
     // find our cistern nodes
-    cisternNodes = nodeService.lookUpNodesForSource("cistern");
+    String cisternSourceName = "cistern";
+    cisternNodes = nodeService.lookUpNodesForSource(cisternSourceName);
     if (cisternNodes == null || cisternNodes.isEmpty()) {
-      logger.error("Could not find any cistern nodes. Cannot continue");
-      throw new RuntimeException("Couldn't find any cistern nodes!");
+      logger.error("Could not find any " + cisternSourceName + " nodes. Cannot continue");
+      throw new RuntimeException("Couldn't find any " + cisternSourceName + " nodes!");
     }
-    // check the temps and reciculator pump state for those nodes
-    establishTempVariablesAndReciculatorState();
+    // check the temps and recirculator pump state for those nodes
+    establishTempVariablesAndRecirculatorState();
 
     if (cisternBottomTemp == null || cisternInletTemp == null || cisternTopTemp == null) {
       logger.error("Could not determine temps to run cistern rule. Will try again later.");
@@ -143,30 +146,42 @@ public class SolarCisternRule implements Rule {
     // find our current temp delta
     establishTempGain();
 
+    // check to see if there's a manual override set
+    SourceOverride solarOverride = OverrideHolder.getSourceOverride(cisternSourceName);
+    if (!solarOverride.equals(SourceOverride.RUN)) {
+      logger.info("Solar Cistern Manual Override Enabled:" + solarOverride.name());
+      if (solarOverride.equals(SourceOverride.OVERRIDE_ON)) {
+        return changeRecirculatorState(true,
+            "Manual Override: ON. Temperature gain is: " + tempGain);
+      } else if (solarOverride.equals(SourceOverride.OVERRIDE_OFF)) {
+        return changeRecirculatorState(true, "Manual Override: OFF.");
+      }
+    }
+
     if (cisternInletTemp == null) {
       logger.error("Cistern inlet temp is null; cannot continue calculating rules.");
-      changeReciculatorState(false, "Reciculator off: Cistern Inlet Tempature isn't set.");
+      changeRecirculatorState(false, "Recirculator off: Cistern Inlet Tempature isn't set.");
       return false;
     }
 
     // max temp check
     if (cisternTopTemp > maxTemp || cisternBottomTemp > maxTemp) { // if it is too hot
-      return changeReciculatorState(false,
-          "Reciculator off: Cistern's tempature is above the maxium allowed. Current temp: "
+      return changeRecirculatorState(false,
+          "Recirculator off: Cistern's tempature is above the maxium allowed. Current temp: "
               + cisternTopTemp + ". Max temp allowed: " + maxTemp);
     }
 
     // daylight check
     if (!DaylightService.getDayLight().isDaylight()) {// if it's night
-      return changeReciculatorState(false, "Reciculator off: Night.");
+      return changeRecirculatorState(false, "Recirculator off: Night.");
     }
-    long timeSinceReciculatorLastRan = timeSinceReciculatorLastRan();
-    logger
-        .debug("Current temp gain is: " + tempGain + " the reciculatorPump is: " + reciculatorState
-            + " the last time the reciculatorPump ran was: " + timeSinceReciculatorLastRan);
+    long timeSinceRecirculatorLastRan = timeSinceRecirculatorLastRan();
+    logger.debug(
+        "Current temp gain is: " + tempGain + " the recirculatorPump is: " + recirculatorState
+            + " the last time the recirculatorPump ran was: " + timeSinceRecirculatorLastRan);
     // temp gain check
-    // if we're not gaining temp and the reciculator is on
-    if (tempGain < 0 && reciculatorState) {
+    // if we're not gaining temp and the recirculator is on
+    if (tempGain < 0 && recirculatorState) {
       try {
         Thread.sleep(maxColdRuntime);// give it some time to see if it gets better
       } catch (InterruptedException e) {
@@ -176,30 +191,31 @@ public class SolarCisternRule implements Rule {
       // if it's still not better
       if (tempGain < 0) {
         // turn it off
-        return changeReciculatorState(false, "Reciculator off: Not enough incoming heat. " + tempGain);
+        return changeRecirculatorState(false,
+            "Recirculator off: Not enough incoming heat. " + tempGain);
       }
-    } else if (!reciculatorState && timeSinceReciculatorLastRan > retryTime) {
-      // if the reciculator is/was off AND we've passed our retrytime
+    } else if (!recirculatorState && timeSinceRecirculatorLastRan > retryTime) {
+      // if the recirculator is/was off AND we've passed our retrytime
       // let's hope things are better now; give it a shot!
-      return changeReciculatorState(true,
+      return changeRecirculatorState(true,
           "Running to see if we have more heat. Temperature gain is: " + tempGain);
     }
 
-    return changeReciculatorState(true, "Temperature gain is: " + tempGain);
+    return changeRecirculatorState(true, "Temperature gain is: " + tempGain);
   }
 
-  private boolean changeReciculatorState(boolean state, String reason) {
-    logger.info("Cistern reciculator is: " + state + " because: " + reason);
+  private boolean changeRecirculatorState(boolean state, String reason) {
+    logger.info("Cistern recirculator is: " + state + " because: " + reason);
     MiscNotices.setCisternNotice(reason);
-    if (reciculatorState) {// if the reciculator is currently running
+    if (recirculatorState) {// if the recirculator is currently running
       // let us know that it's still running for future calls
-      lastReciculatorRunTime = new Date().getTime();
+      lastRecirculatorRunTime = new Date().getTime();
     }
     try {
-      // Change the reciculatorPump state
+      // Change the recirculatorPump state
       nodeService.changeSourceState("recirculatorPump", state);
     } catch (NodeConnectionException e) {
-      logger.error("Cannot connect to node to change reciculatorPump state to " + state, e);
+      logger.error("Cannot connect to node to change recirculatorPump state to " + state, e);
       return false;
     }
     return true;
@@ -210,8 +226,8 @@ public class SolarCisternRule implements Rule {
    * 
    * @return
    */
-  private long timeSinceReciculatorLastRan() {
-    return new Date().getTime() - lastReciculatorRunTime;
+  private long timeSinceRecirculatorLastRan() {
+    return new Date().getTime() - lastRecirculatorRunTime;
   }
 
   /**
@@ -240,7 +256,7 @@ public class SolarCisternRule implements Rule {
   }
 
 
-  private void establishTempVariablesAndReciculatorState() {
+  private void establishTempVariablesAndRecirculatorState() {
 
     ArrayList<NodeInformation> currentNodes =
         new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
@@ -274,15 +290,15 @@ public class SolarCisternRule implements Rule {
           }
         } else if (s.getName().equals("recirculatorPump")) { // as long as we're looping through
                                                              // everything, find out what the
-                                                             // reciculator is currently doing
-          reciculatorState = s.getState();
+                                                             // recirculator is currently doing
+          recirculatorState = s.getState();
         }
       }
     }
     // assuming we found everything at this point... probably not a good assumption
     logger.info("Cistern temps: inlet: " + cisternInletTemp + " top: " + cisternTopTemp
         + " bottom: " + cisternBottomTemp);
-    logger.info("Reciculator is currently: " + reciculatorState);
+    logger.info("Recirculator is currently: " + recirculatorState);
   }
 
   /**

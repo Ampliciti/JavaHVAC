@@ -44,5 +44,10 @@ public abstract class Routes {
      */
     server.uri("/zone", zc).method(POST, PUT).name("zone");
 
+    /**
+     * route to set an source override
+     */
+    server.uri("/sourceOverride", zc).method(POST, PUT).name("sourceOverride");
+
   }
 }

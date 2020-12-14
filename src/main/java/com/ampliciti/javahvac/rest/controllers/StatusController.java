@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2020 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,7 +14,6 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
-import com.ampliciti.javahvac.dao.domain.DayLight;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.service.DaylightService;
@@ -52,7 +51,7 @@ public class StatusController {
       String cisternNotices = MiscNotices.getCisternNotice();
       if (cisternNotices != null) {
         toReturn.put("cisternStatus", cisternNotices);
-      }      
+      }
       toReturn.put("sun", DaylightService.getDayLight().asMap());
       return toReturn;
     } catch (Exception e) {

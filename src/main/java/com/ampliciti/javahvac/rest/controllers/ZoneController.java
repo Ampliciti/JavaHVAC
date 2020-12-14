@@ -93,7 +93,7 @@ public class ZoneController {
      */
     private String name;
     /**
-     * State to change the name to.
+     * State that the named zone should be set to.
      */
     private boolean state;
 
@@ -105,7 +105,7 @@ public class ZoneController {
     /**
      *
      * @param name Name of zone/area to change.
-     * @param state State to change the name to.
+     * @param state State that the named zone should be set to.
      */
     public ChangeRequest(String name, boolean state) {
       this.name = name;
@@ -131,7 +131,7 @@ public class ZoneController {
     }
 
     /**
-     * State to change the name to.
+     * State that the named zone should be set to.
      *
      * @return the state
      */
@@ -140,7 +140,7 @@ public class ZoneController {
     }
 
     /**
-     * State to change the name to.
+     * State that the named zone should be set to.
      *
      * @param state the state to set
      */
