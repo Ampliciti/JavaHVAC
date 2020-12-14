@@ -158,7 +158,7 @@ public class SolarCisternRule implements Rule {
 
     // daylight check
     if (!DaylightService.getDayLight().isDaylight()) {// if it's night
-      return changeReciculatorState(false, "Reciculator off: Not enough light.");
+      return changeReciculatorState(false, "Reciculator off: Night.");
     }
     long timeSinceReciculatorLastRan = timeSinceReciculatorLastRan();
     logger
@@ -179,7 +179,7 @@ public class SolarCisternRule implements Rule {
       if (tempGain < 0) {
         // logger.debug("Here2");
         // turn it off
-        return changeReciculatorState(false, "Reciculator off: Not enough Sun. " + tempGain);
+        return changeReciculatorState(false, "Reciculator off: Not enough incoming heat. " + tempGain);
       }
     } else if (!reciculatorState && timeSinceReciculatorLastRan > retryTime) {
       // logger.debug("Here3");
