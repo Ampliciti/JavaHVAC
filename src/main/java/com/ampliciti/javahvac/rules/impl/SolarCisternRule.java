@@ -166,9 +166,7 @@ public class SolarCisternRule implements Rule {
             + " the last time the reciculatorPump ran was: " + timeSinceReciculatorLastRan);
     // temp gain check
     // if we're not gaining temp and the reciculator is on
-    // logger.debug("Here0");
     if (tempGain < 0 && reciculatorState) {
-      // logger.debug("Here1");
       try {
         Thread.sleep(maxColdRuntime);// give it some time to see if it gets better
       } catch (InterruptedException e) {
@@ -177,12 +175,10 @@ public class SolarCisternRule implements Rule {
       establishTempGain();
       // if it's still not better
       if (tempGain < 0) {
-        // logger.debug("Here2");
         // turn it off
         return changeReciculatorState(false, "Reciculator off: Not enough incoming heat. " + tempGain);
       }
     } else if (!reciculatorState && timeSinceReciculatorLastRan > retryTime) {
-      // logger.debug("Here3");
       // if the reciculator is/was off AND we've passed our retrytime
       // let's hope things are better now; give it a shot!
       return changeReciculatorState(true,
