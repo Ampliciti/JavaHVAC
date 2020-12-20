@@ -20,6 +20,7 @@ import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.rest.Routes;
 import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
+import com.ampliciti.javahvac.rest.controllers.SourceOverrideController;
 import com.ampliciti.javahvac.rest.controllers.StatusController;
 import com.ampliciti.javahvac.rest.controllers.ZoneController;
 import com.ampliciti.javahvac.rules.Rule;
@@ -226,7 +227,7 @@ public class Main {
           // .setBaseUrl(config.getBaseUrl())
           .setExecutorThreadCount(15).setMaxContentSize(512000);// half a meg
 
-      Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(),
+      Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(), new SourceOverrideController(),
           server);
       // Relationships.define(server);
       // configurePlugins(config, server);

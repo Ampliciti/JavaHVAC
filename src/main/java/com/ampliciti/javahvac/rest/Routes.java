@@ -15,6 +15,7 @@
 package com.ampliciti.javahvac.rest;
 
 import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
+import com.ampliciti.javahvac.rest.controllers.SourceOverrideController;
 import com.ampliciti.javahvac.rest.controllers.StatusController;
 import com.ampliciti.javahvac.rest.controllers.ZoneController;
 import static io.netty.handler.codec.http.HttpMethod.GET;
@@ -29,7 +30,7 @@ import org.restexpress.RestExpress;
  */
 public abstract class Routes {
 
-  public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc,
+  public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc, SourceOverrideController soc,
       RestExpress server) {
     // health check
     server.uri("/health", hcc).action("getHealth", GET).name("health").noSerialization();
@@ -47,7 +48,7 @@ public abstract class Routes {
     /**
      * route to set an source override
      */
-    server.uri("/sourceOverride", zc).method(POST, PUT).name("sourceOverride");
+    server.uri("/sourceOverride", soc).method(POST, PUT).name("sourceOverride");
 
   }
 }
