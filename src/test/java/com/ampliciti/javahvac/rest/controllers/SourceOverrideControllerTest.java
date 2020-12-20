@@ -39,7 +39,6 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
   @Test
   public void testOverrideOn() {
     System.out.println("override on");
-    OverrideHolder.clearOverrides();
     ResponseOptions response =
         given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_ON\"}").expect()
             .statusCode(201).body("name", equalTo("recirculatorPump"))
@@ -53,7 +52,6 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
   @Test
   public void testOverrideOff() {
     System.out.println("override off");
-    OverrideHolder.clearOverrides();
     ResponseOptions response =
         given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_OFF\"}").expect()
             .statusCode(201).body("name", equalTo("recirculatorPump"))
@@ -67,7 +65,6 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
   @Test
   public void testOverrideRun() {
     System.out.println("override run");
-    OverrideHolder.clearOverrides();
     ResponseOptions response = given().body("{\"name\":\"recirculatorPump\",\"state\":\"RUN\"}")
         .expect().statusCode(201).body("name", equalTo("recirculatorPump"))
         .body("state", equalTo("RUN")).when().post("/sourceOverride").andReturn();

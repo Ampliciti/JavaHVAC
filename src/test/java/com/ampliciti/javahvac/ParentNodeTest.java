@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac;
 
+import com.ampliciti.javahvac.config.OverrideHolder;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
@@ -67,6 +68,7 @@ public class ParentNodeTest {
   @Before
   public void setUp() {
     stopMocks();// kill our mocks in case they're still running
+    OverrideHolder.clearOverrides();
   }
 
   @After

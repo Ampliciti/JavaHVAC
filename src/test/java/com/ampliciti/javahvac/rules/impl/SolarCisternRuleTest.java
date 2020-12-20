@@ -15,8 +15,10 @@
 package com.ampliciti.javahvac.rules.impl;
 
 import com.ampliciti.javahvac.ParentNodeTest;
+import com.ampliciti.javahvac.config.OverrideHolder;
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.domain.DayLight;
+import com.ampliciti.javahvac.dao.domain.SourceOverride;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.service.DaylightService;
@@ -186,7 +188,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
 
   }
-  
+
   /**
    * Test of enforceRule method, of class SolarCisternRule.
    */
@@ -205,6 +207,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
+    OverrideHolder.setSourceOverride("cistern", SourceOverride.OVERRIDE_ON);
+
     // end setup
     SolarCisternRule instance = new SolarCisternRule("Cistern", 120);
     // hack the instance with reflection so we don't wait minutes to return
@@ -216,11 +220,12 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     retryTimeField.set(instance, 15000);
     // end hack
 
-    // mock the daylight service so it thinks it is daylight (even if you're coding this well after dark)
+    // mock the daylight service so it thinks it is daylight (even if you're coding this well after
+    // dark)
     mockDayLight(false);
-    
-   //make sure the cistern gets turned on 
-       super.mockServerCistern
+
+    // make sure the cistern gets turned on
+    super.mockServerCistern
         .when(request().withPath("/action")
             .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
         .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
@@ -229,56 +234,21 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     VerificationTimes.exactly(1);
     MiscNotices.setCisternNotice(null);
     boolean expResult = true;
-    boolean result = instance.enforceRule();
-    assertEquals(expResult, result);
-    assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
-    assertEquals(64.85, instance.getCisternInletTemp(), .0001);
-    assertEquals(65.975, instance.getCisternTopTemp(), .0001);
-    assertEquals(65.975, instance.getCisternAverageTemp(), .0001);
-    assertEquals(-1.125, instance.getTempGain(), .0001);
-    String cisternStatus = MiscNotices.getCisternNotice();
-    assertNotNull(cisternStatus);
-    assertEquals("Manual Override: ON. Temperature gain is: " + -1.125,
-        cisternStatus);
-
-    // do some more mocking (indicating our cistern pump started)
-    String recircOnCisternResponse = cisternResponse.replace(
-        "        {\n" + "            \"source\": \"cistern\",\n" + "            \"state\": false,\n"
-            + "            \"name\": \"recirculatorPump\"\n" + "        }",
-        "        {\n" + "            \"source\": \"cistern\",\n" + "            \"state\": true,\n"
-            + "            \"name\": \"recirculatorPump\"\n" + "        }");
-    logger.debug("recircOnCisternResponse: " + recircOnCisternResponse);
-    mockServerCistern.stop();
-    mockServerCistern = ClientAndServer.startClientAndServer(8085);// this is kinda ugly; not sure
-                                                                   // why i have to restart this
-    mockServerCistern.when(request().withPath("/info"))
-        .respond(response().withBody(recircOnCisternResponse).withStatusCode(200));
-
-    // wait
-    Thread.sleep(16000);
-    CurrentNodeState.refreshNodeState();// build our registry of nodes again (with the new cistern
-                                        // running state)
-    // run again -- nothing's changed temp wise
-
-    // at this point, we'd normally be giving up that it's going to get better, but we have an override on!
-    super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
-
-    result = instance.enforceRule();
-    assertEquals(expResult, result);
-    assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
-    assertEquals(64.85, instance.getCisternInletTemp(), .0001);
-    assertEquals(65.975, instance.getCisternTopTemp(), .0001);
-    assertEquals(65.975, instance.getCisternAverageTemp(), .0001);
-    assertEquals(-1.125, instance.getTempGain(), .0001);
-    cisternStatus = MiscNotices.getCisternNotice();
-    assertNotNull(cisternStatus);
-    assertEquals("Manual Override: ON. Temperature gain is: " + -1.125, cisternStatus);
-
-
+    boolean result = true;
+    for (int i = 0; i < 5; i++) {
+      result = instance.enforceRule();
+      assertEquals(expResult, result);
+      assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
+      assertEquals(64.85, instance.getCisternInletTemp(), .0001);
+      assertEquals(65.975, instance.getCisternTopTemp(), .0001);
+      assertEquals(65.975, instance.getCisternAverageTemp(), .0001);
+      assertEquals(-1.125, instance.getTempGain(), .0001);
+      String cisternStatus = MiscNotices.getCisternNotice();
+      assertNotNull(cisternStatus);
+      assertEquals("Recirculator Manual Override: ON. Temperature gain is: " + -1.125,
+          cisternStatus);
+      Thread.sleep(500);
+    }
   }
 
 
