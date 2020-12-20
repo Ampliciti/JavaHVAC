@@ -117,11 +117,22 @@ public class SolarCisternRule implements Rule {
 
   }
 
+  /**
+   * Friendly string that defines what this rule is.
+   *
+   * @return
+   */
   @Override
   public String getDefinition() {
     return "Solar cistern rule for: " + name;
   }
 
+  /**
+   * A call to this method indicates that this rule should be actively enforced in the real world.
+   *
+   * @return True if the rule was successfully implemented, false if the condition could not be
+   *         enforced.
+   */
   @Override
   public synchronized boolean enforceRule() {
     // NOTE: This is rather specific to my setup. Either override with your own rules, or use the
@@ -138,6 +149,7 @@ public class SolarCisternRule implements Rule {
 
     if (cisternBottomTemp == null || cisternInletTemp == null || cisternTopTemp == null) {
       logger.error("Could not determine temps to run cistern rule. Will try again later.");
+      //return false; //TODO: Startup bug here
     }
 
     // find the average temp
