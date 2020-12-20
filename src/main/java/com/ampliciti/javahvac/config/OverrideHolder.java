@@ -66,8 +66,8 @@ public class OverrideHolder {
   }
 
   /**
-   * Clears all existing overrides and resets everything back into a non-override state. Likely used
-   * mostly for unit testing.
+   * Clears <b>all</b> existing overrides and resets everything back into a non-override state.
+   * Likely used mostly for unit testing.
    */
   public static void clearOverrides() {
     sourceOverrideMap = new ConcurrentHashMap<>();

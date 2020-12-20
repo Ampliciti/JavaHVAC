@@ -30,8 +30,8 @@ import org.restexpress.RestExpress;
  */
 public abstract class Routes {
 
-  public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc, SourceOverrideController soc,
-      RestExpress server) {
+  public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc,
+      SourceOverrideController soc, RestExpress server) {
     // health check
     server.uri("/health", hcc).action("getHealth", GET).name("health").noSerialization();
 

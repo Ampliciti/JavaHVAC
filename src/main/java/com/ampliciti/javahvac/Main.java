@@ -227,8 +227,8 @@ public class Main {
           // .setBaseUrl(config.getBaseUrl())
           .setExecutorThreadCount(15).setMaxContentSize(512000);// half a meg
 
-      Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(), new SourceOverrideController(),
-          server);
+      Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(),
+          new SourceOverrideController(), server);
       // Relationships.define(server);
       // configurePlugins(config, server);
       // mapExceptions(server);

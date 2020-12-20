@@ -14,17 +14,14 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
-import com.ampliciti.javahvac.domain.CurrentNodeState;
+import com.ampliciti.javahvac.config.OverrideHolder;
+import com.ampliciti.javahvac.dao.domain.SourceOverride;
 import static com.jayway.restassured.RestAssured.given;
 import com.jayway.restassured.response.ResponseOptions;
 import org.apache.log4j.Logger;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
-import static org.mockserver.model.StringBody.exact;
-import org.mockserver.verify.VerificationTimes;
 
 /**
  *
@@ -32,7 +29,7 @@ import org.mockserver.verify.VerificationTimes;
  */
 public class SourceOverrideControllerTest extends ParentControllerTest {
 
-  private static Logger logger = Logger.getLogger(ZoneControllerTest.class);
+  private static Logger logger = Logger.getLogger(SourceOverrideControllerTest.class);
 
   public SourceOverrideControllerTest() {}
 
@@ -40,19 +37,40 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
    * Test of create method, of class SourceOverrideController.
    */
   @Test
-  public void testCreate() {
-    System.out.println("create");
-//    super.mockServerAttic
-//        .when(request().withPath("/action")
-//            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
-//        .respond(
-//            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
-//    VerificationTimes.exactly(1);
-//    CurrentNodeState.refreshNodeState();// build our registry of nodes
-
-    ResponseOptions response = given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_ON\"}").expect()
-        .statusCode(201).body("name", equalTo("recirculatorPump")).body("state", equalTo("OVERRIDE_ON")).when()
-        .post("/sourceOverride").andReturn();
+  public void testOverrideOn() {
+    System.out.println("override on");
+    OverrideHolder.clearOverrides();
+    ResponseOptions response =
+        given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_ON\"}").expect()
+            .statusCode(201).body("name", equalTo("recirculatorPump"))
+            .body("state", equalTo("OVERRIDE_ON")).when().post("/sourceOverride").andReturn();
+    assertEquals(SourceOverride.OVERRIDE_ON, OverrideHolder.getSourceOverride("recirculatorPump"));
   }
 
+  /**
+   * Test of create method, of class SourceOverrideController.
+   */
+  @Test
+  public void testOverrideOff() {
+    System.out.println("override off");
+    OverrideHolder.clearOverrides();
+    ResponseOptions response =
+        given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_OFF\"}").expect()
+            .statusCode(201).body("name", equalTo("recirculatorPump"))
+            .body("state", equalTo("OVERRIDE_OFF")).when().post("/sourceOverride").andReturn();
+    assertEquals(SourceOverride.OVERRIDE_OFF, OverrideHolder.getSourceOverride("recirculatorPump"));
+  }
+
+  /**
+   * Test of create method, of class SourceOverrideController.
+   */
+  @Test
+  public void testOverrideRun() {
+    System.out.println("override run");
+    OverrideHolder.clearOverrides();
+    ResponseOptions response = given().body("{\"name\":\"recirculatorPump\",\"state\":\"RUN\"}")
+        .expect().statusCode(201).body("name", equalTo("recirculatorPump"))
+        .body("state", equalTo("RUN")).when().post("/sourceOverride").andReturn();
+    assertEquals(SourceOverride.RUN, OverrideHolder.getSourceOverride("recirculatorPump"));
+  }
 }
