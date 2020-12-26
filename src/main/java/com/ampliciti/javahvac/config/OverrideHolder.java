@@ -15,6 +15,8 @@
 package com.ampliciti.javahvac.config;
 
 import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
@@ -63,6 +65,25 @@ public class OverrideHolder {
     sourceOverrideMap.put(source, override);
     logger.info("Overriding source: " + source + " to " + override.name()
         + ". Override state was previously: " + currentValue);
+  }
+
+  /**
+   * Gets all our current overrides as a Properties object for easy printing. This method is
+   * probably not 100% Thread Safe, but likely good enough for our needs. Will not print any
+   * Overrides in the RUN state, as they're not actually overrides at that point.
+   * 
+   * @return
+   */
+  public static Properties getAllOverrides() {
+    Properties toReturn = new Properties();
+    Set<String> keySet = sourceOverrideMap.keySet();
+    keySet.forEach(key -> {
+      SourceOverride so = sourceOverrideMap.get(key);
+      if (so != null && !so.equals(SourceOverride.RUN)) {
+        toReturn.put(key, so);
+      }
+    });
+    return toReturn;
   }
 
   /**

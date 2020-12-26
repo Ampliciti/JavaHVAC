@@ -193,8 +193,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
    * Test of enforceRule method, of class SolarCisternRule.
    */
   @Test
-  public synchronized void testEnforceRuleTooColdWithOverrideOn() throws Exception {
-    System.out.println("testEnforceRuleTooColdWithOverrideOn");
+  public synchronized void testEnforceRuleTooColdWithOverrideCycle() throws Exception {
+    System.out.println("testEnforceRuleTooColdWithOverrideCycle");
 
     // setup
     File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
@@ -224,6 +224,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     // dark)
     mockDayLight(false);
 
+    // override on
     // make sure the cistern gets turned on
     super.mockServerCistern
         .when(request().withPath("/action")
@@ -232,10 +233,10 @@ public class SolarCisternRuleTest extends ParentNodeTest {
             .withStatusCode(201));
 
     VerificationTimes.exactly(1);
-    MiscNotices.setCisternNotice(null);
     boolean expResult = true;
     boolean result = true;
     for (int i = 0; i < 5; i++) {
+      MiscNotices.setCisternNotice(null);
       result = instance.enforceRule();
       assertEquals(expResult, result);
       assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
@@ -249,6 +250,34 @@ public class SolarCisternRuleTest extends ParentNodeTest {
           cisternStatus);
       Thread.sleep(500);
     }
+    // override off
+    // make sure the cistern gets turned off
+    super.mockServerCistern
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
+            .withStatusCode(201));
+
+    VerificationTimes.exactly(1);
+    OverrideHolder.setSourceOverride("cistern", SourceOverride.OVERRIDE_OFF);
+    for (int i = 0; i < 5; i++) {
+      MiscNotices.setCisternNotice(null);
+      result = instance.enforceRule();
+      assertEquals(expResult, result);
+      assertEquals(65.975, instance.getCisternBottomTemp(), .0001);
+      assertEquals(64.85, instance.getCisternInletTemp(), .0001);
+      assertEquals(65.975, instance.getCisternTopTemp(), .0001);
+      assertEquals(65.975, instance.getCisternAverageTemp(), .0001);
+      assertEquals(-1.125, instance.getTempGain(), .0001);
+      String cisternStatus = MiscNotices.getCisternNotice();
+      assertNotNull(cisternStatus);
+      assertEquals("Recirculator Manual Override: OFF.", cisternStatus);
+      Thread.sleep(500);
+    }
+    // override run
+    OverrideHolder.setSourceOverride("cistern", SourceOverride.RUN);
+    // run the full too cold test as part of this test to make sure we didn't botch something up
+    testEnforceRuleTooCold();
   }
 
 

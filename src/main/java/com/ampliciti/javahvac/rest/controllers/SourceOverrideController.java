@@ -59,7 +59,7 @@ public class SourceOverrideController {
    * @return
    */
   public Object create(Request request, Response response) {
-    OverrideRequest cr = request.getBodyAs(OverrideRequest.class);
+    OverrideState cr = request.getBodyAs(OverrideState.class);
     try {
       logger.info("Call to /sourceOverride " + cr.toString());
       OverrideHolder.setSourceOverride(cr.getName(), cr.getState());// TODO: This isn't really safe
@@ -93,76 +93,4 @@ public class SourceOverrideController {
     return create(request, response);
   }
 
-  /**
-   * POJO for request.
-   */
-  private static final class OverrideRequest {
-
-    /**
-     * Name of source to override.
-     */
-    private String name;
-
-    /**
-     * State to change the named source to.
-     */
-    private SourceOverride state;
-
-    /**
-     * Default constructor; needed for serialization.
-     */
-    public OverrideRequest() {}
-
-    /**
-     *
-     * @param name Name of source to change.
-     * @param state State to change the named source to.
-     */
-    public OverrideRequest(String name, SourceOverride state) {
-      this.name = name;
-      this.state = state;
-    }
-
-    /**
-     * Name of source to change.
-     *
-     * @return the name
-     */
-    public String getName() {
-      return name;
-    }
-
-    /**
-     * Name of source to change.
-     *
-     * @param name the name to set
-     */
-    public void setName(String name) {
-      this.name = name;
-    }
-
-    /**
-     * State to change the named source to.
-     *
-     * @return the state
-     */
-    public SourceOverride getState() {
-      return state;
-    }
-
-    /**
-     * State to change the named source to.
-     *
-     * @param state the state to set
-     */
-    public void setState(SourceOverride state) {
-      this.state = state;
-    }
-
-    @Override
-    public String toString() {
-      return "OverrideRequest{" + "name=" + name + ", state=" + state + '}';
-    }
-
-  }
 }

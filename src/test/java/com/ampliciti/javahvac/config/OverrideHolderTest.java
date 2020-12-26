@@ -62,6 +62,8 @@ public class OverrideHolderTest {
     OverrideHolder.setSourceOverride(source, override);
     SourceOverride result = OverrideHolder.getSourceOverride(source);
     assertEquals(override, result);
+    assertEquals(1, OverrideHolder.getAllOverrides().size());
+    // assertEquals()
     override = SourceOverride.OVERRIDE_ON;
     OverrideHolder.setSourceOverride(source, override);
     result = OverrideHolder.getSourceOverride(source);
