@@ -149,7 +149,7 @@ public class SolarCisternRule implements Rule {
 
     if ((cisternBottomTemp == null && cisternTopTemp == null) || cisternInletTemp == null) {
       logger.error("Could not determine temps to run cistern rule. Will try again later.");
-      return false; //TODO: Startup bug here!
+      return false; // TODO: Startup bug here!
     }
 
     // find the average temp
@@ -177,10 +177,10 @@ public class SolarCisternRule implements Rule {
     }
 
     // max temp check
-    if (cisternTopTemp > maxTemp || cisternBottomTemp > maxTemp) { // if it is too hot
+    if (cisternAverageTemp > maxTemp) { // if it is too hot
       return changeRecirculatorState(false,
           "Recirculator off: Cistern's tempature is above the maxium allowed. Current temp: "
-              + cisternTopTemp + ". Max temp allowed: " + maxTemp);
+              + cisternAverageTemp + ". Max temp allowed: " + maxTemp);
     }
 
     // daylight check

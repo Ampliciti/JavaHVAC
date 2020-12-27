@@ -148,6 +148,7 @@ public class Main {
     // ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
 
     // start up a thread to keep an eye on our nodes:
+    String nodeWatcherThreadName = "NodeWatcherThread";
     Runnable nodeWatcher = new Runnable() {
       @Override
       public void run() {
@@ -157,39 +158,50 @@ public class Main {
           } catch (InterruptedException e) {
 
           }
-          CurrentNodeState.refreshNodeState();
+          try {
+            CurrentNodeState.refreshNodeState();
+          } catch (Throwable t) {
+            logger.error("Error refreshing nodes in " + nodeWatcherThreadName, t);
+          }
         }
       }
     };
 
     Thread nodeWatcherThread = new Thread(nodeWatcher);
-    nodeWatcherThread.setName("NodeWatcherThread");
+    nodeWatcherThread.setName("nodeWatcherThreadName");
     logger.info("Starting node watcher worker thread...");
     nodeWatcherThread.start();
     logger.info("Node watcher thread started.");
 
     // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
     // Start worker thread to see if any conditions need to be changed
+    String ruleThreadName = "ManagedWorkerThread";
     Runnable managedWorker = new Runnable() {
       @Override
       public void run() {
-        while (true) {
-          for (Rule r : getManagedRules()) {// enforce all rules
-            logger.info("Enforcing rule: " + r.getDefinition());
-            r.enforceRule();
-            logger.info("Done enforcing rule: " + r.getDefinition());
+        try {
+          while (true) {
+
+            for (Rule r : getManagedRules()) {// enforce all rules
+              logger.info("Enforcing rule: " + r.getDefinition());
+              r.enforceRule();
+              logger.info("Done enforcing rule: " + r.getDefinition());
+            }
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e) {
+              ;
+            }
+
           }
-          try {
-            Thread.sleep(1000);
-          } catch (InterruptedException e) {
-            ;
-          }
+        } catch (Throwable t) {
+          logger.fatal("Error enforcing rules nodes in " + ruleThreadName, t);
         }
       }
     };
 
     Thread managedWorkerThread = new Thread(managedWorker);
-    managedWorkerThread.setName("ManagedWorkerThread");
+    managedWorkerThread.setName(ruleThreadName);
     logger.info("Starting managed worker thread...");
     managedWorkerThread.start();
     logger.info("Managed worker thread started.");
