@@ -154,9 +154,11 @@ public class SolarCisternRule implements Rule {
 
     // find the average temp
     establishAverageTemp();
+    logger.info("Cistern average tempature is: " + cisternAverageTemp);
 
     // find our current temp delta
     establishTempGain();
+    logger.info("Current cistern tempature delta is: " + tempGain);
 
     // check to see if there's a manual override set
     SourceOverride solarOverride = OverrideHolder.getSourceOverride(cisternSourceName);
@@ -168,6 +170,8 @@ public class SolarCisternRule implements Rule {
       } else if (solarOverride.equals(SourceOverride.OVERRIDE_OFF)) {
         return changeRecirculatorState(true, "Recirculator Manual Override: OFF.");
       }
+    } else {
+      logger.debug("No cistern override set currently.");
     }
 
     if (cisternInletTemp == null) {
