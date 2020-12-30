@@ -184,8 +184,11 @@ public class Main {
 
             for (Rule r : getManagedRules()) {// enforce all rules
               logger.info("Enforcing rule: " + r.getDefinition());
-              r.enforceRule();
-              logger.info("Done enforcing rule: " + r.getDefinition());
+              if (r.enforceRule()) {
+                logger.info("Done enforcing rule: " + r.getDefinition());
+              } else {
+                logger.error("Failed to enforce rule: " + r.getDefinition());
+              }
             }
             try {
               Thread.sleep(1000);

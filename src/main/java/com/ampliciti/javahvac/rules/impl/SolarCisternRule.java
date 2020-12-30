@@ -141,8 +141,10 @@ public class SolarCisternRule implements Rule {
     String cisternSourceName = "cistern";
     cisternNodes = nodeService.lookUpNodesForSource(cisternSourceName);
     if (cisternNodes == null || cisternNodes.isEmpty()) {
-      logger.error("Could not find any " + cisternSourceName + " nodes. Cannot continue");
-      throw new RuntimeException("Couldn't find any " + cisternSourceName + " nodes!");
+      logger.error("Could not find any " + cisternSourceName
+          + " nodes. Cannot do any rule enforcement. Failing to enforce this rule.");
+      // throw new RuntimeException("Couldn't find any " + cisternSourceName + " nodes!");
+      return false;
     }
     // check the temps and recirculator pump state for those nodes
     establishTempVariablesAndRecirculatorState();
