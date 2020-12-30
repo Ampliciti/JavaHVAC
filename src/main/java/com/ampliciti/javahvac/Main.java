@@ -168,7 +168,7 @@ public class Main {
     };
 
     Thread nodeWatcherThread = new Thread(nodeWatcher);
-    nodeWatcherThread.setName("nodeWatcherThreadName");
+    nodeWatcherThread.setName(nodeWatcherThreadName);
     logger.info("Starting node watcher worker thread...");
     nodeWatcherThread.start();
     logger.info("Node watcher thread started.");
