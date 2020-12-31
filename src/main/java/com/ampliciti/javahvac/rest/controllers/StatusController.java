@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
+import com.ampliciti.javahvac.config.OverrideHolder;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.service.DaylightService;
@@ -53,6 +54,7 @@ public class StatusController {
         toReturn.put("cisternStatus", cisternNotices);
       }
       toReturn.put("sun", DaylightService.getDayLight().asMap());
+      toReturn.put("overrides", OverrideHolder.getAllOverrides());
       return toReturn;
     } catch (Exception e) {
       logger.error("Problem performing action", e);

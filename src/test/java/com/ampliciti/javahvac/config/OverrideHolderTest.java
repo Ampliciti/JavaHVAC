@@ -15,6 +15,8 @@
 package com.ampliciti.javahvac.config;
 
 import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import com.ampliciti.javahvac.rest.controllers.OverrideState;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -62,20 +64,45 @@ public class OverrideHolderTest {
     OverrideHolder.setSourceOverride(source, override);
     SourceOverride result = OverrideHolder.getSourceOverride(source);
     assertEquals(override, result);
-    assertEquals(1, OverrideHolder.getAllOverrides().size());
-    // assertEquals()
+    ArrayList<OverrideState> allOverrides =
+        (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(1, allOverrides.size());
+    assertEquals(source, allOverrides.get(0).getName());
+    assertEquals(SourceOverride.OVERRIDE_OFF, allOverrides.get(0).getState());
     override = SourceOverride.OVERRIDE_ON;
     OverrideHolder.setSourceOverride(source, override);
     result = OverrideHolder.getSourceOverride(source);
     assertEquals(override, result);
+    allOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(1, allOverrides.size());
+    assertEquals(source, allOverrides.get(0).getName());
+    assertEquals(SourceOverride.OVERRIDE_ON, allOverrides.get(0).getState());
     override = SourceOverride.OVERRIDE_OFF;
     OverrideHolder.setSourceOverride(source, override);
     result = OverrideHolder.getSourceOverride(source);
     assertEquals(override, result);
+    allOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(1, allOverrides.size());
+    assertEquals(source, allOverrides.get(0).getName());
+    assertEquals(SourceOverride.OVERRIDE_OFF, allOverrides.get(0).getState());
     String source1 = "testSource1";
     result = OverrideHolder.getSourceOverride(source1);
     assertEquals(SourceOverride.RUN, result);
+    allOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(1, allOverrides.size());// we don't don't return overrides in the RUN state from
+                                         // the getAll method
+    OverrideHolder.setSourceOverride(source1, SourceOverride.OVERRIDE_ON);
+    // if this fails, there's an ordering issue and you need to fix this test to search the whole
+    // arraylist
+    allOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(2, allOverrides.size());
+    assertEquals(source, allOverrides.get(1).getName());
+    assertEquals(SourceOverride.OVERRIDE_OFF, allOverrides.get(1).getState());
+    assertEquals(source1, allOverrides.get(0).getName());
+    assertEquals(SourceOverride.OVERRIDE_ON, allOverrides.get(0).getState());
     OverrideHolder.clearOverrides();
+    allOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllOverrides();
+    assertEquals(0, allOverrides.size());
     result = OverrideHolder.getSourceOverride(source);
     assertEquals(SourceOverride.RUN, result);
   }

@@ -48,7 +48,7 @@ public abstract class Routes {
     /**
      * route to set an source override
      */
-    server.uri("/sourceOverride", soc).method(POST, PUT).name("sourceOverride");
+    server.uri("/sourceOverride", soc).method(POST, PUT, GET).name("sourceOverride");
 
   }
 }

@@ -39,17 +39,17 @@ public class SourceOverrideController {
   }
 
 
-  // /**
-  // * GET call.
-  // * @param request
-  // * @param response
-  // * @return
-  // */
-  // public Object read(Request request, Response response) {
-  //
-  // logger.info("get overrides called");//TODO replace with route name
-  //
-  // }
+  /**
+   * GET call.
+   * 
+   * @param request
+   * @param response
+   * @return
+   */
+  public Object read(Request request, Response response) {
+    logger.info("Call to GET /sourceOverride");
+    return OverrideHolder.getAllOverrides();
+  }
 
   /**
    * POST call.
@@ -61,7 +61,7 @@ public class SourceOverrideController {
   public Object create(Request request, Response response) {
     OverrideState cr = request.getBodyAs(OverrideState.class);
     try {
-      logger.info("Call to /sourceOverride " + cr.toString());
+      logger.info("Call to POST /sourceOverride " + cr.toString());
       OverrideHolder.setSourceOverride(cr.getName(), cr.getState());// TODO: This isn't really safe
                                                                     // as a caller could just start
                                                                     // setting random keys here, but

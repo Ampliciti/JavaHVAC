@@ -15,6 +15,9 @@
 package com.ampliciti.javahvac.config;
 
 import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import com.ampliciti.javahvac.rest.controllers.OverrideState;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,13 +77,14 @@ public class OverrideHolder {
    * 
    * @return
    */
-  public static Properties getAllOverrides() {
-    Properties toReturn = new Properties();
+  public static List<OverrideState> getAllOverrides() {
+    List<OverrideState> toReturn = new ArrayList<>();
     Set<String> keySet = sourceOverrideMap.keySet();
     keySet.forEach(key -> {
       SourceOverride so = sourceOverrideMap.get(key);
       if (so != null && !so.equals(SourceOverride.RUN)) {
-        toReturn.put(key, so);
+        OverrideState os = new OverrideState(key, so);
+        toReturn.add(os);
       }
     });
     return toReturn;
