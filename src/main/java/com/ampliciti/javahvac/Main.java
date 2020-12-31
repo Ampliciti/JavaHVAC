@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 jeffrey
+ * Copyright (C) 2018-2020 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -20,6 +20,7 @@ import com.ampliciti.javahvac.dao.impl.SqliteHVACDao;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.rest.Routes;
 import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
+import com.ampliciti.javahvac.rest.controllers.SourceOverrideController;
 import com.ampliciti.javahvac.rest.controllers.StatusController;
 import com.ampliciti.javahvac.rest.controllers.ZoneController;
 import com.ampliciti.javahvac.rules.Rule;
@@ -147,6 +148,7 @@ public class Main {
     // ArrayList<Rule> unmanagedRules = RuleGenerator.generateNonManagedZoneRules();
 
     // start up a thread to keep an eye on our nodes:
+    String nodeWatcherThreadName = "NodeWatcherThread";
     Runnable nodeWatcher = new Runnable() {
       @Override
       public void run() {
@@ -156,39 +158,53 @@ public class Main {
           } catch (InterruptedException e) {
 
           }
-          CurrentNodeState.refreshNodeState();
+          try {
+            CurrentNodeState.refreshNodeState();
+          } catch (Throwable t) {
+            logger.error("Error refreshing nodes in " + nodeWatcherThreadName, t);
+          }
         }
       }
     };
 
     Thread nodeWatcherThread = new Thread(nodeWatcher);
-    nodeWatcherThread.setName("NodeWatcherThread");
+    nodeWatcherThread.setName(nodeWatcherThreadName);
     logger.info("Starting node watcher worker thread...");
     nodeWatcherThread.start();
     logger.info("Node watcher thread started.");
 
     // NOTE: System defaults to off for all zones; but cistern rules go into effect immedately
     // Start worker thread to see if any conditions need to be changed
+    String ruleThreadName = "ManagedWorkerThread";
     Runnable managedWorker = new Runnable() {
       @Override
       public void run() {
-        while (true) {
-          for (Rule r : getManagedRules()) {// enforce all rules
-            logger.info("Enforcing rule: " + r.getDefinition());
-            r.enforceRule();
-            logger.info("Done enforcing rule: " + r.getDefinition());
+        try {
+          while (true) {
+
+            for (Rule r : getManagedRules()) {// enforce all rules
+              logger.info("Enforcing rule: " + r.getDefinition());
+              if (r.enforceRule()) {
+                logger.info("Done enforcing rule: " + r.getDefinition());
+              } else {
+                logger.error("Failed to enforce rule: " + r.getDefinition());
+              }
+            }
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e) {
+              ;
+            }
+
           }
-          try {
-            Thread.sleep(1000);
-          } catch (InterruptedException e) {
-            ;
-          }
+        } catch (Throwable t) {
+          logger.fatal("Error enforcing rules nodes in " + ruleThreadName, t);
         }
       }
     };
 
     Thread managedWorkerThread = new Thread(managedWorker);
-    managedWorkerThread.setName("ManagedWorkerThread");
+    managedWorkerThread.setName(ruleThreadName);
     logger.info("Starting managed worker thread...");
     managedWorkerThread.start();
     logger.info("Managed worker thread started.");
@@ -227,7 +243,7 @@ public class Main {
           .setExecutorThreadCount(15).setMaxContentSize(512000);// half a meg
 
       Routes.define(new HealthCheckController(), new StatusController(), new ZoneController(),
-          server);
+          new SourceOverrideController(), server);
       // Relationships.define(server);
       // configurePlugins(config, server);
       // mapExceptions(server);

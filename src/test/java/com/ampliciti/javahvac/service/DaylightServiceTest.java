@@ -60,11 +60,11 @@ public class DaylightServiceTest {
     ServerConfig.buildConfig(yamlFile);
 
     // confirm we don't have an last updated time
-    //long resultLastUpdated = DaylightService.getLastUpdated();
-    //assertEquals(0L, resultLastUpdated);
-    //^^ commenting out due to a test ordering issue that I don't feel like fixing right now
-    
-    
+    // long resultLastUpdated = DaylightService.getLastUpdated();
+    // assertEquals(0L, resultLastUpdated);
+    // ^^ commenting out due to a test ordering issue that I don't feel like fixing right now
+
+
     // get the daylight
     DayLight result = DaylightService.getDayLight();
     assertNotNull(result);
@@ -72,8 +72,9 @@ public class DaylightServiceTest {
     // check that the last updated time was set
     long resultLastUpdated = DaylightService.getLastUpdated();
     long lastUpdatedDelay = new Date().getTime() - resultLastUpdated;
-    //assertTrue("Daylight not updated in last 100 ms: " + lastUpdatedDelay, lastUpdatedDelay < 100);// make sure we were updated within the past 100 ms
-    //^^ commenting out due to a test ordering issue that I don't feel like fixing right now
+    // assertTrue("Daylight not updated in last 100 ms: " + lastUpdatedDelay, lastUpdatedDelay <
+    // 100);// make sure we were updated within the past 100 ms
+    // ^^ commenting out due to a test ordering issue that I don't feel like fixing right now
     assertTrue(lastUpdatedDelay > 0);// and that we're somehow not in the past
     // call again
     DayLight result1 = DaylightService.getDayLight();

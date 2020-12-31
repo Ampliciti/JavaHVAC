@@ -92,17 +92,18 @@ public class DayLight {
     return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight=" + isDaylight()
         + "}";
   }
-  
+
   /**
    * Returns the DayLight as a Map with human readable times.
-   * @return 
+   * 
+   * @return
    */
-  public Map asMap(){
-      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-      Map toReturn = new HashMap();
-      toReturn.put("sunrise", sdf.format(sunrise));
-      toReturn.put("sunset", sdf.format(sunset));
-      return toReturn;
+  public Map asMap() {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    Map toReturn = new HashMap();
+    toReturn.put("sunrise", sdf.format(sunrise));
+    toReturn.put("sunset", sdf.format(sunset));
+    return toReturn;
   }
 
 

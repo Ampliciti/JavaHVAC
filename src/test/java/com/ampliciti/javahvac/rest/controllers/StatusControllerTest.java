@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2020 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -14,7 +14,10 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
+import com.ampliciti.javahvac.config.OverrideHolder;
+import com.ampliciti.javahvac.dao.domain.SourceOverride;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import static com.jayway.restassured.RestAssured.given;
 import com.jayway.restassured.response.ResponseOptions;
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ public class StatusControllerTest extends ParentControllerTest {
   public void testGetStatus() throws ParseException {
     System.out.println("getStatus");
     logger.info("get status test start");
+    OverrideHolder.setSourceOverride("randomOverride", SourceOverride.OVERRIDE_ON);
     ResponseOptions response = given().expect().statusCode(200).when().get("/status").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
@@ -65,11 +69,18 @@ public class StatusControllerTest extends ParentControllerTest {
     // assertNotNull(items.get(1).get("zones"));
     // assertEquals("house-central", items.get(2).get("name"));
     // assertNotNull(items.get(2).get("zones"));
-    
-    JSONObject sun = (JSONObject)fullResponse.get("sun");
+
+    JSONObject sun = (JSONObject) fullResponse.get("sun");
     assertNotNull(sun);
     assertEquals(2, sun.size());
-    
+    JSONArray overrides = (JSONArray) fullResponse.get("overrides");
+    assertNotNull(overrides);
+    assertEquals(1, overrides.size());
+    ArrayList<LinkedTreeMap> overridesList =
+        (ArrayList<LinkedTreeMap>) new Gson().fromJson(overrides.toJSONString(), ArrayList.class);
+    assertEquals("randomOverride", overridesList.get(0).get("name"));
+    assertEquals(SourceOverride.OVERRIDE_ON.toString(), overridesList.get(0).get("state"));
+
     logger.info("get status test end");
   }
 
