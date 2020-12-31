@@ -23,9 +23,9 @@ def read_temp_raw(sensor_address):
 def read_temp(sensor_address):
     print "Trying to read DS18B20 at address: " + sensor_address
     lines = read_temp_raw(sensor_address)
-    while lines[0].strip()[-3:] != 'YES':
+    while lines[0].strip()[-3:] != 'YES': #retry if the first call didn't make sense
         time.sleep(0.2)
-        lines = read_temp_raw()
+        lines = read_temp_raw(sensor_address)
     equals_pos = lines[1].find('t=')
     if equals_pos != -1:
         temp_string = lines[1][equals_pos+2:]
