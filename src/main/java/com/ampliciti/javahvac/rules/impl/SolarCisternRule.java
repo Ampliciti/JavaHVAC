@@ -151,7 +151,7 @@ public class SolarCisternRule implements Rule {
 
     if ((cisternBottomTemp == null && cisternTopTemp == null) || cisternInletTemp == null) {
       logger.error("Could not determine temps to run cistern rule. Will try again later.");
-      return false; // TODO: Startup bug here!
+      return false;
     }
 
     // find the average temp
