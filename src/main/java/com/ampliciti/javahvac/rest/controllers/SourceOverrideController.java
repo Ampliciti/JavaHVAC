@@ -15,7 +15,6 @@
 package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.config.OverrideHolder;
-import com.ampliciti.javahvac.dao.domain.SourceOverride;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.log4j.Logger;
 import org.restexpress.Request;

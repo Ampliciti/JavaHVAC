@@ -254,8 +254,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     // make sure the cistern gets turned off
     super.mockServerCistern
         .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
+            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
             .withStatusCode(201));
 
     VerificationTimes.exactly(1);

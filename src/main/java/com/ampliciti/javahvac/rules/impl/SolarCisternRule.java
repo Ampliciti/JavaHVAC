@@ -170,7 +170,7 @@ public class SolarCisternRule implements Rule {
         return changeRecirculatorState(true,
             "Recirculator Manual Override: ON. Temperature gain is: " + tempGain);
       } else if (solarOverride.equals(SourceOverride.OVERRIDE_OFF)) {
-        return changeRecirculatorState(true, "Recirculator Manual Override: OFF.");
+        return changeRecirculatorState(false, "Recirculator Manual Override: OFF.");
       }
     } else {
       logger.debug("No cistern override set currently.");

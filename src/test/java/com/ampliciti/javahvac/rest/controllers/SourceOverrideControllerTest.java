@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2020 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -21,7 +21,6 @@ import com.google.gson.internal.LinkedTreeMap;
 import static com.jayway.restassured.RestAssured.given;
 import com.jayway.restassured.response.ResponseOptions;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import org.apache.log4j.Logger;
 import static org.hamcrest.CoreMatchers.equalTo;
 import org.json.simple.JSONArray;
