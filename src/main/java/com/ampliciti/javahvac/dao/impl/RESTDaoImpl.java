@@ -86,8 +86,8 @@ public class RESTDaoImpl implements RESTDao {
     // }
 
     // super long timeouts, because we are lazy and would rather not fail just for really slow nodes
-    rc = RequestConfig.custom().setConnectTimeout(30000).setSocketTimeout(30000)
-        .setConnectionRequestTimeout(30000).build();
+    rc = RequestConfig.custom().setConnectTimeout(60000).setSocketTimeout(60000)
+        .setConnectionRequestTimeout(60000).build();
   }
 
   /**
