@@ -15,7 +15,7 @@
 package com.ampliciti.javahvac.config;
 
 import com.ampliciti.javahvac.dao.domain.SourceOverride;
-import com.ampliciti.javahvac.rest.controllers.OverrideState;
+import com.ampliciti.javahvac.domain.OverrideState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
