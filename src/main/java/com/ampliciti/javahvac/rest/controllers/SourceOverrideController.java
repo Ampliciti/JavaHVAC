@@ -14,6 +14,7 @@
  */
 package com.ampliciti.javahvac.rest.controllers;
 
+import com.ampliciti.javahvac.domain.OverrideState;
 import com.ampliciti.javahvac.config.OverrideHolder;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.log4j.Logger;
