@@ -157,6 +157,29 @@ public class NodeService {
   }
 
   /**
+   * Method that gets called when a region needs to change state.
+   * 
+   * @param regionName Name of the region to change.
+   * @param command State to change it to.
+   * @return True if the state was changed successfully. False if there was a problem.
+   * @throws NodeConnectionException If the node is unreachable.
+   */
+  public boolean changeRegionState(String regionName, boolean command)
+      throws NodeConnectionException {
+    Node nodeforRegion = lookUpNodeForRegionControl(regionName);
+    if (nodeforRegion == null) {
+      throw new NodeConnectionException("No node for that region could be found.");
+    }
+    return nodeCommander.sendCommand(nodeforRegion.getAddress(), regionName + "Pump", command);// note
+                                                                                               // ugly
+                                                                                               // hack
+                                                                                               // on
+                                                                                               // appending
+                                                                                               // "Pump"
+                                                                                               // here
+  }
+
+  /**
    * Method that gets called when an end user wants to change a Zone state.
    * 
    * @param zoneName Name of the zone to change.
@@ -271,6 +294,40 @@ public class NodeService {
       }
     }
     return new ArrayList<>(toReturn);
+  }
+
+  /**
+   * Helper method that looks up the Nodes that control a region.
+   * 
+   * @param regionName Region that you'd like to know the controlling source for.
+   * @return The node that controls a region if it exists. Empty otherwise.
+   */
+  public Node lookUpNodeForRegionControl(String regionName) {
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getSources() != null) {
+        for (NodeSourceInformation nsi : ni.getSources())
+          if (nsi.getRegionControl() != null && nsi.getRegionControl().equals(regionName)) { // hey,
+                                                                                             // this
+                                                                                             // node
+                                                                                             // controls
+                                                                                             // this
+                                                                                             // region
+            ArrayList<Node> serverConfigNodes = ServerConfig.getNodes();
+            // ^^ lets pull the nodes from ServerConfig as we know them
+            // and find the Node object we want
+            for (Node n : serverConfigNodes) {
+              if (n.getName().equals(ni.getName())) {
+                return n;// and return it from there instead: it will have the right DNS/IP
+                         // and port, rather than relying on the self reported address
+              }
+            }
+          }
+      }
+    }
+    return null; // node not found for this region control
   }
 
   /**

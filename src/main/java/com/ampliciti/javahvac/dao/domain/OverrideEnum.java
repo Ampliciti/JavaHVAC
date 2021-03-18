@@ -15,11 +15,11 @@
 package com.ampliciti.javahvac.dao.domain;
 
 /**
- * Enum used to determine if the system (heat source) needs to be in an overridden state.
+ * Enum used to determine if the system (heat source or region) needs to be in an overridden state.
  * 
  * @author jeffrey
  */
-public enum SourceOverride {
+public enum OverrideEnum {
   /**
    * Indicates that the system should be overridden in the ON position.
    */

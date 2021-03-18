@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 jeffrey
+ * Copyright (C) 2021 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -32,14 +32,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
+ * Note: copy and paste from SourceOverrideControllerTest -- variable names are arbitary so I kept
+ * changes to a minimum
+ * 
  * @author jeffrey
  */
-public class SourceOverrideControllerTest extends ParentControllerTest {
+public class RegionOverrideControllerTest extends ParentControllerTest {
 
-  private static Logger logger = Logger.getLogger(SourceOverrideControllerTest.class);
+  private static Logger logger = Logger.getLogger(RegionOverrideControllerTest.class);
 
-  public SourceOverrideControllerTest() {}
+  public RegionOverrideControllerTest() {}
 
   @Before
   @Override
@@ -56,12 +58,12 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
     ResponseOptions response =
         given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_ON\"}").expect()
             .statusCode(201).body("name", equalTo("recirculatorPump"))
-            .body("state", equalTo("OVERRIDE_ON")).when().post("/sourceOverride").andReturn();
-    assertEquals(OverrideEnum.OVERRIDE_ON, OverrideHolder.getSourceOverride("recirculatorPump"));
+            .body("state", equalTo("OVERRIDE_ON")).when().post("/regionOverride").andReturn();
+    assertEquals(OverrideEnum.OVERRIDE_ON, OverrideHolder.getRegionOverride("recirculatorPump"));
   }
 
   /**
-   * Test of create method, of class SourceOverrideController.
+   * Test of create method, of class RegionOverrideController.
    */
   @Test
   public void testOverrideOff() {
@@ -69,30 +71,30 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
     ResponseOptions response =
         given().body("{\"name\":\"recirculatorPump\",\"state\":\"OVERRIDE_OFF\"}").expect()
             .statusCode(201).body("name", equalTo("recirculatorPump"))
-            .body("state", equalTo("OVERRIDE_OFF")).when().post("/sourceOverride").andReturn();
-    assertEquals(OverrideEnum.OVERRIDE_OFF, OverrideHolder.getSourceOverride("recirculatorPump"));
+            .body("state", equalTo("OVERRIDE_OFF")).when().post("/regionOverride").andReturn();
+    assertEquals(OverrideEnum.OVERRIDE_OFF, OverrideHolder.getRegionOverride("recirculatorPump"));
   }
 
   /**
-   * Test of create method, of class SourceOverrideController.
+   * Test of create method, of class RegionOverrideController.
    */
   @Test
   public void testOverrideRun() {
     System.out.println("override run");
     ResponseOptions response = given().body("{\"name\":\"recirculatorPump\",\"state\":\"RUN\"}")
         .expect().statusCode(201).body("name", equalTo("recirculatorPump"))
-        .body("state", equalTo("RUN")).when().post("/sourceOverride").andReturn();
-    assertEquals(OverrideEnum.RUN, OverrideHolder.getSourceOverride("recirculatorPump"));
+        .body("state", equalTo("RUN")).when().post("/regionOverride").andReturn();
+    assertEquals(OverrideEnum.RUN, OverrideHolder.getRegionOverride("recirculatorPump"));
   }
 
   /**
-   * Test of GET method, of class SourceOverrideController.
+   * Test of GET method, of class RegionOverrideController.
    */
   @Test
   public void testGetAllOverridesEmpty() throws Exception {
     System.out.println("getAllOverrides empty");
     ResponseOptions response =
-        given().expect().statusCode(200).when().get("/sourceOverride").andReturn();
+        given().expect().statusCode(200).when().get("/regionOverride").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
     JSONParser parser = new JSONParser();
@@ -102,14 +104,14 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
   }
 
   /**
-   * Test of GET method, of class SourceOverrideController.
+   * Test of GET method, of class RegionOverrideController.
    */
   @Test
   public void testGetAllOverridesSet() throws Exception {
     System.out.println("getAllOverrides set");
-    OverrideHolder.setSourceOverride("recirculatorPump", OverrideEnum.OVERRIDE_ON);
+    OverrideHolder.setRegionOverride("recirculatorPump", OverrideEnum.OVERRIDE_ON);
     ResponseOptions response =
-        given().expect().statusCode(200).when().get("/sourceOverride").andReturn();
+        given().expect().statusCode(200).when().get("/regionOverride").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
     JSONParser parser = new JSONParser();
@@ -125,16 +127,16 @@ public class SourceOverrideControllerTest extends ParentControllerTest {
   }
 
   /**
-   * Test of GET method, of class SourceOverrideController.
+   * Test of GET method, of class RegionOverrideController.
    */
   @Test
   public void testGetAllOverridesSetMultiple() throws Exception {
     System.out.println("getAllOverrides set multiple");
-    OverrideHolder.setSourceOverride("recirculatorPump", OverrideEnum.OVERRIDE_ON);
-    OverrideHolder.setSourceOverride("housePump", OverrideEnum.OVERRIDE_OFF);
-    OverrideHolder.setSourceOverride("whatever", OverrideEnum.RUN);
+    OverrideHolder.setRegionOverride("recirculatorPump", OverrideEnum.OVERRIDE_ON);
+    OverrideHolder.setRegionOverride("housePump", OverrideEnum.OVERRIDE_OFF);
+    OverrideHolder.setRegionOverride("whatever", OverrideEnum.RUN);
     ResponseOptions response =
-        given().expect().statusCode(200).when().get("/sourceOverride").andReturn();
+        given().expect().statusCode(200).when().get("/regionOverride").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
     JSONParser parser = new JSONParser();

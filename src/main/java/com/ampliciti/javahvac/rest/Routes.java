@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2021 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -15,6 +15,7 @@
 package com.ampliciti.javahvac.rest;
 
 import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
+import com.ampliciti.javahvac.rest.controllers.RegionOverrideController;
 import com.ampliciti.javahvac.rest.controllers.SourceOverrideController;
 import com.ampliciti.javahvac.rest.controllers.StatusController;
 import com.ampliciti.javahvac.rest.controllers.ZoneController;
@@ -31,7 +32,7 @@ import org.restexpress.RestExpress;
 public abstract class Routes {
 
   public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc,
-      SourceOverrideController soc, RestExpress server) {
+      SourceOverrideController soc, RegionOverrideController roc, RestExpress server) {
     // health check
     server.uri("/health", hcc).action("getHealth", GET).name("health").noSerialization();
 
@@ -49,6 +50,11 @@ public abstract class Routes {
      * route to set an source override
      */
     server.uri("/sourceOverride", soc).method(POST, PUT, GET).name("sourceOverride");
+
+    /**
+     * route to set an region override
+     */
+    server.uri("/regionOverride", roc).method(POST, PUT, GET).name("regionOverride");
 
   }
 }

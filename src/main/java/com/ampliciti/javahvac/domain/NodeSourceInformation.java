@@ -16,7 +16,7 @@ package com.ampliciti.javahvac.domain;
 
 /**
  * Zone information that is being self-reported from the nodes.
- * 
+ *
  * @author jeffrey
  */
 public class NodeSourceInformation {
@@ -37,6 +37,11 @@ public class NodeSourceInformation {
    */
   private String name;
 
+  /**
+   * Name of the region that this source is controlling. This will often be null as it only will
+   * return on nodes that actually control a region.
+   */
+  private String regionControl;
 
   /**
    * Current temperature that the node is reporting for this zone. Using objects rather than
@@ -46,20 +51,24 @@ public class NodeSourceInformation {
 
   /**
    * Constructor.
-   * 
+   *
    * @param source Name of the source this node is reporting information for.
-   * 
+   *
    * @param name Name of the specific function of the source that this node is reporting for.
    * @param state Current state of the zones relay/switch. True = switch on, False = switch off.
    *        Using objects rather than primitives here to allow for null values.
    * @param temp Current temperature that the node is reporting for this zone. Using objects rather
    *        than primitives here to allow for null values.
+   * @param regionControl Name of the region that this source is controlling. This will often be
+   *        null as it only will return on nodes that actually control a region.
    */
-  public NodeSourceInformation(String source, String name, Boolean state, Double temp) {
+  public NodeSourceInformation(String source, String name, Boolean state, Double temp,
+      String regionControl) {
     this.name = name;
     this.source = source;
     this.state = state;
     this.temp = temp;
+    this.regionControl = regionControl;
   }
 
   /**
@@ -72,7 +81,7 @@ public class NodeSourceInformation {
   /**
    * Current temperature that the node is reporting for this zone. Using objects rather than
    * primitives here to allow for null values.
-   * 
+   *
    * @return
    */
   public Boolean getState() {
@@ -81,7 +90,7 @@ public class NodeSourceInformation {
 
   /**
    * Name of the source this node is reporting information for.
-   * 
+   *
    * @return the source
    */
   public String getSource() {
@@ -91,19 +100,27 @@ public class NodeSourceInformation {
   /**
    * Current temperature that the node is reporting for this zone. Using objects rather than
    * primitives here to allow for null values. For sources, this will frequently be null.
-   * 
+   *
    * @return the temp
    */
   public Double getTemp() {
     return temp;
   }
 
+  /**
+   * Name of the region that this source is controlling. This will often be null as it only will
+   * return on nodes that actually control a region.
+   * 
+   * @return the region that this source is controlling.
+   */
+  public String getRegionControl() {
+    return regionControl;
+  }
+
   @Override
   public String toString() {
     return "NodeSourceInformation{" + "source=" + source + ", state=" + state + ", name=" + name
-        + ", temp=" + temp + '}';
+        + ", regionControl=" + regionControl + ", temp=" + temp + '}';
   }
-
-
 
 }

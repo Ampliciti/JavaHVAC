@@ -29,12 +29,14 @@
         {
             "source": "cistern",
             "state": true,
-            "name": "barnPump"
+            "name": "barnPump",
+	          "regionControl": "barn"
         },
         {
             "source": "cistern",
             "state": false,
-            "name": "housePump"
+            "name": "housePump",
+	          "regionControl": "house"
         },
         {
             "source": "cistern",

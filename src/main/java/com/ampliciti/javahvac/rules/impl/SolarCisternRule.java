@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 jeffrey
+ * Copyright (C) 2019-2021 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -15,7 +15,7 @@
 package com.ampliciti.javahvac.rules.impl;
 
 import com.ampliciti.javahvac.config.OverrideHolder;
-import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import com.ampliciti.javahvac.dao.domain.OverrideEnum;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.domain.NodeInformation;
@@ -163,13 +163,13 @@ public class SolarCisternRule implements Rule {
     logger.info("Current cistern tempature delta is: " + tempGain);
 
     // check to see if there's a manual override set
-    SourceOverride solarOverride = OverrideHolder.getSourceOverride(cisternSourceName);
-    if (!solarOverride.equals(SourceOverride.RUN)) {
+    OverrideEnum solarOverride = OverrideHolder.getSourceOverride(cisternSourceName);
+    if (!solarOverride.equals(OverrideEnum.RUN)) {
       logger.info("Solar Cistern Manual Override Enabled:" + solarOverride.name());
-      if (solarOverride.equals(SourceOverride.OVERRIDE_ON)) {
+      if (solarOverride.equals(OverrideEnum.OVERRIDE_ON)) {
         return changeRecirculatorState(true,
             "Recirculator Manual Override: ON. Temperature gain is: " + tempGain);
-      } else if (solarOverride.equals(SourceOverride.OVERRIDE_OFF)) {
+      } else if (solarOverride.equals(OverrideEnum.OVERRIDE_OFF)) {
         return changeRecirculatorState(false, "Recirculator Manual Override: OFF.");
       }
     } else {
