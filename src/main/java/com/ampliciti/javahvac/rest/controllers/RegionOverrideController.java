@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 jeffrey
+ * Copyright (C) 2021 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -26,15 +26,15 @@ import org.restexpress.Response;
  *
  * @author jeffrey
  */
-public class SourceOverrideController {
+public class RegionOverrideController {
 
 
   /**
    * Logger for this class.
    */
-  private static Logger logger = Logger.getLogger(SourceOverrideController.class);
+  private static Logger logger = Logger.getLogger(RegionOverrideController.class);
 
-  public SourceOverrideController() {
+  public RegionOverrideController() {
 
   }
 
@@ -47,8 +47,8 @@ public class SourceOverrideController {
    * @return
    */
   public Object read(Request request, Response response) {
-    logger.info("Call to GET /sourceOverride");
-    return OverrideHolder.getAllSourceOverrides();
+    logger.info("Call to GET /regionOverride");
+    return OverrideHolder.getAllRegionOverrides();
   }
 
   /**
@@ -61,8 +61,8 @@ public class SourceOverrideController {
   public Object create(Request request, Response response) {
     OverrideState cr = request.getBodyAs(OverrideState.class);
     try {
-      logger.info("Call to POST /sourceOverride " + cr.toString());
-      OverrideHolder.setSourceOverride(cr.getName(), cr.getState());// TODO: This isn't really safe
+      logger.info("Call to POST /regionOverride " + cr.toString());
+      OverrideHolder.setRegionOverride(cr.getName(), cr.getState());// TODO: This isn't really safe
                                                                     // as a caller could just start
                                                                     // setting random keys here, but
                                                                     // I'm just running this on my

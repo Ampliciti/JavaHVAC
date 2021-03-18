@@ -184,6 +184,9 @@ class Info(Resource):
             relayR = {}
             print str(relay)
             relayR['name'] = relay['name']
+            if relay.get('region') != None:
+                #if the relay is associated with a region
+                relayR['regionControl'] = relay['region']
             try:
                 switch_state = GPIOHelper.getPinState(relay['GPIO'])
                 #if LOW means on, we have a flag for that (which means HIGH is off)

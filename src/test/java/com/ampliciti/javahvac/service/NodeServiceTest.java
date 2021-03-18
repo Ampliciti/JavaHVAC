@@ -282,8 +282,27 @@ public class NodeServiceTest extends ParentNodeTest {
     NodeService instance = new NodeService();
     ArrayList<Node> cisternNodes = instance.lookUpNodesForSource(sourceName);
     assertEquals(1, cisternNodes.size());
+  }
 
+  @Test
+  public void testLookUpNodeForRegionControl() throws Exception {
+    System.out.println("testLookUpNodeForRegionControl");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
 
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String regionControlName = "house";
+    NodeService instance = new NodeService();
+    Node houseRegionControlNode = instance.lookUpNodeForRegionControl(regionControlName);
+    assertNotNull(houseRegionControlNode);
+    assertEquals("pump-pi", houseRegionControlNode.getName());
   }
 
 

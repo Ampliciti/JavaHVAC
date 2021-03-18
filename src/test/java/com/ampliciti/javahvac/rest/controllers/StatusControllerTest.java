@@ -15,7 +15,7 @@
 package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.config.OverrideHolder;
-import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import com.ampliciti.javahvac.dao.domain.OverrideEnum;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import static com.jayway.restassured.RestAssured.given;
@@ -46,7 +46,7 @@ public class StatusControllerTest extends ParentControllerTest {
   public void testGetStatus() throws ParseException {
     System.out.println("getStatus");
     logger.info("get status test start");
-    OverrideHolder.setSourceOverride("randomOverride", SourceOverride.OVERRIDE_ON);
+    OverrideHolder.setSourceOverride("randomOverride", OverrideEnum.OVERRIDE_ON);
     ResponseOptions response = given().expect().statusCode(200).when().get("/status").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
@@ -79,7 +79,7 @@ public class StatusControllerTest extends ParentControllerTest {
     ArrayList<LinkedTreeMap> overridesList =
         (ArrayList<LinkedTreeMap>) new Gson().fromJson(overrides.toJSONString(), ArrayList.class);
     assertEquals("randomOverride", overridesList.get(0).get("name"));
-    assertEquals(SourceOverride.OVERRIDE_ON.toString(), overridesList.get(0).get("state"));
+    assertEquals(OverrideEnum.OVERRIDE_ON.toString(), overridesList.get(0).get("state"));
 
     logger.info("get status test end");
   }

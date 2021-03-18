@@ -18,7 +18,7 @@ import com.ampliciti.javahvac.ParentNodeTest;
 import com.ampliciti.javahvac.config.OverrideHolder;
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.dao.domain.DayLight;
-import com.ampliciti.javahvac.dao.domain.SourceOverride;
+import com.ampliciti.javahvac.dao.domain.OverrideEnum;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
 import com.ampliciti.javahvac.service.DaylightService;
@@ -207,7 +207,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
-    OverrideHolder.setSourceOverride("cistern", SourceOverride.OVERRIDE_ON);
+    OverrideHolder.setSourceOverride("cistern", OverrideEnum.OVERRIDE_ON);
 
     // end setup
     SolarCisternRule instance = new SolarCisternRule("Cistern", 120);
@@ -259,7 +259,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
             .withStatusCode(201));
 
     VerificationTimes.exactly(1);
-    OverrideHolder.setSourceOverride("cistern", SourceOverride.OVERRIDE_OFF);
+    OverrideHolder.setSourceOverride("cistern", OverrideEnum.OVERRIDE_OFF);
     for (int i = 0; i < 5; i++) {
       MiscNotices.setCisternNotice(null);
       result = instance.enforceRule();
@@ -275,7 +275,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
       Thread.sleep(500);
     }
     // override run
-    OverrideHolder.setSourceOverride("cistern", SourceOverride.RUN);
+    OverrideHolder.setSourceOverride("cistern", OverrideEnum.RUN);
     // run the full too cold test as part of this test to make sure we didn't botch something up
     testEnforceRuleTooCold();
   }
