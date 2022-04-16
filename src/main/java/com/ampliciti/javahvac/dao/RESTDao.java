@@ -30,6 +30,18 @@ public interface RESTDao {
    */
   JSONObject doGetCall(String path) throws RESTException;
 
+  
+    /**
+   * Does an http GET call.
+   *
+   * @param path to GET
+   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate issues when testing locally or for extremely low-stakes calls.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be
+   *         empty.
+   * @throws RESTException
+   */
+  JSONObject doGetCall(String path, boolean ignoreSSLProblems) throws RESTException;
+  
   /**
    * Does an HTTP POST call.
    *

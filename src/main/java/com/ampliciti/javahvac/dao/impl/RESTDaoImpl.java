@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 jeffrey
+ * Copyright (C) 2018-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -19,8 +19,12 @@ import com.ampliciti.javahvac.dao.RESTDao;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.net.ssl.SSLContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -30,8 +34,15 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
@@ -59,7 +70,13 @@ public class RESTDaoImpl implements RESTDao {
    * Our http client.
    */
   private HttpClient client;
+  
+    /**
+   * Our insecure http client.
+   */
+  private HttpClient insecureClient;
 
+  
   /**
    * Host we are trying to talk to with REST.
    */
@@ -77,6 +94,7 @@ public class RESTDaoImpl implements RESTDao {
    */
   public RESTDaoImpl(URL host) {
     client = HttpClientBuilder.create().build();
+    insecureClient = buildInsecureClient();
     this.host = host;
     // future: security
     // if (base64Encode) {
@@ -89,6 +107,28 @@ public class RESTDaoImpl implements RESTDao {
     rc = RequestConfig.custom().setConnectTimeout(120000).setSocketTimeout(120000)
         .setConnectionRequestTimeout(120000).build();
   }
+  
+  private HttpClient buildInsecureClient(){
+    try{
+      final SSLContext insecureSslContext = new SSLContextBuilder()
+        .loadTrustMaterial(null, (x509CertChain, authType) -> true)
+        .build();
+      return HttpClientBuilder.create()
+        .setSSLContext(insecureSslContext)
+        .setConnectionManager(
+                new PoolingHttpClientConnectionManager(
+                        RegistryBuilder.<ConnectionSocketFactory>create()
+                                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                                .register("https", new SSLConnectionSocketFactory(insecureSslContext,
+                                        NoopHostnameVerifier.INSTANCE))
+                                .build()
+                ))
+        .build();
+    } catch (KeyManagementException | KeyStoreException | NoSuchAlgorithmException e){
+        logger.warn("Warning, cannot build insecure HTTP Client!", e);
+        return null;//terrible exception handling, but I'm literally wasting daylight right now.
+    }
+  }
 
   /**
    * Gets the host URL associated with this class.
@@ -98,8 +138,8 @@ public class RESTDaoImpl implements RESTDao {
   public URL getHost() {
     return this.host;
   }
-
-  /**
+  
+    /**
    * Does an http GET call.
    *
    * @param path to GET
@@ -109,6 +149,20 @@ public class RESTDaoImpl implements RESTDao {
    */
   @Override
   public JSONObject doGetCall(String path) throws RESTException {
+      return doGetCall(path, false);
+  }
+
+  /**
+   * Does an http GET call.
+   *
+   * @param path to GET
+   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate issues when testing locally or for extremely low-stakes calls.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be
+   *         empty.
+   * @throws RESTException
+   */
+  @Override
+  public JSONObject doGetCall(String path, boolean ignoreSSLProblems) throws RESTException {
     String responseString = "";
     HttpGet request = null;
     try {
@@ -124,7 +178,13 @@ public class RESTDaoImpl implements RESTDao {
       // if (config.getSecToken() != null) {
       // request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSecToken());
       // }
-      HttpResponse response = client.execute(request);
+      HttpResponse response;
+      if(ignoreSSLProblems){
+          logger.warn("Warning, making an insecure request to " + fullPath.toExternalForm());
+          response = insecureClient.execute(request);
+      } else {
+          response = client.execute(request);
+      }
       int responseCode = response.getStatusLine().getStatusCode();
       if (responseCode < 200 || responseCode >= 300) {
         throw new RESTException("Error when doing a GET call agaist: " + path, response);

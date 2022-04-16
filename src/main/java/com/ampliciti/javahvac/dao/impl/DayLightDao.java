@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -47,7 +47,7 @@ public class DayLightDao {
       path.append("&lng=");
       path.append(location.getLongitude());
       path.append("&date=today&formatted=0");
-      response = restDao.doGetCall(path.toString());
+      response = restDao.doGetCall(path.toString(), true);
       JSONObject results = (JSONObject) response.get("results");
       String sunrise = (String) results.get("sunrise");
       String sunset = (String) results.get("sunset");
