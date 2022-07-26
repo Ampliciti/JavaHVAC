@@ -50,10 +50,10 @@ public class DaylightService {
    * @return a populated daylight object.
    * 
    */
-  public static synchronized DayLight getDayLight(){
-      return getDayLight(0);
+  public static synchronized DayLight getDayLight() {
+    return getDayLight(0);
   }
-  
+
   /**
    * Method to get the current daylight within the time range of four hours or so. Uses cached
    * values when possible.
@@ -64,7 +64,9 @@ public class DaylightService {
    * 
    */
   private static synchronized DayLight getDayLight(int retryCount) {
-    if (daylight == null || lastUpdated < new Date().getTime() - (3600000 * 4) || retryCount == 5) {// daylight is not
+    if (daylight == null || lastUpdated < new Date().getTime() - (3600000 * 4) || retryCount == 5) {// daylight
+                                                                                                    // is
+                                                                                                    // not
       // populated, or its out
       // of date.
       DayLightDao dao = new DayLightDao();
@@ -77,8 +79,9 @@ public class DaylightService {
         if (daylight == null) { // we can't just return the cached value, because we don't have one.
           try {
             Thread.sleep(10000);// wait 10 seconds
-            return getDayLight(++retryCount);// recurse (to try again) -- not stictly safe, but it's cold
-                                 // outside and I need this working.
+            return getDayLight(++retryCount);// recurse (to try again) -- not stictly safe, but it's
+                                             // cold
+            // outside and I need this working.
           } catch (InterruptedException ie) {
             ;// don't care
           }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 jeffrey
+ * Copyright (C) 2019-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -32,6 +32,10 @@ public class DayLight {
    * Thirty five minutes in milliseconds.
    */
   private static final long THIRTY_FIVE_MINUTES = 60000 * 35;
+  /**
+   * Eighty five minutes in milliseconds.
+   */
+  private static final long EIGHTY_FIVE_MINUTES = 60000 * 85;
   /**
    * Time of sunrise.
    */
@@ -72,7 +76,7 @@ public class DayLight {
 
   /**
    * Returns true if it is currently light outside. Assumes the sunset/sunrise times are for today.
-   * Makes the assumption that it is functionally dark 35 minutes before sunset and 35 minutes after
+   * Makes the assumption that it is functionally dark 85 minutes before sunset and 85 minutes after
    * sunrise.
    * 
    * @return True if it is light outside, false if it is dark.
@@ -81,7 +85,7 @@ public class DayLight {
     DateTime nowDateTime = new DateTime(); // Gives the default time zone.
     DateTime dateTime = nowDateTime.toDateTime(DateTimeZone.UTC); // Converting default zone to UTC
     long now = dateTime.getMillis();
-    if (now > sunrise + THIRTY_FIVE_MINUTES && now < sunset - THIRTY_FIVE_MINUTES) {
+    if (now > sunrise + EIGHTY_FIVE_MINUTES && now < sunset - EIGHTY_FIVE_MINUTES) {
       return true;
     }
     return false;
