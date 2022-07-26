@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 jeffrey
+ * Copyright (C) 2019-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -84,8 +84,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
                                                                                  // sets in 12 hours
 
     } else { // make it day
-      daylight = new DayLight(currentTime - 45 * 60000, currentTime + 45 * 60000);
-      // make it think that the sun rose 45 minutes ago and will set in 45 minutes -- i guess we're
+      daylight = new DayLight(currentTime - 95 * 60000, currentTime + 95 * 60000);
+      // make it think that the sun rose 95 minutes ago and will set in 95 minutes -- i guess we're
       // on
       // a spinning astroid?
     }

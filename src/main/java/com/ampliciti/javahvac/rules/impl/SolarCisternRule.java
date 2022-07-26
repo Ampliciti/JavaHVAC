@@ -97,7 +97,7 @@ public class SolarCisternRule implements Rule {
   /**
    * Max time we'll let the cistern run while losing heat.
    */
-  private final long maxColdRuntime = 1000 * 60 * 5;// 5 min
+  private final long maxColdRuntime = 1000 * 60 * 3;// 3 min
 
   /**
    * How long we'll wait before checking to see if things are better.
@@ -252,18 +252,20 @@ public class SolarCisternRule implements Rule {
    * Sets the average temp variable.
    */
   private void establishAverageTemp() {
-//    // if we don't have one, set it to the other
-//    if (cisternBottomTemp == null || cisternTopTemp == null) {
-//      if (cisternBottomTemp == null) {
-//        cisternAverageTemp = cisternTopTemp;
-//      } else {
-//        cisternAverageTemp = cisternBottomTemp;
-//      }
-//    } else { // we have both top and bottom
-//      cisternAverageTemp = (cisternTopTemp + cisternBottomTemp) / 2;
-//    }
+    // // if we don't have one, set it to the other
+    // if (cisternBottomTemp == null || cisternTopTemp == null) {
+    // if (cisternBottomTemp == null) {
+    // cisternAverageTemp = cisternTopTemp;
+    // } else {
+    // cisternAverageTemp = cisternBottomTemp;
+    // }
+    // } else { // we have both top and bottom
+    // cisternAverageTemp = (cisternTopTemp + cisternBottomTemp) / 2;
+    // }
 
-    //Update for Winter of 2022: I've rebuilt my cistern to a double container where all water comes in/out of the top of a second stock tank. We need to use the top temp here to have this make sense, because the bottom is always a lot colder.
+    // Update for Winter of 2022: I've rebuilt my cistern to a double container where all water
+    // comes in/out of the top of a second stock tank. We need to use the top temp here to have this
+    // make sense, because the bottom is always a lot colder.
     cisternAverageTemp = cisternTopTemp;
   }
 

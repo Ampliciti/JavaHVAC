@@ -70,13 +70,13 @@ public class RESTDaoImpl implements RESTDao {
    * Our http client.
    */
   private HttpClient client;
-  
-    /**
+
+  /**
    * Our insecure http client.
    */
   private HttpClient insecureClient;
 
-  
+
   /**
    * Host we are trying to talk to with REST.
    */
@@ -107,26 +107,21 @@ public class RESTDaoImpl implements RESTDao {
     rc = RequestConfig.custom().setConnectTimeout(120000).setSocketTimeout(120000)
         .setConnectionRequestTimeout(120000).build();
   }
-  
-  private HttpClient buildInsecureClient(){
-    try{
+
+  private HttpClient buildInsecureClient() {
+    try {
       final SSLContext insecureSslContext = new SSLContextBuilder()
-        .loadTrustMaterial(null, (x509CertChain, authType) -> true)
-        .build();
-      return HttpClientBuilder.create()
-        .setSSLContext(insecureSslContext)
-        .setConnectionManager(
-                new PoolingHttpClientConnectionManager(
-                        RegistryBuilder.<ConnectionSocketFactory>create()
-                                .register("http", PlainConnectionSocketFactory.INSTANCE)
-                                .register("https", new SSLConnectionSocketFactory(insecureSslContext,
-                                        NoopHostnameVerifier.INSTANCE))
-                                .build()
-                ))
-        .build();
-    } catch (KeyManagementException | KeyStoreException | NoSuchAlgorithmException e){
-        logger.warn("Warning, cannot build insecure HTTP Client!", e);
-        return null;//terrible exception handling, but I'm literally wasting daylight right now.
+          .loadTrustMaterial(null, (x509CertChain, authType) -> true).build();
+      return HttpClientBuilder.create().setSSLContext(insecureSslContext)
+          .setConnectionManager(new PoolingHttpClientConnectionManager(RegistryBuilder
+              .<ConnectionSocketFactory>create()
+              .register("http", PlainConnectionSocketFactory.INSTANCE).register("https",
+                  new SSLConnectionSocketFactory(insecureSslContext, NoopHostnameVerifier.INSTANCE))
+              .build()))
+          .build();
+    } catch (KeyManagementException | KeyStoreException | NoSuchAlgorithmException e) {
+      logger.warn("Warning, cannot build insecure HTTP Client!", e);
+      return null;// terrible exception handling, but I'm literally wasting daylight right now.
     }
   }
 
@@ -138,8 +133,8 @@ public class RESTDaoImpl implements RESTDao {
   public URL getHost() {
     return this.host;
   }
-  
-    /**
+
+  /**
    * Does an http GET call.
    *
    * @param path to GET
@@ -149,14 +144,15 @@ public class RESTDaoImpl implements RESTDao {
    */
   @Override
   public JSONObject doGetCall(String path) throws RESTException {
-      return doGetCall(path, false);
+    return doGetCall(path, false);
   }
 
   /**
    * Does an http GET call.
    *
    * @param path to GET
-   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate issues when testing locally or for extremely low-stakes calls.
+   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate
+   *        issues when testing locally or for extremely low-stakes calls.
    * @return JSONObject Representing the response. If the route returns no body, the object will be
    *         empty.
    * @throws RESTException
@@ -179,11 +175,11 @@ public class RESTDaoImpl implements RESTDao {
       // request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSecToken());
       // }
       HttpResponse response;
-      if(ignoreSSLProblems){
-          logger.warn("Warning, making an insecure request to " + fullPath.toExternalForm());
-          response = insecureClient.execute(request);
+      if (ignoreSSLProblems) {
+        logger.warn("Warning, making an insecure request to " + fullPath.toExternalForm());
+        response = insecureClient.execute(request);
       } else {
-          response = client.execute(request);
+        response = client.execute(request);
       }
       int responseCode = response.getStatusLine().getStatusCode();
       if (responseCode < 200 || responseCode >= 300) {
