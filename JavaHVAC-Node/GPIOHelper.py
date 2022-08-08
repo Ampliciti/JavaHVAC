@@ -12,6 +12,7 @@ def setup(pins):
         GPIO.setmode(GPIO.BOARD)
         #only supporting output at this time (ie, relays or other binary outputs); default to off
         for pin in pins:
+            print "Trying to setup pin " + str(pin) + "..."
             if pin["invert"]:
                 GPIO.setup(pin["pin"], GPIO.OUT, initial=GPIO.HIGH)
             else:

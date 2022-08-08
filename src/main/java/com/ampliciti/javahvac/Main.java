@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 jeffrey
+ * Copyright (C) 2018-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -248,7 +248,7 @@ public class Main {
       // Relationships.define(server);
       // configurePlugins(config, server);
       // mapExceptions(server);
-      server.bind(8080);
+      server.bind(ServerConfig.getPort());
       logger.info("-----JavaHVAC REST API initalized.-----");
       server.awaitShutdown();
       Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

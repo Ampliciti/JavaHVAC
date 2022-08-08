@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 jeffrey
+ * Copyright (C) 2018-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
  * @author jeffrey
  */
 public class ServerConfig {
-
   /**
    * Logger for this class.
    */
@@ -75,6 +74,11 @@ public class ServerConfig {
    * Location of this building complex.
    */
   private static Location location;
+
+  /**
+   * Port for this service to run on.
+   */
+  private static Integer port;
 
   /**
    * Path where the database will be stored.
@@ -127,6 +131,25 @@ public class ServerConfig {
   public static String getDbPath() {
     return dbPath;
   }
+
+  /**
+   * Port for this service to run on.
+   * 
+   * @return the port
+   */
+  public static Integer getPort() {
+    return port;
+  }
+
+  /**
+   * Port for this service to run on.
+   * 
+   * @param aPort the port to set
+   */
+  public void setPort(Integer aPort) {
+    port = aPort;
+  }
+
 
   /**
    * Path where the database will be stored.
