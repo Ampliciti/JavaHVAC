@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 jeffrey
+ * Copyright (C) 2018-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -87,6 +87,7 @@ public class ServerConfigTest {
 
     assertEquals(new Double(39.0000), ServerConfig.getLocation().getLatitude());
     assertEquals(new Double(-104.0000), ServerConfig.getLocation().getLongitude());
+    assertEquals((Integer) 8080, (Integer) ServerConfig.getPort());
 
   }
 
