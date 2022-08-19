@@ -23,6 +23,7 @@ import com.ampliciti.javahvac.dao.impl.NodeInformationRESTDao;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.domain.NodeMiscInformation;
 import com.ampliciti.javahvac.domain.NodeSourceInformation;
 import com.ampliciti.javahvac.domain.NodeZoneInformation;
 import com.ampliciti.javahvac.domain.config.Region;
@@ -328,6 +329,70 @@ public class NodeService {
       }
     }
     return null; // node not found for this region control
+  }
+
+  /**
+   * Gets all currently defined zones with their current status.
+   * 
+   * @return
+   */
+  public static ArrayList<NodeZoneInformation> lookupAllZones() {
+
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    ArrayList<NodeZoneInformation> toReturn = new ArrayList<>();
+
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getZones() != null) {
+        for (NodeZoneInformation nzi : ni.getZones())
+          toReturn.add(nzi);
+      }
+    }
+    return toReturn;
+  }
+
+  /**
+   * Gets all currently defined sources with their current status.
+   * 
+   * @return
+   */
+  public static ArrayList<NodeSourceInformation> lookupAllSources() {
+
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    ArrayList<NodeSourceInformation> toReturn = new ArrayList<>();
+
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getSources() != null) {
+        for (NodeSourceInformation nsi : ni.getSources())
+          toReturn.add(nsi);
+      }
+    }
+    return toReturn;
+  }
+
+
+  /**
+   * Gets all currently defined misc info with their current status.
+   * 
+   * @return
+   */
+  public static ArrayList<NodeMiscInformation> lookupAllMisc() {
+
+    ArrayList<NodeInformation> currentNodes =
+        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    // ^^ note, pulls from cache rather than reloading
+    ArrayList<NodeMiscInformation> toReturn = new ArrayList<>();
+
+    for (NodeInformation ni : currentNodes) {
+      if (ni.getMisc() != null) {
+        for (NodeMiscInformation nmi : ni.getMisc())
+          toReturn.add(nmi);
+      }
+    }
+    return toReturn;
   }
 
   /**

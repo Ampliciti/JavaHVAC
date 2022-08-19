@@ -15,11 +15,13 @@
 package com.ampliciti.javahvac.rest.controllers;
 
 import com.ampliciti.javahvac.config.OverrideHolder;
-import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.MiscNotices;
+import com.ampliciti.javahvac.domain.NodeMiscInformation;
+import com.ampliciti.javahvac.domain.NodeSourceInformation;
+import com.ampliciti.javahvac.domain.NodeZoneInformation;
 import com.ampliciti.javahvac.service.DaylightService;
+import com.ampliciti.javahvac.service.NodeService;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,21 +36,28 @@ import org.restexpress.Response;
  * 
  * @author jeffrey
  */
-public class StatusController {
+public class StatusCleanController {
 
-  private static Logger logger = Logger.getLogger(StatusController.class);
+  private static Logger logger = Logger.getLogger(StatusCleanController.class);
 
   public Object read(Request request, Response response) {
     try {
-      logger.info("/status called");
+      logger.info("/statusClean called");
       // // Construct the response for create...
       response.setResponseStatus(HttpResponseStatus.OK);
       response.setContentType(ContentType.JSON);
       Map toReturn = new HashMap();
-      List currentState = new ArrayList(CurrentNodeState.getCurrentNodeState().values());
+      List<NodeZoneInformation> zones = NodeService.lookupAllZones();
+      logger
+          .debug("Status is returning current zone state of: " + Arrays.toString(zones.toArray()));
+      toReturn.put("zones", zones);
+      List<NodeSourceInformation> sources = NodeService.lookupAllSources();
       logger.debug(
-          "Status is returning current node state of: " + Arrays.toString(currentState.toArray()));
-      toReturn.put("nodeState", currentState);
+          "Status is returning current source state of: " + Arrays.toString(sources.toArray()));
+      toReturn.put("sources", sources);
+      List<NodeMiscInformation> misc = NodeService.lookupAllMisc();
+      logger.debug("Status is returning current misc state of: " + Arrays.toString(misc.toArray()));
+      toReturn.put("misc", misc);
       String cisternNotices = MiscNotices.getCisternNotice();
       if (cisternNotices != null) {
         toReturn.put("cisternStatus", cisternNotices);
