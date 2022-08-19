@@ -36,11 +36,11 @@ import org.junit.Test;
  *
  * @author jeffrey
  */
-public class StatusControllerTest extends ParentControllerTest {
+public class StatusCleanControllerTest extends ParentControllerTest {
 
-  private static Logger logger = Logger.getLogger(StatusControllerTest.class);
+  private static Logger logger = Logger.getLogger(StatusCleanControllerTest.class);
 
-  public StatusControllerTest() {}
+  public StatusCleanControllerTest() {}
 
   @Before
   @Override
@@ -52,31 +52,34 @@ public class StatusControllerTest extends ParentControllerTest {
 
   @Test
   public void testGetStatus() throws ParseException {
-    System.out.println("getStatus");
+    System.out.println("getStatusClean");
     logger.info("get status test start");
     OverrideHolder.setSourceOverride("randomOverride", OverrideEnum.OVERRIDE_ON);
-    ResponseOptions response = given().expect().statusCode(200).when().get("/status").andReturn();
+    ResponseOptions response =
+        given().expect().statusCode(200).when().get("/statusClean").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
     JSONParser parser = new JSONParser();
     JSONObject fullResponse = (JSONObject) parser.parse(responseBody);
     assertNotNull(fullResponse);
-    JSONArray nodeStateJson = (JSONArray) fullResponse.get("nodeState");
-    String nodeStateString = nodeStateJson.toJSONString();
-    assertNotNull(nodeStateString);
-    ArrayList<LinkedHashMap> items = new Gson().fromJson(nodeStateString, ArrayList.class);
-    assertNotNull(items);
-    assertEquals(4, items.size());
-    // getting weird class cast exceptions -- fix later if you care
-    // LinkedHashMap barnItem = items.get(0);
-    // String barnName = (String)barnItem.get("name");
-    // assertEquals("barn", barnName);
-    // //assertEquals("barn", .get("name"));
-    // assertNotNull(items.get(0).get("zones"));
-    // assertEquals("house-attic", items.get(1).get("name"));
-    // assertNotNull(items.get(1).get("zones"));
-    // assertEquals("house-central", items.get(2).get("name"));
-    // assertNotNull(items.get(2).get("zones"));
+    JSONArray zonesJson = (JSONArray) fullResponse.get("zones");
+    assertNotNull(zonesJson);
+    ArrayList<LinkedHashMap> zones = new Gson().fromJson(zonesJson.toJSONString(), ArrayList.class);
+    assertNotNull(zones);
+    assertEquals(8, zones.size());
+
+    JSONArray sourcesJson = (JSONArray) fullResponse.get("sources");
+    assertNotNull(sourcesJson);
+    ArrayList<LinkedHashMap> sources =
+        new Gson().fromJson(sourcesJson.toJSONString(), ArrayList.class);
+    assertNotNull(sources);
+    assertEquals(8, sources.size());
+
+    JSONArray miscJson = (JSONArray) fullResponse.get("misc");
+    assertNotNull(miscJson);
+    ArrayList<LinkedHashMap> misc = new Gson().fromJson(miscJson.toJSONString(), ArrayList.class);
+    assertNotNull(misc);
+    assertEquals(1, misc.size());
 
     JSONObject sun = (JSONObject) fullResponse.get("sun");
     assertNotNull(sun);

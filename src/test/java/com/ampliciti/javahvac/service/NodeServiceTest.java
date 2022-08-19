@@ -18,6 +18,9 @@ import com.ampliciti.javahvac.ParentNodeTest;
 import com.ampliciti.javahvac.config.ServerConfig;
 import com.ampliciti.javahvac.domain.CurrentNodeState;
 import com.ampliciti.javahvac.domain.NodeInformation;
+import com.ampliciti.javahvac.domain.NodeMiscInformation;
+import com.ampliciti.javahvac.domain.NodeSourceInformation;
+import com.ampliciti.javahvac.domain.NodeZoneInformation;
 import com.ampliciti.javahvac.domain.config.Node;
 import com.ampliciti.javahvac.exceptions.PermissionsException;
 import java.io.File;
@@ -37,7 +40,6 @@ import org.mockserver.verify.VerificationTimes;
 public class NodeServiceTest extends ParentNodeTest {
 
   public NodeServiceTest() {}
-
 
   /**
    * Test of checkNodeConnections method, of class NodeService.
@@ -145,8 +147,6 @@ public class NodeServiceTest extends ParentNodeTest {
     assertNotNull(result);
     assertEquals(1, result.getZones().size());
   }
-
-
 
   /**
    * Test of changeZoneState method, of class NodeService.
@@ -305,5 +305,61 @@ public class NodeServiceTest extends ParentNodeTest {
     assertEquals("pump-pi", houseRegionControlNode.getName());
   }
 
+  @Test
+  public void testLookupAllZones() {
+    System.out.println("testLookupAllZones");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+    // test
+    NodeService instance = new NodeService();
+    ArrayList<NodeZoneInformation> allZones = instance.lookupAllZones();
+    assertNotNull(allZones);
+    assertEquals(8, allZones.size());
+  }
 
+  @Test
+  public void testLookupAllSources() {
+    System.out.println("testLookupAllSources");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+    // test
+    NodeService instance = new NodeService();
+    ArrayList<NodeSourceInformation> allSources = instance.lookupAllSources();
+    assertNotNull(allSources);
+    assertEquals(8, allSources.size());
+  }
+
+
+  @Test
+  public void testLookupAllMisc() {
+    System.out.println("testLookupAllSources");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+    // test
+    NodeService instance = new NodeService();
+    ArrayList<NodeMiscInformation> allMisc = instance.lookupAllMisc();
+    assertNotNull(allMisc);
+    assertEquals(1, allMisc.size());
+  }
 }

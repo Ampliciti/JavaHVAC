@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 jeffrey
+ * Copyright (C) 2019-2022 jeffrey
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -17,6 +17,7 @@ package com.ampliciti.javahvac.rest;
 import com.ampliciti.javahvac.rest.controllers.HealthCheckController;
 import com.ampliciti.javahvac.rest.controllers.RegionOverrideController;
 import com.ampliciti.javahvac.rest.controllers.SourceOverrideController;
+import com.ampliciti.javahvac.rest.controllers.StatusCleanController;
 import com.ampliciti.javahvac.rest.controllers.StatusController;
 import com.ampliciti.javahvac.rest.controllers.ZoneController;
 import static io.netty.handler.codec.http.HttpMethod.GET;
@@ -31,8 +32,9 @@ import org.restexpress.RestExpress;
  */
 public abstract class Routes {
 
-  public static void define(HealthCheckController hcc, StatusController sc, ZoneController zc,
-      SourceOverrideController soc, RegionOverrideController roc, RestExpress server) {
+  public static void define(HealthCheckController hcc, StatusController sc,
+      StatusCleanController scc, ZoneController zc, SourceOverrideController soc,
+      RegionOverrideController roc, RestExpress server) {
     // health check
     server.uri("/health", hcc).action("getHealth", GET).name("health").noSerialization();
 
@@ -40,6 +42,11 @@ public abstract class Routes {
      * route to get the current state of everything
      */
     server.uri("/status", sc).method(GET).name("status");
+
+    /**
+     * route to get the current state of everything sorted by zone in an easier to read format
+     */
+    server.uri("/statusClean", scc).method(GET).name("statusClean");
 
     /**
      * route to modify a zone state
