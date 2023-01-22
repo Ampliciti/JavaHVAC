@@ -79,6 +79,7 @@ public class RuleGeneratorTest {
     ServerConfig.buildConfig(yamlFile);
     ArrayList<Rule> result = RuleGenerator.generateNonManagedZoneRules();
     assertEquals("Rule for zone: house_floods", result.get(0).getDefinition());
+    assertEquals("Rule for zone: barn_floods", result.get(1).getDefinition());
   }
 
 }

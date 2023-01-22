@@ -34,6 +34,12 @@ public class Zone {
   private boolean manualAllowed = false;
 
   /**
+   * If present, this string must match another zonename exactly. When that zone is activated, this
+   * zone will be activated as well.
+   */
+  private String syncWith;
+
+  /**
    * Runtime for this zone in seconds. This is used to allow regions to round robin heat sources
    * between zones. A time of zero indicates that the zone should never be automatically started. If
    * the region desires a climate change, the zone will run for this amount of time, then turn off,
@@ -76,6 +82,26 @@ public class Zone {
    */
   public int getRuntime() {
     return runtime;
+  }
+
+  /**
+   * If present, this string must match another zonename exactly. When that zone is activated, this
+   * zone will be activated as well.
+   * 
+   * @return the syncWith
+   */
+  public String getSyncWith() {
+    return syncWith;
+  }
+
+  /**
+   * If present, this string must match another zonename exactly. When that zone is activated, this
+   * zone will be activated as well.
+   * 
+   * @param syncWith the syncWith to set
+   */
+  public void setSyncWith(String syncWith) {
+    this.syncWith = syncWith;
   }
 
   @Override
