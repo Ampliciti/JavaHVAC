@@ -197,7 +197,14 @@ public class NodeService {
     if (zone == null) {// doesn't exist in config
       throw new NodeConnectionException("Zone: " + zoneName + " does not exist in configuration.");
     } else if (zone.isManualAllowed()) {// all ok
-      return changeZoneState(zoneName, command);
+      boolean success = changeZoneState(zoneName, command);
+      if (success && zone.getSyncWith() != null) { // if there's a sync config, make the change
+        logger.info("Triggering sync'ed zone: " + zone.getSyncWith());
+        success = changeZoneState(zone.getSyncWith(), command); // only return success if both the
+                                                                // main and the synced change were
+                                                                // successful
+      }
+      return success;
     } else {// no manual control allowed.
       throw new PermissionsException("Manual control on zone: " + zoneName + " is not allowed.");
     }

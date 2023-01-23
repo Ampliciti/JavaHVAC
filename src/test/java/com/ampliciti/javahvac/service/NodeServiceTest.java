@@ -241,6 +241,43 @@ public class NodeServiceTest extends ParentNodeTest {
   /**
    * Test of endUserChangeZoneState method, of class NodeService.
    */
+  @Test
+  public void testEndUserChangeZoneStateWithSync() throws Exception {
+    System.out.println("endUserChangeZoneState");
+    // setup
+    File yamlFile = new File("./config-samples/server.yaml.sample-network-test");
+    if (!yamlFile.exists()) {
+      fail("Bad test setup; " + yamlFile.getAbsolutePath() + " does not exist.");
+    }
+    ServerConfig.buildConfig(yamlFile);
+    // mock
+    startMocks();
+    super.mockServerBarn
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"barn_floods\",\"state\":true}")))
+        .respond(
+            response().withBody("{\"name\":\"barn_floods\",\"state\":true}").withStatusCode(201));
+    VerificationTimes.exactly(1);
+
+    super.mockServerAttic
+        .when(request().withPath("/action")
+            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
+        .respond(
+            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
+    VerificationTimes.exactly(1);
+    CurrentNodeState.refreshNodeState();// build our registry of nodes
+
+    String zoneName = "barn_floods";
+    boolean command = true;
+    NodeService instance = new NodeService();
+    boolean expResult = true;
+    boolean result = instance.endUserChangeZoneState(zoneName, command);
+    assertEquals(expResult, result);
+  }
+
+  /**
+   * Test of endUserChangeZoneState method, of class NodeService.
+   */
   @Test(expected = PermissionsException.class)
   public void testEndUserChangeZoneStatePermissionDenied() throws Exception {
     System.out.println("endUserChangeZoneState");
@@ -321,7 +358,7 @@ public class NodeServiceTest extends ParentNodeTest {
     NodeService instance = new NodeService();
     ArrayList<NodeZoneInformation> allZones = instance.lookupAllZones();
     assertNotNull(allZones);
-    assertEquals(8, allZones.size());
+    assertEquals(9, allZones.size());
   }
 
   @Test
@@ -342,7 +379,6 @@ public class NodeServiceTest extends ParentNodeTest {
     assertNotNull(allSources);
     assertEquals(8, allSources.size());
   }
-
 
   @Test
   public void testLookupAllMisc() {
