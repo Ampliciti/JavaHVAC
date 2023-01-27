@@ -66,7 +66,7 @@ public class StatusCleanControllerTest extends ParentControllerTest {
     assertNotNull(zonesJson);
     ArrayList<LinkedHashMap> zones = new Gson().fromJson(zonesJson.toJSONString(), ArrayList.class);
     assertNotNull(zones);
-    assertEquals(8, zones.size());
+    assertEquals(9, zones.size());
 
     JSONArray sourcesJson = (JSONArray) fullResponse.get("sources");
     assertNotNull(sourcesJson);

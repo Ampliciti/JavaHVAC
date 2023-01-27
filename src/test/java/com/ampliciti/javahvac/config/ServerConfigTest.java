@@ -74,6 +74,11 @@ public class ServerConfigTest {
     assertEquals(0, ServerConfig.getRegions().get(2).getZones().get(0).getRuntime());
     assertEquals(true, ServerConfig.getRegions().get(2).getZones().get(0).isManualAllowed());
 
+    assertEquals("barn_floods", ServerConfig.getRegions().get(2).getZones().get(1).getName());
+    assertEquals(0, ServerConfig.getRegions().get(2).getZones().get(1).getRuntime());
+    assertEquals(true, ServerConfig.getRegions().get(2).getZones().get(1).isManualAllowed());
+    assertEquals("house_floods", ServerConfig.getRegions().get(2).getZones().get(1).getSyncWith());
+
     assertEquals("barn.lan", ServerConfig.getNodes().get(0).getAddress());
     assertEquals("barn", ServerConfig.getNodes().get(0).getName());
     assertEquals("central.lan", ServerConfig.getNodes().get(1).getAddress());

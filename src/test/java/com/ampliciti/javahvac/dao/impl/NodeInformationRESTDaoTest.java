@@ -43,7 +43,7 @@ public class NodeInformationRESTDaoTest extends ParentNodeTest {
     assertNotNull(result);
     assertEquals("barn", result.getName());
     assertEquals("barn.lan", result.getAddress());
-    assertEquals(5, result.getZones().size());
+    assertEquals(6, result.getZones().size());
     assertEquals("mill", result.getZones().get(0).getName());
     assertEquals(new Double(75.4), result.getZones().get(0).getTemp());
     assertEquals(false, result.getZones().get(0).getState());
