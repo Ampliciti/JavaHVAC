@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.service;
 
@@ -163,10 +162,8 @@ public class NodeServiceTest extends ParentNodeTest {
     // mock
     startMocks();
     super.mockServerAttic
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
-        .respond(
-            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
@@ -193,10 +190,8 @@ public class NodeServiceTest extends ParentNodeTest {
     // mock
     startMocks();
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
@@ -223,10 +218,8 @@ public class NodeServiceTest extends ParentNodeTest {
     // mock
     startMocks();
     super.mockServerAttic
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
-        .respond(
-            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
@@ -253,17 +246,13 @@ public class NodeServiceTest extends ParentNodeTest {
     // mock
     startMocks();
     super.mockServerBarn
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"barn_floods\",\"state\":true}")))
-        .respond(
-            response().withBody("{\"name\":\"barn_floods\",\"state\":true}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"barn_floods\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"barn_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
 
     super.mockServerAttic
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
-        .respond(
-            response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"house_floods\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"house_floods\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
@@ -289,8 +278,7 @@ public class NodeServiceTest extends ParentNodeTest {
     ServerConfig.buildConfig(yamlFile);
     // mock
     startMocks();
-    super.mockServerCentral
-        .when(request().withPath("/action").withBody(exact("{\"zone\":\"hall\",\"state\":true}")))
+    super.mockServerCentral.when(request().withPath("/action").withBody(exact("{\"zone\":\"hall\",\"state\":true}")))
         .respond(response().withBody("{\"zone\":\"hall\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     CurrentNodeState.refreshNodeState();// build our registry of nodes

@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.domain;
 
@@ -22,14 +21,14 @@ package com.ampliciti.javahvac.domain;
 public class NodeZoneInformation {
 
   /**
-   * Current temperature that the node is reporting for this zone. Using objects rather than
-   * primitives here to allow for null values.
+   * Current temperature that the node is reporting for this zone. Using objects rather than primitives here to allow
+   * for null values.
    */
   private Double temp;
 
   /**
-   * Current state of the zones relay/switch. True = switch on, False = switch off. Using objects
-   * rather than primitives here to allow for null values.
+   * Current state of the zones relay/switch. True = switch on, False = switch off. Using objects rather than primitives
+   * here to allow for null values.
    */
   private Boolean state;
 
@@ -43,10 +42,10 @@ public class NodeZoneInformation {
    * 
    * @param name Name of the zone that this node is reporting for.
    * 
-   * @param temp Current temperature that the node is reporting for this zone. Using objects rather
+   * @param temp Current temperature that the node is reporting for this zone. Using objects rather than primitives here
+   *        to allow for null values.
+   * @param state Current state of the zones relay/switch. True = switch on, False = switch off. Using objects rather
    *        than primitives here to allow for null values.
-   * @param state Current state of the zones relay/switch. True = switch on, False = switch off.
-   *        Using objects rather than primitives here to allow for null values.
    */
   public NodeZoneInformation(String name, Double temp, Boolean state) {
     this.name = name;
@@ -62,8 +61,8 @@ public class NodeZoneInformation {
   }
 
   /**
-   * Current temperature that the node is reporting for this zone. Using objects rather than
-   * primitives here to allow for null values.
+   * Current temperature that the node is reporting for this zone. Using objects rather than primitives here to allow
+   * for null values.
    * 
    * @return
    */
@@ -72,8 +71,8 @@ public class NodeZoneInformation {
   }
 
   /**
-   * Current temperature that the node is reporting for this zone. Using objects rather than
-   * primitives here to allow for null values.
+   * Current temperature that the node is reporting for this zone. Using objects rather than primitives here to allow
+   * for null values.
    * 
    * @return
    */
@@ -85,8 +84,7 @@ public class NodeZoneInformation {
 
   @Override
   public String toString() {
-    return "NodeZoneInformation{" + "temp=" + temp + ", state=" + state + ", name=" + getName()
-        + '}';
+    return "NodeZoneInformation{" + "temp=" + temp + ", state=" + state + ", name=" + getName() + '}';
   }
 
 

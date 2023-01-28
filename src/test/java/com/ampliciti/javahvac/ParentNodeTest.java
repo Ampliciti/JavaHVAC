@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac;
 
@@ -51,15 +50,13 @@ public class ParentNodeTest {
 
   @BeforeClass
   public static void setUpClass() throws IOException {
-    barnResponse = FileUtils
-        .readFileToString(new File("./config-samples/node-json/barn-node-info.json"), "UTF-8");
-    atticResponse = FileUtils
-        .readFileToString(new File("./config-samples/node-json/attic-node-info.json"), "UTF-8");
-    centralResponse = FileUtils
-        .readFileToString(new File("./config-samples/node-json/central-node-info.json"), "UTF-8");
+    barnResponse = FileUtils.readFileToString(new File("./config-samples/node-json/barn-node-info.json"), "UTF-8");
+    atticResponse = FileUtils.readFileToString(new File("./config-samples/node-json/attic-node-info.json"), "UTF-8");
+    centralResponse =
+        FileUtils.readFileToString(new File("./config-samples/node-json/central-node-info.json"), "UTF-8");
 
-    cisternResponse = FileUtils
-        .readFileToString(new File("./config-samples/node-json/cistern-node-info.json"), "UTF-8");
+    cisternResponse =
+        FileUtils.readFileToString(new File("./config-samples/node-json/cistern-node-info.json"), "UTF-8");
   }
 
   @AfterClass
@@ -81,8 +78,7 @@ public class ParentNodeTest {
     try {
       if (mockServerBarn == null || !mockServerBarn.isRunning()) {
         mockServerBarn = ClientAndServer.startClientAndServer(8082);
-        mockServerBarn.when(request().withPath("/info"))
-            .respond(response().withBody(barnResponse).withStatusCode(200));
+        mockServerBarn.when(request().withPath("/info")).respond(response().withBody(barnResponse).withStatusCode(200));
       }
       if (mockServerCentral == null || !mockServerCentral.isRunning()) {
         mockServerCentral = ClientAndServer.startClientAndServer(8083);

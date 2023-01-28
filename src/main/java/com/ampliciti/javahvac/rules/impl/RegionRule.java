@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2021 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.rules.impl;
 
@@ -62,14 +61,12 @@ public class RegionRule implements Rule {
   /**
    * A call to this method indicates that this rule should be actively enforced in the real world.
    *
-   * @return True if the rule was successfully implemented, false if the condition could not be
-   *         enforced.
+   * @return True if the rule was successfully implemented, false if the condition could not be enforced.
    */
   @Override
   public synchronized boolean enforceRule() {
     // check for overrides
-    ArrayList<OverrideState> regionOverrides =
-        (ArrayList<OverrideState>) OverrideHolder.getAllRegionOverrides();
+    ArrayList<OverrideState> regionOverrides = (ArrayList<OverrideState>) OverrideHolder.getAllRegionOverrides();
     for (OverrideState os : regionOverrides) {
       String regionName = region.getName();
       if (os.getName().equals(regionName) && !os.getState().equals(OverrideEnum.RUN)) { // if it's
@@ -84,8 +81,7 @@ public class RegionRule implements Rule {
         } else if (os.getState().equals(OverrideEnum.OVERRIDE_OFF)) {
           return changeRegionState(false, "Region " + regionName + " Manual Override: OFF.");
         } else {
-          logger.warn(
-              "This should never happen. Logging just in case. Indicates a programming error.");
+          logger.warn("This should never happen. Logging just in case. Indicates a programming error.");
           return false;
         }
       }
@@ -105,8 +101,7 @@ public class RegionRule implements Rule {
       // Change the pumpName state
       nodeService.changeRegionState(region.getName(), state);
     } catch (NodeConnectionException e) {
-      logger.error("Cannot connect to node to change " + region.getName() + " state to " + state,
-          e);
+      logger.error("Cannot connect to node to change " + region.getName() + " state to " + state, e);
       return false;
     }
     return true;

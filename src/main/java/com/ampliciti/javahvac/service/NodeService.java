@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2018-2019 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.service;
 
@@ -59,8 +58,8 @@ public class NodeService {
   }
 
   /**
-   * Checks that we can connect to our nodes and that they are up and running. Used as a basic
-   * application startup check.
+   * Checks that we can connect to our nodes and that they are up and running. Used as a basic application startup
+   * check.
    * 
    * @return True if we can talk to ALL nodes, false if one or more node is down.
    */
@@ -69,15 +68,13 @@ public class NodeService {
     ArrayList<Node> allNodes = ServerConfig.getNodes();
 
     for (Node node : allNodes) {
-      logger.info(
-          "Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
+      logger.info("Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
       try {
         NodeInformation ni = nodeInformation.getInfo(node.getAddress());
-        logger.info(
-            "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
+        logger.info("Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
       } catch (NodeConnectionException e) {
-        logger.error("Could not connect to node " + node.getName() + " on address: "
-            + node.getAddress() + " to confirm connection.", e);
+        logger.error("Could not connect to node " + node.getName() + " on address: " + node.getAddress()
+            + " to confirm connection.", e);
         connectedToAll = false;
         // even though we've failed here, we'll keep checking the rest of the nodes for logging
         // purposes.
@@ -109,16 +106,13 @@ public class NodeService {
    */
   public NodeInformation pullNodeState(Node node) {
     NodeInformationDao nodeDao = new NodeInformationRESTDao();
-    logger.info(
-        "Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
+    logger.info("Attempting to connect to node: " + node.getName() + " on address: " + node.getAddress());
     try {
       NodeInformation ni = nodeDao.getInfo(node.getAddress());
-      logger.info(
-          "Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
+      logger.info("Successfully connected to node: " + node.getName() + ", Response: " + ni.toString());
       return ni;
     } catch (NodeConnectionException e) {
-      logger.error(
-          "Could not connect to node " + node.getName() + " on address: " + node.getAddress(), e);
+      logger.error("Could not connect to node " + node.getName() + " on address: " + node.getAddress(), e);
       return null;
     }
 
@@ -148,8 +142,7 @@ public class NodeService {
    * @return True if the state was changed successfully. False if there was a problem.
    * @throws NodeConnectionException If the node is unreachable.
    */
-  public boolean changeSourceState(String sourceName, boolean command)
-      throws NodeConnectionException {
+  public boolean changeSourceState(String sourceName, boolean command) throws NodeConnectionException {
     Node nodeforSource = lookUpNodeForSource(sourceName);
     if (nodeforSource == null) {
       throw new NodeConnectionException("No node for that source could be found.");
@@ -165,8 +158,7 @@ public class NodeService {
    * @return True if the state was changed successfully. False if there was a problem.
    * @throws NodeConnectionException If the node is unreachable.
    */
-  public boolean changeRegionState(String regionName, boolean command)
-      throws NodeConnectionException {
+  public boolean changeRegionState(String regionName, boolean command) throws NodeConnectionException {
     Node nodeforRegion = lookUpNodeForRegionControl(regionName);
     if (nodeforRegion == null) {
       throw new NodeConnectionException("No node for that region could be found.");
@@ -187,8 +179,7 @@ public class NodeService {
    * @param command State to change it to.
    * @return True if the state was changed successfully. False if there was a problem.
    * @throws NodeConnectionException If the node is unreachable.
-   * @throws PermissionsException if the user isn't allowed to set this zone manually per
-   *         configuration rules.
+   * @throws PermissionsException if the user isn't allowed to set this zone manually per configuration rules.
    */
   public boolean endUserChangeZoneState(String zoneName, boolean command)
       throws NodeConnectionException, PermissionsException {
@@ -217,8 +208,7 @@ public class NodeService {
    * @return The node if a zone exists. Null otherwise.
    */
   private Node lookUpNodeForZone(String zoneName) {
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {
       if (ni.getZones() != null) {
@@ -234,8 +224,7 @@ public class NodeService {
                          // rather than relying on the self reported address
               }
             }
-            logger
-                .error("Node found for zone: " + zoneName + ", but it was not in the ServerConfig");
+            logger.error("Node found for zone: " + zoneName + ", but it was not in the ServerConfig");
           }
       }
     }
@@ -249,8 +238,7 @@ public class NodeService {
    * @return The node if a source exists. Null otherwise.
    */
   private Node lookUpNodeForSource(String sourceName) {
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {
       if (ni.getSources() != null) {
@@ -266,8 +254,7 @@ public class NodeService {
                          // rather than relying on the self reported address
               }
             }
-            logger.error(
-                "Node found for source: " + sourceName + ", but it was not in the ServerConfig");
+            logger.error("Node found for source: " + sourceName + ", but it was not in the ServerConfig");
           }
       }
     }
@@ -282,8 +269,7 @@ public class NodeService {
    */
   public ArrayList<Node> lookUpNodesForSource(String sourceName) {
     Set<Node> toReturn = new HashSet<>();
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {
       if (ni.getSources() != null) {
@@ -311,8 +297,7 @@ public class NodeService {
    * @return The node that controls a region if it exists. Empty otherwise.
    */
   public Node lookUpNodeForRegionControl(String regionName) {
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {
       if (ni.getSources() != null) {
@@ -345,8 +330,7 @@ public class NodeService {
    */
   public static ArrayList<NodeZoneInformation> lookupAllZones() {
 
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     ArrayList<NodeZoneInformation> toReturn = new ArrayList<>();
 
@@ -366,8 +350,7 @@ public class NodeService {
    */
   public static ArrayList<NodeSourceInformation> lookupAllSources() {
 
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     ArrayList<NodeSourceInformation> toReturn = new ArrayList<>();
 
@@ -388,8 +371,7 @@ public class NodeService {
    */
   public static ArrayList<NodeMiscInformation> lookupAllMisc() {
 
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     // ^^ note, pulls from cache rather than reloading
     ArrayList<NodeMiscInformation> toReturn = new ArrayList<>();
 

@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2021 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.rules.impl;
 
@@ -91,10 +90,8 @@ public class RegionRuleTest extends ParentNodeTest {
 
     boolean expResult = true;
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"housePump\",\"state\":false}")))
-        .respond(
-            response().withBody("{\"name\":\"housePump\",\"state\":false}").withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"housePump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"housePump\",\"state\":false}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
 
@@ -116,10 +113,9 @@ public class RegionRuleTest extends ParentNodeTest {
     startMocks();
     CurrentNodeState.refreshNodeState();// build our registry of nodes
 
-    super.mockServerCistern.when(
-        request().withPath("/action").withBody(exact("{\"name\":\"housePump\",\"state\":true}")))
-        .respond(
-            response().withBody("{\"name\":\"housePump\",\"state\":true}").withStatusCode(201));
+    super.mockServerCistern
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"housePump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"housePump\",\"state\":true}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
 
