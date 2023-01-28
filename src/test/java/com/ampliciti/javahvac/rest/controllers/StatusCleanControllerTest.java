@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.rest.controllers;
 
@@ -55,8 +54,7 @@ public class StatusCleanControllerTest extends ParentControllerTest {
     System.out.println("getStatusClean");
     logger.info("get status test start");
     OverrideHolder.setSourceOverride("randomOverride", OverrideEnum.OVERRIDE_ON);
-    ResponseOptions response =
-        given().expect().statusCode(200).when().get("/statusClean").andReturn();
+    ResponseOptions response = given().expect().statusCode(200).when().get("/statusClean").andReturn();
     String responseBody = response.getBody().asString();
     logger.info(response);
     JSONParser parser = new JSONParser();
@@ -70,8 +68,7 @@ public class StatusCleanControllerTest extends ParentControllerTest {
 
     JSONArray sourcesJson = (JSONArray) fullResponse.get("sources");
     assertNotNull(sourcesJson);
-    ArrayList<LinkedHashMap> sources =
-        new Gson().fromJson(sourcesJson.toJSONString(), ArrayList.class);
+    ArrayList<LinkedHashMap> sources = new Gson().fromJson(sourcesJson.toJSONString(), ArrayList.class);
     assertNotNull(sources);
     assertEquals(8, sources.size());
 

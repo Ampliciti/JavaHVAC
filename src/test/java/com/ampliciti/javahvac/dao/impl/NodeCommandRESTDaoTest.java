@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.dao.impl;
 
@@ -58,8 +57,7 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     int testPort = 8081;
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
-      mockServer
-          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
+      mockServer.when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
           .respond(response().withBody("{\"name\":\"mill\",\"state\":true}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
@@ -84,9 +82,7 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     int testPort = 8081;
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
-      mockServer
-          .when(
-              request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":false}")))
+      mockServer.when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":false}")))
           .respond(response().withBody("{\"name\":\"mill\",\"state\":false}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
@@ -111,8 +107,7 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     int testPort = 8081;
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
-      mockServer
-          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
+      mockServer.when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
           .respond(response().withBody("{\"name\":\"mill\",\"state\":false}").withStatusCode(201));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;
@@ -137,8 +132,7 @@ public class NodeCommandRESTDaoTest extends ParentNodeTest {
     int testPort = 8081;
     ClientAndServer mockServer = ClientAndServer.startClientAndServer(testPort);
     try {
-      mockServer
-          .when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
+      mockServer.when(request().withPath("/action").withBody(exact("{\"name\":\"mill\",\"state\":true}")))
           .respond(response().withBody("{\"error\":\"botched!\"}").withStatusCode(400));
       VerificationTimes.exactly(1);
       String nodeAddress = "localhost:" + testPort;

@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.rules.impl;
 
@@ -67,8 +66,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
   }
 
   /**
-   * Mocks the daylight service so that it will return what you want it to. Allow for coding after
-   * dark.
+   * Mocks the daylight service so that it will return what you want it to. Allow for coding after dark.
    * 
    * @param dark If true, returns a nighttime daylight. If false, returns a daytime daylight.
    */
@@ -129,10 +127,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // our current rules would require the cistern to be turned on; make sure that happens
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
     MiscNotices.setCisternNotice(null);
@@ -146,8 +142,7 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     assertEquals(-1.125, instance.getTempGain(), .0001);
     String cisternStatus = MiscNotices.getCisternNotice();
     assertNotNull(cisternStatus);
-    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125,
-        cisternStatus);
+    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125, cisternStatus);
 
     // do some more mocking (indicating our cistern pump started)
     String recircOnCisternResponse = cisternResponse.replace(
@@ -170,10 +165,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // however, at this point, we're giving up that it's going to get better
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}").withStatusCode(201));
 
     result = instance.enforceRule();
     assertEquals(expResult, result);
@@ -227,10 +220,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     // override on
     // make sure the cistern gets turned on
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
     boolean expResult = true;
@@ -246,17 +237,14 @@ public class SolarCisternRuleTest extends ParentNodeTest {
       assertEquals(-1.125, instance.getTempGain(), .0001);
       String cisternStatus = MiscNotices.getCisternNotice();
       assertNotNull(cisternStatus);
-      assertEquals("Recirculator Manual Override: ON. Temperature gain is: " + -1.125,
-          cisternStatus);
+      assertEquals("Recirculator Manual Override: ON. Temperature gain is: " + -1.125, cisternStatus);
       Thread.sleep(500);
     }
     // override off
     // make sure the cistern gets turned off
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
     OverrideHolder.setSourceOverride("cistern", OverrideEnum.OVERRIDE_OFF);
@@ -315,10 +303,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // our current rules would require the cistern to be turned off; make sure that happens
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}").withStatusCode(201));
 
     VerificationTimes.exactly(1);
     MiscNotices.setCisternNotice(null);
@@ -343,18 +329,15 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // make sure the cistern gets turned on
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     result = instance.enforceRule();
     assertEquals(expResult, result);
     // make sure it tries to start up the cistern
     cisternStatus = MiscNotices.getCisternNotice();
     assertNotNull(cisternStatus);
-    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125,
-        cisternStatus);
+    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125, cisternStatus);
 
     // wait
     Thread.sleep(16000);
@@ -365,10 +348,8 @@ public class SolarCisternRuleTest extends ParentNodeTest {
     mockDayLight(true);
     // make sure the cistern gets turned off
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":false}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":false}").withStatusCode(201));
     VerificationTimes.exactly(1);
     result = instance.enforceRule();
     assertEquals(expResult, result);
@@ -383,18 +364,15 @@ public class SolarCisternRuleTest extends ParentNodeTest {
 
     // make sure the cistern gets turned on
     super.mockServerCistern
-        .when(request().withPath("/action")
-            .withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
-        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}")
-            .withStatusCode(201));
+        .when(request().withPath("/action").withBody(exact("{\"name\":\"recirculatorPump\",\"state\":true}")))
+        .respond(response().withBody("{\"name\":\"recirculatorPump\",\"state\":true}").withStatusCode(201));
     VerificationTimes.exactly(1);
     result = instance.enforceRule();
     assertEquals(expResult, result);
     // make sure it tries to start up the cistern
     cisternStatus = MiscNotices.getCisternNotice();
     assertNotNull(cisternStatus);
-    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125,
-        cisternStatus);
+    assertEquals("Running to see if we have more heat. Temperature gain is: " + -1.125, cisternStatus);
   }
 
 }

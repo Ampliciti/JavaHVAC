@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2018-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.config;
 
@@ -28,8 +27,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 /**
- * Config object for our application. All accessors are static, so once built, this object does not
- * need to be passed around.
+ * Config object for our application. All accessors are static, so once built, this object does not need to be passed
+ * around.
  *
  * @author jeffrey
  */
@@ -40,8 +39,8 @@ public class ServerConfig {
   private static Logger logger = Logger.getLogger(ServerConfig.class);
 
   /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
+   * The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith
+   * Household" or "ABC Company".
    */
   private static String name;
 
@@ -87,8 +86,8 @@ public class ServerConfig {
   private static String dbPath = "./hvac-sqlite.db";
 
   /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
+   * The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith
+   * Household" or "ABC Company".
    *
    * @return the name
    */
@@ -161,8 +160,8 @@ public class ServerConfig {
   }
 
   /**
-   * The name of your building complex and/or setup. This is used for logging and UI purposes.
-   * Example: "Smith Household" or "ABC Company".
+   * The name of your building complex and/or setup. This is used for logging and UI purposes. Example: "Smith
+   * Household" or "ABC Company".
    *
    * @param aName the name to set
    */

@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.rules.impl;
 
@@ -130,8 +129,7 @@ public class SolarCisternRule implements Rule {
   /**
    * A call to this method indicates that this rule should be actively enforced in the real world.
    *
-   * @return True if the rule was successfully implemented, false if the condition could not be
-   *         enforced.
+   * @return True if the rule was successfully implemented, false if the condition could not be enforced.
    */
   @Override
   public synchronized boolean enforceRule() {
@@ -167,8 +165,7 @@ public class SolarCisternRule implements Rule {
     if (!solarOverride.equals(OverrideEnum.RUN)) {
       logger.info("Solar Cistern Manual Override Enabled:" + solarOverride.name());
       if (solarOverride.equals(OverrideEnum.OVERRIDE_ON)) {
-        return changeRecirculatorState(true,
-            "Recirculator Manual Override: ON. Temperature gain is: " + tempGain);
+        return changeRecirculatorState(true, "Recirculator Manual Override: ON. Temperature gain is: " + tempGain);
       } else if (solarOverride.equals(OverrideEnum.OVERRIDE_OFF)) {
         return changeRecirculatorState(false, "Recirculator Manual Override: OFF.");
       }
@@ -185,8 +182,8 @@ public class SolarCisternRule implements Rule {
     // max temp check
     if (cisternAverageTemp > maxTemp) { // if it is too hot
       return changeRecirculatorState(false,
-          "Recirculator off: Cistern's tempature is above the maxium allowed. Current temp: "
-              + cisternAverageTemp + ". Max temp allowed: " + maxTemp);
+          "Recirculator off: Cistern's tempature is above the maxium allowed. Current temp: " + cisternAverageTemp
+              + ". Max temp allowed: " + maxTemp);
     }
 
     // daylight check
@@ -194,9 +191,8 @@ public class SolarCisternRule implements Rule {
       return changeRecirculatorState(false, "Recirculator off: Night.");
     }
     long timeSinceRecirculatorLastRan = timeSinceRecirculatorLastRan();
-    logger.debug(
-        "Current temp gain is: " + tempGain + " the recirculatorPump is: " + recirculatorState
-            + " the last time the recirculatorPump ran was: " + timeSinceRecirculatorLastRan);
+    logger.debug("Current temp gain is: " + tempGain + " the recirculatorPump is: " + recirculatorState
+        + " the last time the recirculatorPump ran was: " + timeSinceRecirculatorLastRan);
     // temp gain check
     // if we're not gaining temp and the recirculator is on
     if (tempGain < 0 && recirculatorState) {
@@ -209,14 +205,12 @@ public class SolarCisternRule implements Rule {
       // if it's still not better
       if (tempGain < 0) {
         // turn it off
-        return changeRecirculatorState(false,
-            "Recirculator off: Not enough incoming heat. " + tempGain);
+        return changeRecirculatorState(false, "Recirculator off: Not enough incoming heat. " + tempGain);
       }
     } else if (!recirculatorState && timeSinceRecirculatorLastRan > retryTime) {
       // if the recirculator is/was off AND we've passed our retrytime
       // let's hope things are better now; give it a shot!
-      return changeRecirculatorState(true,
-          "Running to see if we have more heat. Temperature gain is: " + tempGain);
+      return changeRecirculatorState(true, "Running to see if we have more heat. Temperature gain is: " + tempGain);
     }
 
     return changeRecirculatorState(true, "Temperature gain is: " + tempGain);
@@ -281,8 +275,7 @@ public class SolarCisternRule implements Rule {
 
   private void establishTempVariablesAndRecirculatorState() {
 
-    ArrayList<NodeInformation> currentNodes =
-        new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
+    ArrayList<NodeInformation> currentNodes = new ArrayList<>(CurrentNodeState.getCurrentNodeState().values());
     ArrayList<NodeInformation> cisternNodeInformation = new ArrayList<>();
     // ^^ note, pulls from cache rather than reloading
     for (NodeInformation ni : currentNodes) {// this could be more efficient, but it's cold outside
@@ -319,8 +312,8 @@ public class SolarCisternRule implements Rule {
       }
     }
     // assuming we found everything at this point... probably not a good assumption
-    logger.info("Cistern temps: inlet: " + cisternInletTemp + " top: " + cisternTopTemp
-        + " bottom: " + cisternBottomTemp);
+    logger.info(
+        "Cistern temps: inlet: " + cisternInletTemp + " top: " + cisternTopTemp + " bottom: " + cisternBottomTemp);
     logger.info("Recirculator is currently: " + recirculatorState);
   }
 

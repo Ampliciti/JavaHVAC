@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2018-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.dao.impl;
 
@@ -104,20 +103,19 @@ public class RESTDaoImpl implements RESTDao {
     // }
 
     // super long timeouts, because we are lazy and would rather not fail just for really slow nodes
-    rc = RequestConfig.custom().setConnectTimeout(120000).setSocketTimeout(120000)
-        .setConnectionRequestTimeout(120000).build();
+    rc = RequestConfig.custom().setConnectTimeout(120000).setSocketTimeout(120000).setConnectionRequestTimeout(120000)
+        .build();
   }
 
   private HttpClient buildInsecureClient() {
     try {
-      final SSLContext insecureSslContext = new SSLContextBuilder()
-          .loadTrustMaterial(null, (x509CertChain, authType) -> true).build();
+      final SSLContext insecureSslContext =
+          new SSLContextBuilder().loadTrustMaterial(null, (x509CertChain, authType) -> true).build();
       return HttpClientBuilder.create().setSSLContext(insecureSslContext)
-          .setConnectionManager(new PoolingHttpClientConnectionManager(RegistryBuilder
-              .<ConnectionSocketFactory>create()
-              .register("http", PlainConnectionSocketFactory.INSTANCE).register("https",
-                  new SSLConnectionSocketFactory(insecureSslContext, NoopHostnameVerifier.INSTANCE))
-              .build()))
+          .setConnectionManager(new PoolingHttpClientConnectionManager(
+              RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.INSTANCE)
+                  .register("https", new SSLConnectionSocketFactory(insecureSslContext, NoopHostnameVerifier.INSTANCE))
+                  .build()))
           .build();
     } catch (KeyManagementException | KeyStoreException | NoSuchAlgorithmException e) {
       logger.warn("Warning, cannot build insecure HTTP Client!", e);
@@ -138,8 +136,7 @@ public class RESTDaoImpl implements RESTDao {
    * Does an http GET call.
    *
    * @param path to GET
-   * @return JSONObject Representing the response. If the route returns no body, the object will be
-   *         empty.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be empty.
    * @throws RESTException
    */
   @Override
@@ -151,10 +148,9 @@ public class RESTDaoImpl implements RESTDao {
    * Does an http GET call.
    *
    * @param path to GET
-   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate
-   *        issues when testing locally or for extremely low-stakes calls.
-   * @return JSONObject Representing the response. If the route returns no body, the object will be
-   *         empty.
+   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate issues when testing
+   *        locally or for extremely low-stakes calls.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be empty.
    * @throws RESTException
    */
   @Override
@@ -214,8 +210,7 @@ public class RESTDaoImpl implements RESTDao {
    *
    * @param path URL to post to.
    * @param toPost JSONObject of data to POST.
-   * @return JSONObject representing the response. If the route returns a null body, the object will
-   *         be empty.
+   * @return JSONObject representing the response. If the route returns a null body, the object will be empty.
    * @throws RESTException
    */
   @Override
@@ -224,8 +219,7 @@ public class RESTDaoImpl implements RESTDao {
     String responseString = "";
     try {
       URL fullPath = new URL(host, path);
-      logger.debug("Attempting to POST: " + fullPath.toExternalForm() + ", payload: "
-          + toPost.toJSONString());
+      logger.debug("Attempting to POST: " + fullPath.toExternalForm() + ", payload: " + toPost.toJSONString());
       request = new HttpPost(fullPath.toURI());
       request.setConfig(rc);
       // add request header
@@ -238,8 +232,8 @@ public class RESTDaoImpl implements RESTDao {
       HttpResponse response = client.execute(request);
       int responseCode = response.getStatusLine().getStatusCode();
       if (responseCode < 200 || responseCode >= 300) {
-        throw new RESTException("Error when doing a POST call agaist: " + path + ". JSON posted: "
-            + toPost.toJSONString(), response);
+        throw new RESTException(
+            "Error when doing a POST call agaist: " + path + ". JSON posted: " + toPost.toJSONString(), response);
       }
 
       if (response.getEntity() != null) {
@@ -274,21 +268,18 @@ public class RESTDaoImpl implements RESTDao {
    *
    * @param path URL to post to.
    * @param toPost JSONObject of data to POST.
-   * @return JSONObject representing the response. If the route returns a null body, the object will
-   *         be empty.
+   * @return JSONObject representing the response. If the route returns a null body, the object will be empty.
    * @throws RESTException
    */
   @Override
-  public JSONAware doPostCall(String path, JSONObject toPost, HashMap<String, String> headers)
-      throws RESTException {
+  public JSONAware doPostCall(String path, JSONObject toPost, HashMap<String, String> headers) throws RESTException {
 
     String responseString = "";
     HttpPost request = null;
     try {
       URL fullPath = new URL(host, path);
 
-      logger.debug("Attempting to POST: " + fullPath.toExternalForm() + ", payload: "
-          + toPost.toJSONString());
+      logger.debug("Attempting to POST: " + fullPath.toExternalForm() + ", payload: " + toPost.toJSONString());
       request = new HttpPost(fullPath.toURI());
       request.setConfig(rc);
       // add request header
@@ -312,8 +303,8 @@ public class RESTDaoImpl implements RESTDao {
       HttpResponse response = client.execute(request);
       int responseCode = response.getStatusLine().getStatusCode();
       if (responseCode < 200 || responseCode >= 300) {
-        throw new RESTException("Error when doing a POST call against: " + path + ". JSON posted: "
-            + toPost.toJSONString(), response);
+        throw new RESTException(
+            "Error when doing a POST call against: " + path + ". JSON posted: " + toPost.toJSONString(), response);
       }
 
       if (response.getEntity() != null) {
@@ -348,8 +339,7 @@ public class RESTDaoImpl implements RESTDao {
    *
    * @param path URL to put to.
    * @param toPost JSONObject of data to PUT.
-   * @return JSONObject representing the response. If the route returns no body the object will be
-   *         empty.
+   * @return JSONObject representing the response. If the route returns no body the object will be empty.
    * @throws RESTException
    */
   @Override
@@ -358,8 +348,7 @@ public class RESTDaoImpl implements RESTDao {
     HttpPut request = null;
     try {
       URL fullPath = new URL(host, path);
-      logger.debug("Attempting to PUT: " + fullPath.toExternalForm() + ", payload: "
-          + toPost.toJSONString());
+      logger.debug("Attempting to PUT: " + fullPath.toExternalForm() + ", payload: " + toPost.toJSONString());
       request = new HttpPut(fullPath.toURI());
       request.setConfig(rc);
       // add request header
@@ -375,8 +364,7 @@ public class RESTDaoImpl implements RESTDao {
       HttpResponse response = client.execute(request);
       int responseCode = response.getStatusLine().getStatusCode();
       if (responseCode < 200 || responseCode >= 300) {
-        throw new RESTException(
-            "Error when doing a PUT call against: " + path + ". JSON put: " + toPost.toJSONString(),
+        throw new RESTException("Error when doing a PUT call against: " + path + ". JSON put: " + toPost.toJSONString(),
             response);
       }
 

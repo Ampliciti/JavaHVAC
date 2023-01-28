@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.service;
 
@@ -22,8 +21,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 /**
- * Service for determining if it currently light outside. Location must be populated in the YAML
- * file to make sure this works
+ * Service for determining if it currently light outside. Location must be populated in the YAML file to make sure this
+ * works
  * 
  * @author jeffrey
  */
@@ -44,8 +43,7 @@ public class DaylightService {
   private static Logger logger = Logger.getLogger(DaylightService.class);
 
   /**
-   * Method to get the current daylight within the time range of four hours or so. Uses cached
-   * values when possible.
+   * Method to get the current daylight within the time range of four hours or so. Uses cached values when possible.
    * 
    * @return a populated daylight object.
    * 
@@ -55,8 +53,7 @@ public class DaylightService {
   }
 
   /**
-   * Method to get the current daylight within the time range of four hours or so. Uses cached
-   * values when possible.
+   * Method to get the current daylight within the time range of four hours or so. Uses cached values when possible.
    * 
    * @param retryCount Number of times that this call has been retried.
    * 

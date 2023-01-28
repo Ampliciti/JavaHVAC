@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2019-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.dao.domain;
 
@@ -21,8 +20,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 /**
- * Object that stores the sunrise/sunset times and includes helper methods for determining if it it
- * currently within daylight hours.
+ * Object that stores the sunrise/sunset times and includes helper methods for determining if it it currently within
+ * daylight hours.
  * 
  * @author jeffrey
  */
@@ -75,9 +74,8 @@ public class DayLight {
   }
 
   /**
-   * Returns true if it is currently light outside. Assumes the sunset/sunrise times are for today.
-   * Makes the assumption that it is functionally dark 85 minutes before sunset and 85 minutes after
-   * sunrise.
+   * Returns true if it is currently light outside. Assumes the sunset/sunrise times are for today. Makes the assumption
+   * that it is functionally dark 85 minutes before sunset and 85 minutes after sunrise.
    * 
    * @return True if it is light outside, false if it is dark.
    */
@@ -93,8 +91,7 @@ public class DayLight {
 
   @Override
   public String toString() {
-    return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight=" + isDaylight()
-        + "}";
+    return "DayLight{" + "sunrise=" + sunrise + ", sunset=" + sunset + ", isLight=" + isDaylight() + "}";
   }
 
   /**

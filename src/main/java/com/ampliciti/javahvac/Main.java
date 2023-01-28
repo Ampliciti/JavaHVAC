@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2018-2022 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac;
 
@@ -56,8 +55,8 @@ public class Main {
   private static ArrayList<Rule> managedRules;
 
   /**
-   * Main method. Only one argument expected; a path to a properties file. Checks the arguments,
-   * then calls the constructor for this class.
+   * Main method. Only one argument expected; a path to a properties file. Checks the arguments, then calls the
+   * constructor for this class.
    *
    * @param args A single path to the properties file used for this app.
    */
@@ -77,8 +76,7 @@ public class Main {
     }
     File yamlFile = new File(args[0]);
     if (!yamlFile.exists() || !yamlFile.isFile()) {
-      String message =
-          "YAML file at the path: " + args[0] + " does not exist. Application cannot start.";
+      String message = "YAML file at the path: " + args[0] + " does not exist. Application cannot start.";
       System.err.println(message);
       logger.error(message);
       System.exit(-1);
@@ -108,8 +106,8 @@ public class Main {
     try {
       dao = new SqliteHVACDao(ServerConfig.getDbPath());
     } catch (SQLException e) {
-      String message = "Could not connect to the database at path: " + ServerConfig.getDbPath()
-          + "; application cannot start.";
+      String message =
+          "Could not connect to the database at path: " + ServerConfig.getDbPath() + "; application cannot start.";
       logger.fatal(message, e);
       logger.error(message);
       System.exit(-1);
@@ -231,8 +229,7 @@ public class Main {
   /**
    * Starts up the REST API.
    * 
-   * Normally we'd not make this public, but it makes testing easier for now, and I'm too lazy to
-   * use Reflection.
+   * Normally we'd not make this public, but it makes testing easier for now, and I'm too lazy to use Reflection.
    */
   public void startRestAPI() {
 
@@ -244,9 +241,8 @@ public class Main {
           // .setBaseUrl(config.getBaseUrl())
           .setExecutorThreadCount(15).setMaxContentSize(512000);// half a meg
 
-      Routes.define(new HealthCheckController(), new StatusController(),
-          new StatusCleanController(), new ZoneController(), new SourceOverrideController(),
-          new RegionOverrideController(), server);
+      Routes.define(new HealthCheckController(), new StatusController(), new StatusCleanController(),
+          new ZoneController(), new SourceOverrideController(), new RegionOverrideController(), server);
       // Relationships.define(server);
       // configurePlugins(config, server);
       // mapExceptions(server);

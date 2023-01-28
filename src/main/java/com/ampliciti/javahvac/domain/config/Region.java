@@ -1,16 +1,15 @@
 /*
  * Copyright (C) 2018 jeffrey
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.ampliciti.javahvac.domain.config;
 
@@ -29,8 +28,8 @@ public class Region {
   private String name;
 
   /**
-   * Flag indicating if this region should be computer logic manged or manually operated only.
-   * Defaults to true (computer managed).
+   * Flag indicating if this region should be computer logic manged or manually operated only. Defaults to true
+   * (computer managed).
    */
   private boolean managed = true;
 
@@ -63,8 +62,7 @@ public class Region {
   }
 
   /**
-   * Zones associated with this region. Warning: this will override any zones you have already set
-   * with addZone();
+   * Zones associated with this region. Warning: this will override any zones you have already set with addZone();
    *
    * @param zones the zones to set
    */
@@ -94,8 +92,8 @@ public class Region {
   }
 
   /**
-   * Flag indicating if this region should be computer logic managed or manually operated only.
-   * Defaults to true (computer managed).
+   * Flag indicating if this region should be computer logic managed or manually operated only. Defaults to true
+   * (computer managed).
    *
    * @return True if this region should be computer managed, false if it is manually managed.
    */

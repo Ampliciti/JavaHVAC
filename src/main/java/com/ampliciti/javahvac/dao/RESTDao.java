@@ -24,8 +24,7 @@ public interface RESTDao {
    * Does an http GET call.
    *
    * @param path to GET
-   * @return JSONObject Representing the response. If the route returns no body, the object will be
-   *         empty.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be empty.
    * @throws RESTException
    */
   JSONObject doGetCall(String path) throws RESTException;
@@ -35,10 +34,9 @@ public interface RESTDao {
    * Does an http GET call.
    *
    * @param path to GET
-   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate
-   *        issues when testing locally or for extremely low-stakes calls.
-   * @return JSONObject Representing the response. If the route returns no body, the object will be
-   *         empty.
+   * @param ignoreSSLProblems Unsafe operation that will allow you to override ssl certificate issues when testing
+   *        locally or for extremely low-stakes calls.
+   * @return JSONObject Representing the response. If the route returns no body, the object will be empty.
    * @throws RESTException
    */
   JSONObject doGetCall(String path, boolean ignoreSSLProblems) throws RESTException;
@@ -48,8 +46,7 @@ public interface RESTDao {
    *
    * @param path URL to post to.
    * @param toPost JSONObject of data to POST.
-   * @return JSONObject representing the response. If the route returns a null body, the object will
-   *         be empty.
+   * @return JSONObject representing the response. If the route returns a null body, the object will be empty.
    * @throws RESTException
    */
   JSONAware doPostCall(String path, JSONObject toPost) throws RESTException;
@@ -59,20 +56,17 @@ public interface RESTDao {
    *
    * @param path URL to post to.
    * @param toPost JSONObject of data to POST.
-   * @return JSONObject representing the response. If the route returns a null body, the object will
-   *         be empty.
+   * @return JSONObject representing the response. If the route returns a null body, the object will be empty.
    * @throws RESTException
    */
-  JSONAware doPostCall(String path, JSONObject toPost, HashMap<String, String> headers)
-      throws RESTException;
+  JSONAware doPostCall(String path, JSONObject toPost, HashMap<String, String> headers) throws RESTException;
 
   /**
    * Does an HTTP PUT call.
    *
    * @param path URL to put to.
    * @param toPost JSONObject of data to PUT.
-   * @return JSONObject representing the response. If the route returns no body the object will be
-   *         empty.
+   * @return JSONObject representing the response. If the route returns no body the object will be empty.
    * @throws RESTException
    */
   JSONObject doPutCall(String path, JSONObject toPost) throws RESTException;
