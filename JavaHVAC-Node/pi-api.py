@@ -61,16 +61,16 @@ def smartAppend(listToAppendTo, key, toAppend):
 def getRelayByName(name):
     for relay in relay_config:
         if relay['name'] == name:
-            print str(relay)
+            print(str(relay))
             try:
                 switch_state = GPIOHelper.getPinState(relay['GPIO'])
                 #if LOW means on, we have a flag for that (which means HIGH is off)
                 if relay.get('GPIOInvert'):
                     switch_state = not switch_state
-                    print "Swapping True/High for False/High on fetch: " + str(switch_state)
+                    print("Swapping True/High for False/High on fetch: " + str(switch_state))
                 relay['state'] = switch_state
             except Exception as ex:
-                print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+                print("Could not read current GPIO state: " + str(relay) + ", " + str(ex))
                 relay['state'] = "null"
             return relay
 
@@ -83,7 +83,7 @@ class Sensor(Resource):
                     try:
                         sensor["temp"] = ReadDS18B20.read_temp(sensor["address"])
                     except Exception as ex:
-                        print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
+                        print("Could not read sensor temp: " + str(sensor) + ", " + str(ex))
                 return sensor, 200
         return "Sensor not found", 404
 
@@ -120,8 +120,8 @@ class Action(Resource):
         body = request.get_json(force=True)
         for relay in relay_config:
             exists = False
-            print str(relay)
-            print body['name']
+            print(str(relay))
+            print(body['name'])
             if(relay['name'] == body['name']):
                 exists = True
                 #Actually change the actors state, then return a 201
@@ -130,11 +130,11 @@ class Action(Resource):
                     #if LOW means on, we have a flag for that (which means HIGH is off)
                     if relay.get('GPIOInvert'):
                         switch_state = not switch_state
-                        print "Swapping True/High for False/High on set: " + str(switch_state)
+                        print("Swapping True/High for False/High on set: " + str(switch_state))
                     GPIOHelper.setPinState(relay['GPIO'], switch_state)
                     return getRelayByName(body['name']), 201
                 except Exception as exception:
-                    print str(exception)
+                    print(str(exception))
                     return "Could not complete the action: " + str(exception), 500
 
         if not exists:
@@ -166,7 +166,7 @@ class Info(Resource):
             try:
                 sensorR['temp'] = ReadDS18B20.read_temp(sensor["address"])
             except Exception as ex:
-                print "Could not read sensor temp: " + str(sensor) + ", " + str(ex)
+                print("Could not read sensor temp: " + str(sensor) + ", " + str(ex))
                 sensorR['temp'] = None
             #end common to all sensors
             #source type sensors
@@ -182,7 +182,7 @@ class Info(Resource):
 
         for relay in relay_config:
             relayR = {}
-            print str(relay)
+            print(str(relay))
             relayR['name'] = relay['name']
             if relay.get('region') != None:
                 #if the relay is associated with a region
@@ -192,10 +192,10 @@ class Info(Resource):
                 #if LOW means on, we have a flag for that (which means HIGH is off)
                 if relay.get('GPIOInvert'):
                     switch_state = not switch_state
-                    print "Swapping True/High for False/High on fetch: " + str(switch_state)
+                    print("Swapping True/High for False/High on fetch: " + str(switch_state))
                 relayR['state'] = switch_state
             except Exception as ex:
-                print "Could not read current GPIO state: " + str(relay) + ", " + str(ex)
+                print("Could not read current GPIO state: " + str(relay) + ", " + str(ex))
                 relayR['state'] = "null"
             #source type relays
             if relay.get('source') != None:

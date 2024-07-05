@@ -30,7 +30,7 @@ then
   echo "Virtual environment does not yet exist. Creating now..."
   virtualenv $APP_HOME/.venv
   echo "Installing dependencies to virtual environment..."
-  $APP_HOME/.venv/bin/pip install -r requirements.txt
+  $APP_HOME/.venv/bin/pip3 install -r requirements.txt
   echo "Done setting up Virtual environment."
 fi
 chown -R pi:pi $APP_HOME
