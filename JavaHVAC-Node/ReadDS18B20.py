@@ -21,7 +21,7 @@ def read_temp_raw(sensor_address):
 
 #call this one to get the temp
 def read_temp(sensor_address):
-    print "Trying to read DS18B20 at address: " + sensor_address
+    print("Trying to read DS18B20 at address: " + sensor_address)
     lines = read_temp_raw(sensor_address)
     while lines[0].strip()[-3:] != 'YES': #retry if the first call didn't make sense
         time.sleep(0.2)
