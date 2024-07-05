@@ -19,7 +19,7 @@ apt-get update
 apt-get -y install python3-pip
 apt-get -y install virtualenv
 apt-get -y install python3-dev
-apt-get -y install python-rpi3.gpio
+apt-get -y install python3-rpi.gpio
 echo "Done installing debian dependencies."
 
 APP_HOME=/home/pi/JavaHVAC-Node
