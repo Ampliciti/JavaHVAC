@@ -1,0 +1,5 @@
+#!/bin/bash
+# Starts up the air switch watcher
+echo "Starting up the Air Switch Service..."
+nohup /home/pi/air_switch_watcher.py 40 800 &
+#                     raspi gpio pin ^   ^ switch bouncetime

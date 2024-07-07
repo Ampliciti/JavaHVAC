@@ -1,0 +1,13 @@
+#place in /etc/systemd/system
+[Unit]
+Description=Air Switch Watcher
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/air_switch_watcher.bsh
+Type=forking
+#User=root
+
+[Install]
+WantedBy=default.target
