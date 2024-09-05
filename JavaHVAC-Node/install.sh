@@ -36,7 +36,7 @@ fi
 chown -R pi:pi $APP_HOME
 
 echo "Setting up service..."
-mv ./JavaHVAC-Node.service /etc/systemd/system/
+cp ./JavaHVAC-Node.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable JavaHVAC-Node.service
 
