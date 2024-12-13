@@ -44,11 +44,11 @@ public class RuleGenerator {
    */
   public static ArrayList<Rule> generateManagedRules() {
     ArrayList<Rule> rules = new ArrayList<>();
-    // first define any solar cistern rules -- we want that to go into effect first
-    SolarCisternRule scr = generateSolarCisternRule();
-    if (scr != null) {
-      rules.add(scr);
-    }
+//    // first define any solar cistern rules -- we want that to go into effect first
+//    SolarCisternRule scr = generateSolarCisternRule();
+//    if (scr != null) {
+//      rules.add(scr);
+//    }
     // second, define sources rules, so the regions/zones can use them if needed.
     rules.addAll(generateSourcesRules());
     // third, add all our region rules
