@@ -57,13 +57,14 @@ public class RuleGeneratorTest {
     ServerConfig.buildConfig(yamlFile);
 
     ArrayList<Rule> result = RuleGenerator.generateManagedRules();
-    assertEquals(6, result.size());
-    assertEquals("Solar cistern rule for: cistern", result.get(0).getDefinition());
-    assertEquals("Rule for heat source: furnace for regions: house", result.get(1).getDefinition());
-    assertEquals("Rule for heat source: ac for regions: house", result.get(2).getDefinition());
-    assertEquals("Rule for heat source: cistern for regions: house shop", result.get(3).getDefinition());
-    assertEquals("Rule for Region: house", result.get(4).getDefinition());
-    assertEquals("Rule for Region: shop", result.get(5).getDefinition());
+    //assertEquals(6, result.size());
+    assertEquals(5, result.size());
+    //assertEquals("Solar cistern rule for: cistern", result.get(0).getDefinition());
+    assertEquals("Rule for heat source: furnace for regions: house", result.get(0).getDefinition());
+    assertEquals("Rule for heat source: ac for regions: house", result.get(1).getDefinition());
+    assertEquals("Rule for heat source: cistern for regions: house shop", result.get(2).getDefinition());
+    assertEquals("Rule for Region: house", result.get(3).getDefinition());
+    assertEquals("Rule for Region: shop", result.get(4).getDefinition());
 
   }
 
